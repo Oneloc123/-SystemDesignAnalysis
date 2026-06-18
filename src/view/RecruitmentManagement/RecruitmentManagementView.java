@@ -28,7 +28,7 @@ public class RecruitmentManagementView extends View {
             //exit
             if(question.equals("0")) {System.out.println("Thoat thanh cong"); break loop;}
             // thuc thi func
-            rmc.excuteComent(question);
+            rmc.excuteCommand(question);
         }
     }
 

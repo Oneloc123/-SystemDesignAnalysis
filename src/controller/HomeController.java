@@ -2,6 +2,7 @@ package controller;
 
 import controller.recruimentManagement.RecruitmentManagementController;
 import enumModel.RoleEnum;
+import model.Recruitment.Employer;
 import model.User;
 import view.HomeView;
 
@@ -10,7 +11,7 @@ public class HomeController {
     // login thanhf confg
 
     public HomeController() {
-        MainController.currentUser = new User();
+        MainController.currentUser = new Employer();
         MainController.currentUser.setRole(RoleEnum.EMPLOYER);
         this.hv = new HomeView(this);
     }

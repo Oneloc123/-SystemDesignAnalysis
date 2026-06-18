@@ -10,5 +10,4 @@ public class HomeTest {
 //        RoleEnum role = RoleEnum.ACCOUNT;
 //        System.out.println(role);
     }
-
 }

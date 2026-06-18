@@ -2,14 +2,14 @@ package model.Recruitment;
 
 import java.sql.Date;
 
-public class RecruitmentPost {
+public class JobPosting {
     private String title;
     private String description;
     private String requiment;
     private Date dayEnd;
     private double salary;
 
-    public RecruitmentPost() {
+    public JobPosting() {
     }
 
 
@@ -55,6 +55,15 @@ public class RecruitmentPost {
 
     public boolean checkValid() {
 
+        return true;
+    }
+
+    public boolean save() {
+
+        return true;
+    }
+
+    public boolean saveDraf() {
 
         return true;
     }

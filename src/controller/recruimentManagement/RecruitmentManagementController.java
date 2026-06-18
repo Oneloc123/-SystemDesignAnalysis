@@ -26,7 +26,7 @@ public class RecruitmentManagementController {
         return true;
     }
 
-    public void excuteComent(String question) throws Exception {
+    public void excuteCommand(String question) throws Exception {
         switch(question) {
             case "1":
                 functionCreatePost();

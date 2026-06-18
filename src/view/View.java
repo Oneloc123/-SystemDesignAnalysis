@@ -3,6 +3,8 @@ package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Date;
+
 import controller.MainController;
 import enumModel.AddressEnum;
 
@@ -32,7 +34,7 @@ public abstract class View {
         System.out.print("nhập "+ nameParam+" : ");
         while(true){
             try{
-                result = Double.parseDouble(handleParam("lương"));
+                result = Double.parseDouble(handleParam(nameParam));
                 break;
             }catch (Exception e){
                 showError("lương phải là số");
@@ -45,5 +47,28 @@ public abstract class View {
         printAddress();
         System.out.print("nhập "+ nameParam+" : ");
         return netIn.readLine();
+    }
+
+    public Date handleDate(String nameParam){
+        Date result;
+        System.out.print("nhập "+ nameParam+" : ");
+        while(true){
+            try{
+                result = java.sql.Date.valueOf(handleParam(nameParam));
+                break;
+            }catch (Exception e){
+                showError("Ngày không hợp lệ");
+            }
+        }
+        return result;
+    }
+
+    public void printWelcome(String tile){
+        System.out.println("---------------------");
+        System.out.println(tile);
+        System.out.println("---------------------");
+    }
+    public void showMessage(String text){
+        System.out.println(text);
     }
 }
