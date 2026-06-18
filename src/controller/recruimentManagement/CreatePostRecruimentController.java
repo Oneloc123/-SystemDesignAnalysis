@@ -11,11 +11,13 @@ public class CreatePostRecruimentController {
     private JobPosting draf;
     private CreatePostRecruimentView cprv;
     private AddressEnum address = AddressEnum.CreatePostRecruitment;
-    public CreatePostRecruimentController(){
+
+    public CreatePostRecruimentController() {
         cprv = new CreatePostRecruimentView(this);
     }
+
     public boolean navigateTo() throws Exception {
-        if(!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER)){
+        if (!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER.toString())) {
             return false;
         }
         MainController.addresses.add(address);
@@ -23,9 +25,10 @@ public class CreatePostRecruimentController {
         MainController.addresses.remove(AddressEnum.RecruitmentManagement);
         return true;
     }
-    public void processFormOptions(String s,JobPosting j)throws Exception{
+
+    public void processFormOptions(String s, JobPosting j) throws Exception {
         draf = j;
-        switch(s) {
+        switch (s) {
             case "1":
                 cprv.promptSaveDraft();
                 break;
@@ -33,7 +36,7 @@ public class CreatePostRecruimentController {
                 cprv.promptConfirmSubmit();
                 break;
             case "3":
-                cprv.displayEditOptions(draf,"bản chỉnh sửa");
+                cprv.displayEditOptions(draf, "bản chỉnh sửa");
                 break;
             case "0":
                 cprv.showMessage("thoát form");
@@ -46,18 +49,19 @@ public class CreatePostRecruimentController {
     }
 
     public void handleMainMenuCommand(String question) throws Exception {
-        switch(question) {
+        switch (question) {
             case "1":
                 cprv.enterJobPostingDetails();
                 break;
             case "2":
                 Employer e = (Employer) MainController.currentUser;
                 draf = e.getJobPostingDraf();
-                if(draf == null){
+                if (draf == null) {
                     cprv.showError("không có bản nháp");
                     break;
                 }
-                cprv.displayEditOptions(draf,"bản nháp");
+                draf.setEmployer(e);
+                cprv.displayEditOptions(draf, "bản nháp");
                 break;
             default:
                 cprv.showError("Lệnh không hợp lệ");
@@ -65,21 +69,21 @@ public class CreatePostRecruimentController {
         }
     }
 
-    public void handleConfirmSubmit(String s,JobPosting rp) throws Exception {
-        if(s.toUpperCase().equals("Y")){
-            if(!rp.checkValid()){
+    public void handleConfirmSubmit(String s, JobPosting rp) throws Exception {
+        if (s.toUpperCase().equals("Y")) {
+            if (!rp.checkValid()) {
                 cprv.showMessage("Dữ liệu không hợp lệ, vui lòng nhập lại");
                 cprv.enterJobPostingDetails();
                 return;
             }
-            if(!rp.save()){
+            if (!rp.save()) { // gọi model.save() -> gọi DAO
                 cprv.showMessage("lưu database thất bại, vui lòng vào lại lần sau");
                 return;
             }
             cprv.showMessage("lưu thành công");
             return;
         }
-        if(s.toUpperCase().equals("N")){
+        if (s.toUpperCase().equals("N")) {
             System.out.println("Huỷ gửi form");
             return;
         }
@@ -89,20 +93,20 @@ public class CreatePostRecruimentController {
 
     public void handleSaveDraft(String s, JobPosting rp) throws Exception {
         draf = rp;
-        if(s.toUpperCase().equals("Y")){
-            if(!rp.checkValid()){
+        if (s.toUpperCase().equals("Y")) {
+            if (!rp.checkValid()) {
                 cprv.showMessage("Dữ liệu không hợp lệ, vui lòng nhập lại");
                 cprv.enterJobPostingDetails();
                 return;
             }
-            if(!rp.saveDraf()){
+            if (!rp.saveDraf()) {
                 cprv.showMessage("lưu database thất bại, vui lòng vào lại lần sau");
                 return;
             }
             cprv.showMessage("lưu nháp thành công");
             return;
         }
-        if(s.toUpperCase().equals("N")){
+        if (s.toUpperCase().equals("N")) {
             System.out.println("Huỷ lưu nháp");
             return;
         }
@@ -111,11 +115,11 @@ public class CreatePostRecruimentController {
     }
 
     public void handleContinueDraft(String s) throws Exception {
-        if(s.toUpperCase().equals("Y")){
-            cprv.displayEditOptions(draf,"tiếp tục bản nháp");
+        if (s.toUpperCase().equals("Y")) {
+            cprv.displayEditOptions(draf, "tiếp tục bản nháp");
             return;
         }
-        if(s.toUpperCase().equals("N")){
+        if (s.toUpperCase().equals("N")) {
             System.out.println("Thoát nháp");
             return;
         }
@@ -124,26 +128,26 @@ public class CreatePostRecruimentController {
     }
 
     public void handleEditDraft(String s) throws Exception {
-        switch(s) {
+        switch (s) {
             case "1":
                 draf.setTitle(cprv.handleParam("tiêu đề"));
-                cprv.displayEditOptions(draf,"bản nháp");
+                cprv.displayEditOptions(draf, "bản nháp");
                 break;
             case "2":
                 draf.setDescription(cprv.handleParam("mô tả"));
-                cprv.displayEditOptions(draf,"bản nháp");
+                cprv.displayEditOptions(draf, "bản nháp");
                 break;
             case "3":
                 draf.setRequiment(cprv.handleParam("yêu cầu"));
-                cprv.displayEditOptions(draf,"bản nháp");
+                cprv.displayEditOptions(draf, "bản nháp");
                 break;
             case "4":
                 draf.setSalary(cprv.handleDouleParam("Luong"));
-                cprv.displayEditOptions(draf,"bản nháp");
+                cprv.displayEditOptions(draf, "bản nháp");
                 break;
             case "5":
                 draf.setDayEnd((cprv.handleDate("ngày hết hạn (vd : 2026-06-18):")));
-                cprv.displayEditOptions(draf,"bản nháp");
+                cprv.displayEditOptions(draf, "bản nháp");
                 break;
             case "6":
                 cprv.showMessage("Thoát chỉnh sửa nháp");
@@ -156,7 +160,7 @@ public class CreatePostRecruimentController {
                 break;
             default:
                 cprv.showError("Lệnh không hợp lệ");
-                cprv.displayEditOptions(draf,"bản nháp");
+                cprv.displayEditOptions(draf, "bản nháp");
                 break;
         }
     }

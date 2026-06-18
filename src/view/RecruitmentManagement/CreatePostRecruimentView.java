@@ -1,9 +1,11 @@
 package view.RecruitmentManagement;
 
 import controller.recruimentManagement.CreatePostRecruimentController;
+import model.Recruitment.Employer;
 import model.Recruitment.JobPosting;
 import view.View;
 
+import static controller.MainController.currentUser;
 import static controller.MainController.printList;
 
 public class CreatePostRecruimentView extends View {
@@ -31,6 +33,7 @@ public class CreatePostRecruimentView extends View {
     }
     public void enterJobPostingDetails() throws Exception {
         rp = new JobPosting();
+        rp.setEmployer((Employer) currentUser);
         rp.setTitle(handleParam("tiêu đề"));
         rp.setDescription(handleParam("mô tả"));
         rp.setRequiment(handleParam("yêu cầu"));

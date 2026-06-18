@@ -12,7 +12,7 @@ public class HomeController {
 
     public HomeController() {
         MainController.currentUser = new Employer();
-        MainController.currentUser.setRole(RoleEnum.EMPLOYER);
+        MainController.currentUser.setRole(RoleEnum.EMPLOYER.toString());
         this.hv = new HomeView(this);
     }
     public void show() throws Exception {
