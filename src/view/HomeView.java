@@ -10,15 +10,13 @@ import java.io.InputStreamReader;
 
 public class HomeView extends View {
     HomeController hc;
-    String question;
-    static BufferedReader netIn;
+
     String address = "Home";
 
     public HomeView(HomeController hc) {
         // cật nhật địa chỉ
         MainController.addresses.add(address);
         //
-        netIn = new BufferedReader(new InputStreamReader(System.in));
         //
         this.hc = hc;
     }
@@ -54,10 +52,7 @@ public class HomeView extends View {
         System.out.println("Vui lòng chọn chức năng:");
     }
 
-    public void handleInput() throws IOException {
-        String input = netIn.readLine();
-        question = input.toUpperCase();
-    }
+
 
     public void printAddress(){
         String result = "";

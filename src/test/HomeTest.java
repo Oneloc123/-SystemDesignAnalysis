@@ -1,5 +1,6 @@
 package test;
 
+import controller.HomeController;
 import enumModel.RoleEnum;
 
 public class HomeTest {
