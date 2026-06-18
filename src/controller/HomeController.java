@@ -1,6 +1,5 @@
 package controller;
 
-import controller.profileManagement.ProfileController;
 import controller.recruimentManagement.RecruitmentManagementController;
 import enumModel.RoleEnum;
 import model.User;
@@ -8,13 +7,13 @@ import view.HomeView;
 
 public class HomeController {
     HomeView hv;
-    // login thanhf confg
 
     public HomeController() {
-        MainController.currentUser = new User();
-        MainController.currentUser.setRole(RoleEnum.EMPLOYER);
+        MainController.currentUser = User.getMockData().get(2);
+        ScreenManager.init(MainController.currentUser);
         this.hv = new HomeView(this);
     }
+
     public void show() throws Exception {
         hv.show();
     }
@@ -22,34 +21,35 @@ public class HomeController {
     public void excuteComent(String question) throws Exception {
         switch(question) {
             case "1":
-                hv.printAddress();
-                System.out.println("Chuc nang 1 dang thuc hien");
-                // thuc thi 1
+                ScreenManager.navigateTo("Profile");
                 break;
             case "2":
-                functionRecruitmentManagement();
+                ScreenManager.navigateTo("Schedule");
                 break;
             case "3":
-                System.out.println("Chuc nang 3 dang thuc hien");
-                handleProfile();
+                ScreenManager.navigateTo("ChangePassword");
+                break;
+            case "4":
+                ScreenManager.navigateTo("EmployeeList");
+                break;
+            case "5":
+                ScreenManager.navigateTo("Attendance");
+                break;
+            case "6":
+                functionRecruitmentManagement();
+                break;
+            case "7":
+                CalcSalaryController cc = new CalcSalaryController();
+                if(!cc.execute(MainController.currentUser)){
+                    hv.showError("Khong co quyen");
+                }
                 break;
             default:
                 hv.showError("Lệnh không hợp lệ");
                 break;
         }
     }
-    public void function(){
-        CalcSalaryController cc = new CalcSalaryController();
-        if(!cc.execute(MainController.currentUser)){
-            hv.showError("Khong co quyen");
-        }
-    }
 
-    public void handleProfile() throws Exception {
-        ProfileController pc = new ProfileController();
-
-        pc.showEmployeeList();
-    }
     public void functionRecruitmentManagement() throws Exception {
         RecruitmentManagementController rmc = new RecruitmentManagementController();
         boolean result = rmc.navigate();
@@ -57,5 +57,4 @@ public class HomeController {
             hv.showError("Không có quyền truy cập");
         }
     }
-
 }

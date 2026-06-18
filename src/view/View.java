@@ -12,11 +12,12 @@ public abstract class View {
     public  abstract void show() throws Exception;
     public  void showError(String error){
         System.out.println("------------------------");
-        System.out.println("SYSTEM ERROR :"+error);
+        System.out.println("LỖI HỆ THỐNG: "+error);
         System.out.println("------------------------");
     }
     public void handleInput() throws IOException {
         String input = netIn.readLine();
+        if (input == null) { question = "0"; return; }
         question = input.toUpperCase();
     }
     public void printAddress(){
