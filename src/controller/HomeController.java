@@ -1,17 +1,18 @@
 package controller;
 
 import controller.profileManagement.ProfileController;
+import controller.recruimentManagement.RecruitmentManagementController;
+import enumModel.RoleEnum;
 import model.User;
 import view.HomeView;
 
 public class HomeController {
-    static User currentUser;
     HomeView hv;
     // login thanhf confg
-    void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
+
     public HomeController() {
+        MainController.currentUser = new User();
+        MainController.currentUser.setRole(RoleEnum.EMPLOYER);
         this.hv = new HomeView(this);
     }
     public void show() throws Exception {
@@ -26,7 +27,7 @@ public class HomeController {
                 // thuc thi 1
                 break;
             case "2":
-                System.out.println("Chuc nang 2 dang thuc hien");
+                functionRecruitmentManagement();
                 break;
             case "3":
                 System.out.println("Chuc nang 3 dang thuc hien");
@@ -39,8 +40,7 @@ public class HomeController {
     }
     public void function(){
         CalcSalaryController cc = new CalcSalaryController();
-
-        if(!cc.execute(currentUser)){
+        if(!cc.execute(MainController.currentUser)){
             hv.showError("Khong co quyen");
         }
     }
@@ -50,4 +50,12 @@ public class HomeController {
 
         pc.showEmployeeList();
     }
+    public void functionRecruitmentManagement() throws Exception {
+        RecruitmentManagementController rmc = new RecruitmentManagementController();
+        boolean result = rmc.navigate();
+        if(!result){
+            hv.showError("Không có quyền truy cập");
+        }
+    }
+
 }
