@@ -39,7 +39,6 @@ public class ProfileView extends View {
         System.out.println("Ngày sinh: " + dob);
         System.out.println("Giới tính: " + gender);
         System.out.println("CCCD: " + idCard);
-        System.out.println("Nơi cấp: " + (emp.getIdCard() != null ? "Cục CSĐKX" : "Chưa cập nhật"));
         System.out.println("Quê quán: " + hometown);
         System.out.println("Địa chỉ thường trú: " + address);
         System.out.println("SĐT: " + phone);
@@ -66,7 +65,7 @@ public class ProfileView extends View {
         System.out.println("\n--- Lương cơ bản ---");
         Double baseSalary = emp.getBaseSalary();
         Double allowance = emp.getFixedAllowance();
-        System.out.println("Hệ số lương: " + (baseSalary != null ? String.format("%,.0fđ", baseSalary) : "Chưa cập nhật"));
+        System.out.println("Lương cơ bản: " + (baseSalary != null ? String.format("%,.0fđ", baseSalary) : "Chưa cập nhật"));
         System.out.println("Phụ cấp: " + (allowance != null ? String.format("%,.0fđ", allowance) : "Chưa cập nhật"));
 
         System.out.println("\n--- Bảo hiểm & Thuế ---");
