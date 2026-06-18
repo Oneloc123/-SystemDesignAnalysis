@@ -3,7 +3,7 @@ package model;
 import enumModel.RoleEnum;
 
 public class User {
-    private RoleEnum role;
+    private RoleEnum role ;
 
     public User() {
     }

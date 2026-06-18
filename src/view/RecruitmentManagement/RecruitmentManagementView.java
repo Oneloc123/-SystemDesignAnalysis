@@ -1,6 +1,6 @@
 package view.RecruitmentManagement;
 
-import controller.RecruitmentManagementController;
+import controller.recruimentManagement.RecruitmentManagementController;
 import view.View;
 
 import static controller.MainController.printList;
@@ -23,8 +23,12 @@ public class RecruitmentManagementView extends View {
             printList(funcs);
             //
             printAddress();
-       //     handleInput();
+            handleInput();
             //
+            //exit
+            if(question.equals("0")) {System.out.println("Thoat thanh cong"); break loop;}
+            // thuc thi func
+            rmc.excuteComent(question);
         }
     }
 

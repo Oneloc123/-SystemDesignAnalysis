@@ -1,5 +1,7 @@
 package controller;
 
+import controller.recruimentManagement.RecruitmentManagementController;
+import enumModel.RoleEnum;
 import model.User;
 import view.HomeView;
 
@@ -8,13 +10,15 @@ public class HomeController {
     // login thanhf confg
 
     public HomeController() {
+        MainController.currentUser = new User();
+        MainController.currentUser.setRole(RoleEnum.EMPLOYER);
         this.hv = new HomeView(this);
     }
     public void show() throws Exception {
         hv.show();
     }
 
-    public void excuteComent(String question) {
+    public void excuteComent(String question) throws Exception {
         switch(question) {
             case "1":
                 hv.printAddress();
@@ -22,7 +26,7 @@ public class HomeController {
                 // thuc thi 1
                 break;
             case "2":
-                System.out.println("Chuc nang 2 dang thuc hien");
+                functionRecruitmentManagement();
                 break;
             default:
                 hv.showError("Lệnh không hợp lệ");
@@ -31,7 +35,6 @@ public class HomeController {
     }
     public void function(){
         CalcSalaryController cc = new CalcSalaryController();
-
         if(!cc.execute(MainController.currentUser)){
             hv.showError("Khong co quyen");
         }

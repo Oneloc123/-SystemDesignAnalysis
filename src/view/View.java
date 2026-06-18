@@ -18,7 +18,7 @@ public abstract class View {
     public void handleInput() throws IOException {
         String input = netIn.readLine();
         question = input.toUpperCase();
-
+    }
     public void printAddress(){
         String result = "";
         for(AddressEnum add: MainController.addresses){
@@ -26,5 +26,24 @@ public abstract class View {
         }
         result += ">";
         System.out.print(result);
+    }
+    public double handleDouleParam(String nameParam){
+        double result = 0;
+        System.out.print("nhập "+ nameParam+" : ");
+        while(true){
+            try{
+                result = Double.parseDouble(handleParam("lương"));
+                break;
+            }catch (Exception e){
+                showError("lương phải là số");
+            }
+        }
+        return  result;
+    }
+
+    public String handleParam(String nameParam) throws IOException {
+        printAddress();
+        System.out.print("nhập "+ nameParam+" : ");
+        return netIn.readLine();
     }
 }
