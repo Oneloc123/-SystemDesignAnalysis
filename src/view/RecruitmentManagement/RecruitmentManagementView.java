@@ -1,6 +1,6 @@
 package view.RecruitmentManagement;
 
-import controller.RecruitmentManagementController;
+import controller.recruimentManagement.RecruitmentManagementController;
 import view.View;
 
 import static controller.MainController.printList;

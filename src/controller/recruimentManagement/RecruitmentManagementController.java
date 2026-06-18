@@ -1,5 +1,6 @@
-package controller;
+package controller.recruimentManagement;
 
+import controller.MainController;
 import enumModel.AddressEnum;
 import enumModel.RoleEnum;
 import view.RecruitmentManagement.RecruitmentManagementView;
@@ -25,11 +26,10 @@ public class RecruitmentManagementController {
         return true;
     }
 
-    public void excuteComent(String question) {
+    public void excuteComent(String question) throws Exception {
         switch(question) {
             case "1":
-                rmv.printAddress();
-                System.out.println("Chuc nang 1 dang thuc hien");
+                functionCreatePost();
                 break;
             case "2":
                 rmv.printAddress();
@@ -44,7 +44,11 @@ public class RecruitmentManagementController {
                 break;
         }
     }
-    public void functionCreatePost(){
-
+    public void functionCreatePost() throws Exception {
+        CreatePostRecruimentController cprc = new CreatePostRecruimentController();
+        boolean result = cprc.navigateTo();
+        if(!result){
+            rmv.showError("không có quyền truy cập");
+        }
     }
 }

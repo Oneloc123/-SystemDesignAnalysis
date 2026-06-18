@@ -1,5 +1,6 @@
 package controller;
 
+import controller.recruimentManagement.RecruitmentManagementController;
 import enumModel.RoleEnum;
 import model.User;
 import view.HomeView;
