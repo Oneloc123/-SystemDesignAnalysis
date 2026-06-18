@@ -2,6 +2,7 @@ package view;
 
 import controller.HomeController;
 import controller.MainController;
+import enumModel.AddressEnum;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class HomeView extends View {
     HomeController hc;
     String question;
     static BufferedReader netIn;
-    String address = "Home";
+    AddressEnum address = AddressEnum.Home;
 
     public HomeView(HomeController hc) {
         // cật nhật địa chỉ
@@ -61,7 +62,7 @@ public class HomeView extends View {
 
     public void printAddress(){
         String result = "";
-        for(String add: MainController.addresses){
+        for(AddressEnum add: MainController.addresses){
             result += add+"/";
         }
         result += ">";
