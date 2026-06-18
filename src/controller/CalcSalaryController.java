@@ -2,14 +2,18 @@ package controller;
 
 import enumModel.RoleEnum;
 import model.User;
+import view.calcSalary.ParameterSettingsView;
 
 public class CalcSalaryController {
-    public CalcSalaryController() {}
+    ParameterSettingsView parameterSettingsView;
+    public CalcSalaryController() {
+        this.parameterSettingsView = new ParameterSettingsView(this);
+    }
     public boolean execute(User current){
         //Kiem tra phan quyen
         if (!checkRole(current)) {return false;}
         //Chinh sua tham so
-
+        parameterSettingsView.editParameter();
         //Tinh luong
         return  true;
     }
