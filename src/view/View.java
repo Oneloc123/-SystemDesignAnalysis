@@ -3,6 +3,8 @@ package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import controller.MainController;
+import enumModel.AddressEnum;
 
 public abstract class View {
     protected String question;
@@ -16,6 +18,13 @@ public abstract class View {
     public void handleInput() throws IOException {
         String input = netIn.readLine();
         question = input.toUpperCase();
-    }
 
+    public void printAddress(){
+        String result = "";
+        for(AddressEnum add: MainController.addresses){
+            result += add+"/";
+        }
+        result += ">";
+        System.out.print(result);
+    }
 }
