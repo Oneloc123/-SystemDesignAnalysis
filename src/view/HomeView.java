@@ -5,8 +5,7 @@ import controller.HomeController;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class HomeView extends View {
     HomeController hc;
@@ -18,7 +17,7 @@ public class HomeView extends View {
         netIn = new BufferedReader(new InputStreamReader(System.in));
         this.hc = hc;
     }
-    public String[] funcs = {"Tính Lương",
+     String[] funcs = {"Tính Lương",
             "Quản lý tuyển dụng"};
 
     @Override

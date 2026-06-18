@@ -1,8 +1,6 @@
 package test;
 
-import controller.HomeController;
-import model.RoleEnum;
-import view.HomeView;
+import enumModel.RoleEnum;
 
 public class HomeTest {
     public static void main(String[] args) throws Exception {
