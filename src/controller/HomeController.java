@@ -1,5 +1,6 @@
 package controller;
 
+import controller.profileManagement.ProfileController;
 import controller.recruimentManagement.RecruitmentManagementController;
 import enumModel.RoleEnum;
 import model.User;
@@ -28,6 +29,10 @@ public class HomeController {
             case "2":
                 functionRecruitmentManagement();
                 break;
+            case "3":
+                System.out.println("Chuc nang 3 dang thuc hien");
+                handleProfile();
+                break;
             default:
                 hv.showError("Lệnh không hợp lệ");
                 break;
@@ -40,6 +45,11 @@ public class HomeController {
         }
     }
 
+    public void handleProfile() throws Exception {
+        ProfileController pc = new ProfileController();
+
+        pc.showEmployeeList();
+    }
     public void functionRecruitmentManagement() throws Exception {
         RecruitmentManagementController rmc = new RecruitmentManagementController();
         boolean result = rmc.navigate();
