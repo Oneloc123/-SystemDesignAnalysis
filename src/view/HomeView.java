@@ -4,9 +4,8 @@ import controller.HomeController;
 import controller.MainController;
 import enumModel.AddressEnum;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import static controller.MainController.printList;
 
 
 public class HomeView extends View {
@@ -23,7 +22,7 @@ public class HomeView extends View {
     }
     //
     public String[] funcs = {"Tính Lương",
-            "Quản lý tuyển dụng"};
+            "Quản lý tuyển dụng", "Quản lý hồ sơ"};
 
     @Override
     public void show() throws Exception{
@@ -42,26 +41,6 @@ public class HomeView extends View {
         }
     }
 
-    public  void printList(String[] list){
-        System.out.println("------------------------");
-        System.out.println("Danh Sách Chức Năng");
-        System.out.println("0. Thoát");
-        for(int i=1;i<list.length+1;i++){
-            System.out.println((i)+": "+list[i-1]);
-        }
-        System.out.println("------------------------");
-        System.out.println("Vui lòng chọn chức năng:");
-    }
 
-
-
-    public void printAddress(){
-        String result = "";
-        for(AddressEnum add: MainController.addresses){
-            result += add+"/";
-        }
-        result += ">";
-        System.out.print(result);
-    }
 
 }
