@@ -31,7 +31,6 @@ public abstract class View {
     }
     public double handleDouleParam(String nameParam){
         double result = 0;
-        System.out.print("nhập "+ nameParam+" : ");
         while(true){
             try{
                 result = Double.parseDouble(handleParam(nameParam));
@@ -51,13 +50,14 @@ public abstract class View {
 
     public Date handleDate(String nameParam){
         Date result;
-        System.out.print("nhập "+ nameParam+" : ");
         while(true){
             try{
                 result = java.sql.Date.valueOf(handleParam(nameParam));
                 break;
-            }catch (Exception e){
+            } catch (IllegalArgumentException e) {
                 showError("Ngày không hợp lệ");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
         return result;

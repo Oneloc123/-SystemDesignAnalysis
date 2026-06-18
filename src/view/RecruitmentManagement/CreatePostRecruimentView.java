@@ -35,14 +35,18 @@ public class CreatePostRecruimentView extends View {
         rp.setDescription(handleParam("mô tả"));
         rp.setRequiment(handleParam("yêu cầu"));
         rp.setSalary(handleDouleParam("Luong"));
-        rp.setDayEnd(java.sql.Date.valueOf(handleParam("ngày hết hạn (vd : 2026-06-18):")));
+        rp.setDayEnd(handleDate("ngày hết hạn (vd : 2026-06-18):"));
 
-        executeIsSaveDraf();
-        executeIsConfirm();
+        executeForm();
+    }
+
+    public void executeForm()throws Exception{
+        printList(new String[]{"lưu nháp","gửi form","chỉnh sửa"});
+        cprc.executeForm(handleParam("Nhập lệnh: "),rp);
     }
 
     public void printDraf(JobPosting draf) throws Exception {
-        showMessage("----------Bản nháp-----------");
+        showMessage("---------------------");
         showMessage("----Tiêu đề       :"+draf.getTitle());
         showMessage("----Mô tả         :"+draf.getDescription());
         showMessage("----Yêu cầu       :"+draf.getRequiment());
@@ -52,8 +56,8 @@ public class CreatePostRecruimentView extends View {
         isContinueDraf();
     }
 
-    public void handleDraf(JobPosting draf) throws Exception {
-        showMessage("----------Chỉnh sửa nháp------------");
+    public void handleEdit(JobPosting draf,String title) throws Exception {
+        showMessage("----------"+title+"------------");
         showMessage("Nhập stt input cần chỉnh sửa (vd: 1 ):");
         showMessage("----1. Tiêu đề       :"+draf.getTitle());
         showMessage("----2. Mô tả         :"+draf.getDescription());
