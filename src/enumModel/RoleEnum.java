@@ -1,4 +1,4 @@
-package model;
+package enumModel;
 
 public enum RoleEnum {
     ACCOUNT,
