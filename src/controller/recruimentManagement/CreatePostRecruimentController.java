@@ -15,44 +15,40 @@ public class CreatePostRecruimentController {
         cprv = new CreatePostRecruimentView(this);
     }
     public boolean navigateTo() throws Exception {
-        // xác thực quyền
         if(!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER)){
             return false;
         }
-        // xác thực thành công
         MainController.addresses.add(address);
         cprv.show();
-        // khi thoát
         MainController.addresses.remove(AddressEnum.RecruitmentManagement);
         return true;
     }
-    public void executeForm(String s,JobPosting j)throws Exception{
+    public void processFormOptions(String s,JobPosting j)throws Exception{
         draf = j;
         switch(s) {
             case "1":
-                cprv.executeIsSaveDraf();
+                cprv.promptSaveDraft();
                 break;
             case "2":
-                cprv.executeIsConfirm();
+                cprv.promptConfirmSubmit();
                 break;
             case "3":
-                cprv.handleEdit(draf,"bản chỉnh sửa");
+                cprv.displayEditOptions(draf,"bản chỉnh sửa");
                 break;
             case "0":
                 cprv.showMessage("thoát form");
                 break;
             default:
                 cprv.showError("Lệnh không hợp lệ");
-                cprv.executeForm();
+                cprv.displayFormOptions();
                 break;
         }
     }
 
-    // xử lý menu
-    public void excuteCommand(String question) throws Exception {
+    public void handleMainMenuCommand(String question) throws Exception {
         switch(question) {
             case "1":
-                cprv.handleForm();
+                cprv.enterJobPostingDetails();
                 break;
             case "2":
                 Employer e = (Employer) MainController.currentUser;
@@ -61,7 +57,7 @@ public class CreatePostRecruimentController {
                     cprv.showError("không có bản nháp");
                     break;
                 }
-                cprv.handleEdit(draf,"bản nháp");
+                cprv.displayEditOptions(draf,"bản nháp");
                 break;
             default:
                 cprv.showError("Lệnh không hợp lệ");
@@ -69,13 +65,11 @@ public class CreatePostRecruimentController {
         }
     }
 
-
-    // gửi form
-    public void excecuteConfirm(String s,JobPosting rp) throws Exception {
+    public void handleConfirmSubmit(String s,JobPosting rp) throws Exception {
         if(s.toUpperCase().equals("Y")){
             if(!rp.checkValid()){
                 cprv.showMessage("Dữ liệu không hợp lệ, vui lòng nhập lại");
-                cprv.handleForm();
+                cprv.enterJobPostingDetails();
                 return;
             }
             if(!rp.save()){
@@ -90,16 +84,15 @@ public class CreatePostRecruimentController {
             return;
         }
         cprv.showError("lệnh không hợp lệ");
-        cprv.executeIsConfirm();
+        cprv.promptConfirmSubmit();
     }
 
-    // lưu nháp
-    public void executeSaveDarf(String s, JobPosting rp) throws Exception {
+    public void handleSaveDraft(String s, JobPosting rp) throws Exception {
         draf = rp;
         if(s.toUpperCase().equals("Y")){
             if(!rp.checkValid()){
                 cprv.showMessage("Dữ liệu không hợp lệ, vui lòng nhập lại");
-                cprv.handleForm();
+                cprv.enterJobPostingDetails();
                 return;
             }
             if(!rp.saveDraf()){
@@ -113,14 +106,13 @@ public class CreatePostRecruimentController {
             System.out.println("Huỷ lưu nháp");
             return;
         }
-            cprv.showError("lệnh không hợp lệ");
-            cprv.executeIsSaveDraf(draf);
+        cprv.showError("lệnh không hợp lệ");
+        cprv.promptSaveDraft(draf);
     }
 
-    // tiếp tục bản nháp
-    public void executeContinueDraf(String s) throws Exception {
+    public void handleContinueDraft(String s) throws Exception {
         if(s.toUpperCase().equals("Y")){
-            cprv.handleEdit(draf,"tiếp tục bản nháp");
+            cprv.displayEditOptions(draf,"tiếp tục bản nháp");
             return;
         }
         if(s.toUpperCase().equals("N")){
@@ -128,47 +120,44 @@ public class CreatePostRecruimentController {
             return;
         }
         cprv.showError("lệnh không hợp lệ");
-        cprv.isContinueDraf();
+        cprv.promptContinueDraft();
     }
 
-    // chỉnh sửa nháp
-    public void handleEditDraf(String s) throws Exception {
+    public void handleEditDraft(String s) throws Exception {
         switch(s) {
             case "1":
                 draf.setTitle(cprv.handleParam("tiêu đề"));
-                cprv.handleEdit(draf,"bản nháp");
+                cprv.displayEditOptions(draf,"bản nháp");
                 break;
             case "2":
                 draf.setDescription(cprv.handleParam("mô tả"));
-                cprv.handleEdit(draf,"bản nháp");
+                cprv.displayEditOptions(draf,"bản nháp");
                 break;
             case "3":
                 draf.setRequiment(cprv.handleParam("yêu cầu"));
-                cprv.handleEdit(draf,"bản nháp");
+                cprv.displayEditOptions(draf,"bản nháp");
                 break;
             case "4":
                 draf.setSalary(cprv.handleDouleParam("Luong"));
-                cprv.handleEdit(draf,"bản nháp");
+                cprv.displayEditOptions(draf,"bản nháp");
                 break;
             case "5":
                 draf.setDayEnd((cprv.handleDate("ngày hết hạn (vd : 2026-06-18):")));
-                cprv.handleEdit(draf,"bản nháp");
+                cprv.displayEditOptions(draf,"bản nháp");
                 break;
             case "6":
                 cprv.showMessage("Thoát chỉnh sửa nháp");
                 break;
             case "7":
-                cprv.executeIsSaveDraf(draf);
+                cprv.promptSaveDraft(draf);
                 break;
             case "8":
-                cprv.executeIsConfirm(draf);
+                cprv.promptConfirmSubmit(draf);
                 break;
             default:
                 cprv.showError("Lệnh không hợp lệ");
-                cprv.handleEdit(draf,"bản nháp");
+                cprv.displayEditOptions(draf,"bản nháp");
                 break;
         }
     }
-
-
 }

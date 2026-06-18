@@ -25,11 +25,11 @@ public class CreatePostRecruimentView extends View {
                 System.out.println("Thoat thanh cong");
                 break loop;
             }
-            cprc.excuteCommand(question);
+            cprc.handleMainMenuCommand(question);
 
         }
     }
-    public void handleForm() throws Exception {
+    public void enterJobPostingDetails() throws Exception {
         rp = new JobPosting();
         rp.setTitle(handleParam("tiêu đề"));
         rp.setDescription(handleParam("mô tả"));
@@ -37,26 +37,15 @@ public class CreatePostRecruimentView extends View {
         rp.setSalary(handleDouleParam("Luong"));
         rp.setDayEnd(handleDate("ngày hết hạn (vd : 2026-06-18):"));
 
-        executeForm();
+        displayFormOptions();
     }
 
-    public void executeForm()throws Exception{
+    public void displayFormOptions()throws Exception{
         printList(new String[]{"lưu nháp","gửi form","chỉnh sửa"});
-        cprc.executeForm(handleParam("Nhập lệnh: "),rp);
+        cprc.processFormOptions(handleParam("Nhập lệnh: "),rp);
     }
 
-    public void printDraf(JobPosting draf) throws Exception {
-        showMessage("---------------------");
-        showMessage("----Tiêu đề       :"+draf.getTitle());
-        showMessage("----Mô tả         :"+draf.getDescription());
-        showMessage("----Yêu cầu       :"+draf.getRequiment());
-        showMessage("----Mức lương     :"+draf.getSalary());
-        showMessage("----Ngày kết thúc :"+draf.getDayEnd());
-        showMessage("------------------------------");
-        isContinueDraf();
-    }
-
-    public void handleEdit(JobPosting draf,String title) throws Exception {
+    public void displayEditOptions(JobPosting draf,String title) throws Exception {
         showMessage("----------"+title+"------------");
         showMessage("Nhập stt input cần chỉnh sửa (vd: 1 ):");
         showMessage("----1. Tiêu đề       :"+draf.getTitle());
@@ -69,27 +58,27 @@ public class CreatePostRecruimentView extends View {
         showMessage("----7.lưu nháp");
         showMessage("----8.gửi form");
         showMessage("------------------------------");
-        cprc.handleEditDraf(handleParam("số tt cần chỉnh sửa hoặc các chức năng khác"));
+        cprc.handleEditDraft(handleParam("số tt cần chỉnh sửa hoặc các chức năng khác"));
     }
 
-    public void isContinueDraf() throws Exception {
+    public void promptContinueDraft() throws Exception {
         showMessage(" bạn có muốn tiếp tục bản nháp");
-        cprc.executeContinueDraf(handleParam("Bạn có muốn tiếp tục bản nháp (Y/N): "));
+        cprc.handleContinueDraft(handleParam("Bạn có muốn tiếp tục bản nháp (Y/N): "));
     }
 
-    public void executeIsSaveDraf()throws Exception {
-        cprc.executeSaveDarf(handleParam("Bạn có muôn lưu nháp (Y/N):"),rp);
+    public void promptSaveDraft()throws Exception {
+        cprc.handleSaveDraft(handleParam("Bạn có muôn lưu nháp (Y/N):"),rp);
     }
 
-    public void executeIsConfirm() throws Exception {
-        cprc.excecuteConfirm(handleParam("Xác nhận gửi form (Y/N):"),rp);
+    public void promptConfirmSubmit() throws Exception {
+        cprc.handleConfirmSubmit(handleParam("Xác nhận gửi form (Y/N):"),rp);
     }
 
-    public void executeIsSaveDraf(JobPosting draf)throws Exception {
-        cprc.executeSaveDarf(handleParam("Bạn có muôn lưu nháp (Y/N):"),draf);
+    public void promptSaveDraft(JobPosting draf)throws Exception {
+        cprc.handleSaveDraft(handleParam("Bạn có muôn lưu nháp (Y/N):"),draf);
     }
 
-    public void executeIsConfirm(JobPosting draf) throws Exception {
-        cprc.excecuteConfirm(handleParam("Xác nhận gửi form (Y/N):"),draf);
+    public void promptConfirmSubmit(JobPosting draf) throws Exception {
+        cprc.handleConfirmSubmit(handleParam("Xác nhận gửi form (Y/N):"),draf);
     }
 }
