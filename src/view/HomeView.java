@@ -19,7 +19,7 @@ public class HomeView extends View {
         this.hc = hc;
     }
     public String[] funcs = {"Tính Lương",
-            "Quản lý tuyển dụng"};
+            "Quản lý tuyển dụng", "Quản lý hồ sơ"};
 
     @Override
     public void show() throws Exception{

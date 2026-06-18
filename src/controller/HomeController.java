@@ -1,5 +1,6 @@
 package controller;
 
+import controller.profileManagement.ProfileController;
 import model.User;
 import view.HomeView;
 
@@ -17,7 +18,7 @@ public class HomeController {
         hv.show();
     }
 
-    public void excuteComent(String question) {
+    public void excuteComent(String question) throws Exception {
         switch(question) {
             case "1":
                 hv.printAddress();
@@ -26,6 +27,10 @@ public class HomeController {
                 break;
             case "2":
                 System.out.println("Chuc nang 2 dang thuc hien");
+                break;
+            case "3":
+                System.out.println("Chuc nang 3 dang thuc hien");
+                handleProfile();
                 break;
             default:
                 hv.showError("Lệnh không hợp lệ");
@@ -38,5 +43,11 @@ public class HomeController {
         if(!cc.execute(currentUser)){
             hv.showError("Khong co quyen");
         }
+    }
+
+    public void handleProfile() throws Exception {
+        ProfileController pc = new ProfileController();
+
+        pc.showEmployeeList();
     }
 }
