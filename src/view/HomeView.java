@@ -39,6 +39,7 @@ public class HomeView extends View {
             // thuc thi func
             hc.excuteComent(question);
         }
+        return false;
     }
 
 

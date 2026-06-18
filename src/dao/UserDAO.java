@@ -99,4 +99,42 @@ public class UserDAO implements DAO<User> {
         }
         return list;
     }
+
+    public User findByUsername( String username) {
+        String sql = "SELECT * FROM users WHERE username=?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return mapRow(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private User mapRow(ResultSet rs) throws SQLException {
+        User user = new User();
+        user.setUserId(rs.getInt("user_id"));
+        user.setUsername(rs.getString("username"));
+        user.setPassword(rs.getString("password"));
+        user.setEmail(rs.getString("email"));
+        user.setRole(rs.getString("rple"));
+        return user;
+    }
+    public User authenticate(String username, String password) {
+        String sql = "SELECT * FROM users WHERE username=? AND password=?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)){
+                stmt.setString(1,"username");
+                stmt.setString(2,"password");
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()){
+                    return mapRow(rs);
+                }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

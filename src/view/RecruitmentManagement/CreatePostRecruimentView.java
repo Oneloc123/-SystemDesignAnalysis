@@ -30,6 +30,7 @@ public class CreatePostRecruimentView extends View {
             cprc.handleMainMenuCommand(question);
 
         }
+        return false;
     }
     public void enterJobPostingDetails() throws Exception {
         rp = new JobPosting();

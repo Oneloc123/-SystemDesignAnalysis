@@ -30,6 +30,7 @@ public class RecruitmentManagementView extends View {
             // thuc thi func
             rmc.excuteCommand(question);
         }
+        return false;
     }
 
 }

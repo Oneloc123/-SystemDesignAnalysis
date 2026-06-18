@@ -30,6 +30,7 @@ public class SubmitCVView extends View {
             }
             controller.handleMainMenuCommand(question);
         }
+        return false;
     }
 
     // Thêm phương thức hiển thị danh sách job

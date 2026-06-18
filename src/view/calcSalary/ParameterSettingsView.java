@@ -20,6 +20,7 @@ public class ParameterSettingsView extends View {
         //lay param tu controller ve de chinh sua
         Parameter workingCopy = new Parameter(calcSalaryController.getParameter());
         editParameter(workingCopy);
+        return false;
     }
 
     //menu chinh sua tham so
