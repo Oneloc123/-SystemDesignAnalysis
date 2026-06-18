@@ -37,8 +37,12 @@ public class HomeController {
         }
     }
 
-    public void functionRecruitmentManagement(){
-
+    public void functionRecruitmentManagement() throws Exception {
+        RecruitmentManagementController rmc = new RecruitmentManagementController();
+        boolean result = rmc.navigate();
+        if(!result){
+            hv.showError("Không có quyền truy cập");
+        }
     }
 
 }

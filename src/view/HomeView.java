@@ -44,7 +44,7 @@ public class HomeView extends View {
         }
     }
 
-    public  void printList(String[] list){
+    public void printList(String[] list){
         System.out.println("------------------------");
         System.out.println("Danh Sách Chức Năng");
         System.out.println("0. Thoát");
@@ -60,13 +60,5 @@ public class HomeView extends View {
         question = input.toUpperCase();
     }
 
-    public void printAddress(){
-        String result = "";
-        for(AddressEnum add: MainController.addresses){
-            result += add+"/";
-        }
-        result += ">";
-        System.out.print(result);
-    }
 
 }
