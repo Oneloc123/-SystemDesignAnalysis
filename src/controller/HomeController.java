@@ -4,12 +4,9 @@ import model.User;
 import view.HomeView;
 
 public class HomeController {
-    static User currentUser;
     HomeView hv;
     // login thanhf confg
-    void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
+
     public HomeController() {
         this.hv = new HomeView(this);
     }
@@ -35,8 +32,9 @@ public class HomeController {
     public void function(){
         CalcSalaryController cc = new CalcSalaryController();
 
-        if(!cc.execute(currentUser)){
+        if(!cc.execute(MainController.currentUser)){
             hv.showError("Khong co quyen");
         }
     }
+
 }
