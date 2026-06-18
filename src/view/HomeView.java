@@ -4,9 +4,8 @@ import controller.HomeController;
 import controller.MainController;
 import enumModel.AddressEnum;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import static controller.MainController.printList;
 
 
 public class HomeView extends View {
@@ -41,18 +40,6 @@ public class HomeView extends View {
             hc.excuteComent(question);
         }
     }
-
-    public void printList(String[] list){
-        System.out.println("------------------------");
-        System.out.println("Danh Sách Chức Năng");
-        System.out.println("0. Thoát");
-        for(int i=1;i<list.length+1;i++){
-            System.out.println((i)+": "+list[i-1]);
-        }
-        System.out.println("------------------------");
-        System.out.println("Vui lòng chọn chức năng:");
-    }
-
 
 
 

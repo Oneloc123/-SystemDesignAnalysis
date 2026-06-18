@@ -18,7 +18,7 @@ public abstract class View {
     public void handleInput() throws IOException {
         String input = netIn.readLine();
         question = input.toUpperCase();
-
+    }
     public void printAddress(){
         String result = "";
         for(AddressEnum add: MainController.addresses){

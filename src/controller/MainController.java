@@ -1,6 +1,7 @@
 package controller;
 
 import enumModel.AddressEnum;
+import enumModel.RoleEnum;
 import model.User;
 
 import java.util.ArrayList;
