@@ -1,5 +1,6 @@
 package controller;
 
+import enumModel.AddressEnum;
 import model.User;
 
 import java.util.ArrayList;
@@ -10,5 +11,5 @@ public class MainController {
     void setCurrentUser(User currentUser) {
         MainController.currentUser = currentUser;
     }
-    public static List<String> addresses = new ArrayList<>();
+    public static List<AddressEnum> addresses = new ArrayList<>();
 }

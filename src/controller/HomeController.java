@@ -40,4 +40,8 @@ public class HomeController {
         calcSalaryController.execute(MainController.currentUser);
     }
 
+    public void functionRecruitmentManagement(){
+
+    }
+
 }
