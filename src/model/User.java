@@ -1,6 +1,8 @@
 package model;
 
-import java.util.ArrayList;
+import dao.ProfileDao.ProfileDao;
+import enumModel.RoleEnum;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -28,26 +30,39 @@ public class User {
     public User() {
     }
 
+
+
     public RoleEnum getRole() {
         return role;
     }
-
     public void setRole(RoleEnum role) {
         this.role = role;
     }
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
+    public String getFullName() {return fullName;}
+    public void setFullName(String fullName) {this.fullName = fullName;}
+    public Date getDateOfBirth() {return dateOfBirth;}
+    public void setDateOfBirth(Date dateOfBirth) {this.dateOfBirth = dateOfBirth;}
+    public String getGender() {return gender;}
+    public void setGender(String gender) {this.gender = gender;}
+    public String getPhone() {return phone;}
+    public void setPhone(String phone) {this.phone = phone;}
+    public String getCitizenIdentificationCard() {return citizenIdentificationCard;}
+    public void setCitizenIdentificationCard(String citizenIdentificationCard) {this.citizenIdentificationCard = citizenIdentificationCard;}
+    public String getAddress() {return address;}
+    public void setAddress(String address) {this.address = address;}
 
 
 
-    public String getFullName() { return fullName; }
-    public int getId() { return id; }
 
-
-    public static List<User> getMockData() {
-        List<User> list = new ArrayList<>();
-        // Nhét luôn new Date() cho nhanh, bỏ qua định dạng ngày tháng phức tạp
-        list.add(new User("Hà Nội", "001", "0901", "Nam", new Date(), "Nguyễn Văn Lộc", RoleEnum.ADMIN, 1));
-        list.add(new User("HCM", "002", "0902", "Nữ", new Date(), "Trần Thị Ánh", RoleEnum.HR, 2));
-        list.add(new User("Đà Nẵng", "003", "0903", "Nam", new Date(), "Lê Đình Cương", RoleEnum.EMPLOYER, 3));
-        return list;
+    public static List<User> getAllEmployee() throws SQLException {
+        ProfileDao pd = new ProfileDao();
+        return pd.getAllUsers();
     }
+
+
+
+
+
 }
