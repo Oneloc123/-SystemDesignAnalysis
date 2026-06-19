@@ -8,5 +8,8 @@ public enum AddressEnum {
     EmployeeList,
     Attendance,
     RecruitmentManagement,
-    CreatePostRecruitment
+    CreatePostRecruitment,
+    SubmitCV,
+    ReviewApplications,
+    ScheduleInterview
 }

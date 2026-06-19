@@ -5,6 +5,7 @@ public enum RoleEnum {
     HR,
     ADMIN,
     EMPLOYER,
+    CANDIDATE
     ;
 
 

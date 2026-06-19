@@ -2,16 +2,19 @@ package controller;
 
 import controller.recruimentManagement.RecruitmentManagementController;
 import enumModel.RoleEnum;
+import model.Recruitment.Employer;
 import model.User;
 import view.HomeView;
 
 public class HomeController {
     HomeView hv;
+    CalcSalaryController calcSalaryController;
 
     public HomeController() {
-        MainController.currentUser = User.getMockData().get(2);
-        ScreenManager.init(MainController.currentUser);
+        MainController.currentUser = new Employer();
+        MainController.currentUser.setRole(RoleEnum.EMPLOYER.toString());
         this.hv = new HomeView(this);
+        this.calcSalaryController = new CalcSalaryController();
     }
 
     public void show() throws Exception {
@@ -21,28 +24,16 @@ public class HomeController {
     public void excuteComent(String question) throws Exception {
         switch(question) {
             case "1":
-                ScreenManager.navigateTo("Profile");
+                hv.printAddress();
+                System.out.println("Chuc nang 1 dang thuc hien");
+                // thuc thi 1
                 break;
             case "2":
-                ScreenManager.navigateTo("Schedule");
-                break;
-            case "3":
-                ScreenManager.navigateTo("ChangePassword");
-                break;
-            case "4":
-                ScreenManager.navigateTo("EmployeeList");
-                break;
-            case "5":
-                ScreenManager.navigateTo("Attendance");
-                break;
-            case "6":
                 functionRecruitmentManagement();
                 break;
-            case "7":
-                CalcSalaryController cc = new CalcSalaryController();
-                if(!cc.execute(MainController.currentUser)){
-                    hv.showError("Khong co quyen");
-                }
+            case "3":
+                System.out.println("Chuc nang 3 dang thuc hien");
+                handleProfile();
                 break;
             default:
                 hv.showError("Lệnh không hợp lệ");
@@ -50,6 +41,19 @@ public class HomeController {
         }
     }
 
+    public void function() throws Exception {
+        if (!calcSalaryController.checkRole(MainController.currentUser)) {
+            hv.showError("Khong co quyen");
+            return;
+        }
+        calcSalaryController.execute(MainController.currentUser);
+    }
+
+    public void handleProfile() throws Exception {
+        ProfileController pc = new ProfileController();
+
+        pc.showEmployeeList();
+    }
     public void functionRecruitmentManagement() throws Exception {
         RecruitmentManagementController rmc = new RecruitmentManagementController();
         boolean result = rmc.navigate();
@@ -57,4 +61,5 @@ public class HomeController {
             hv.showError("Không có quyền truy cập");
         }
     }
+
 }

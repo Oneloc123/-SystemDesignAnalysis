@@ -15,7 +15,7 @@ public class RecruitmentManagementController {
 
     public boolean navigate() throws Exception {
         // xác thực quyền
-        if(!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER)){
+        if(!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER.toString())){
             return false;
         }
         // xác thực thành công
@@ -26,18 +26,16 @@ public class RecruitmentManagementController {
         return true;
     }
 
-    public void excuteComent(String question) throws Exception {
+    public void excuteCommand(String question) throws Exception {
         switch(question) {
             case "1":
                 functionCreatePost();
                 break;
             case "2":
-                rmv.printAddress();
-                System.out.println("Chuc nang 2 dang thuc hien");
+                functionReviewApplication();
                 break;
             case "3":
-                rmv.printAddress();
-                System.out.println("Chuc nang 2 dang thuc hien");
+                functionScheduleInterview();
                 break;
             default:
                 rmv.showError("Lệnh không hợp lệ");
@@ -49,6 +47,20 @@ public class RecruitmentManagementController {
         boolean result = cprc.navigateTo();
         if(!result){
             rmv.showError("không có quyền truy cập");
+        }
+    }
+    public void functionReviewApplication() throws Exception{
+        ReviewApplicationsController rac = new ReviewApplicationsController();
+        boolean result = rac.navigateTo();
+        if(!result){
+            rmv.showError("Không có quền truy cập");
+        }
+    }
+    public void functionScheduleInterview()throws  Exception {
+        ScheduleInterviewController sic = new ScheduleInterviewController();
+        boolean result = sic.navigateTo();
+        if(!result){
+            rmv.showError("Không có quền truy cập");
         }
     }
 }
