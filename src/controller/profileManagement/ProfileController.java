@@ -2,8 +2,7 @@ package controller.profileManagement;
 
 import controller.ScreenManager;
 import controller.base.Controller;
-import data.EmployeeDAO;
-import model.Employee;
+import model.hr.Employee;
 import view.profileManagement.ProfileView;
 
 public class ProfileController extends Controller {
@@ -22,7 +21,7 @@ public class ProfileController extends Controller {
                 return;
             }
 
-            Employee emp = getProfile((long) ScreenManager.getCurrentUser().getId());
+            Employee emp = Employee.findByUserId(ScreenManager.getCurrentUser().getUserId());
 
             if (emp == null) {
                 showError("Không tìm thấy thông tin cá nhân. Vui lòng liên hệ HR để được hỗ trợ.");
@@ -38,10 +37,10 @@ public class ProfileController extends Controller {
 
     @Override
     public boolean checkAuth() {
-        return ScreenManager.getCurrentUser() != null && ScreenManager.getCurrentUser().getRole() != null;
+        return ScreenManager.getCurrentUser() != null;
     }
 
-    public Employee getProfile(Long userId) {
-        return EmployeeDAO.findById(userId);
+    public Employee getProfile(int userId) {
+        return Employee.findByUserId(userId);
     }
 }

@@ -20,14 +20,13 @@ public class ScheduleView extends View {
     AddressEnum address = AddressEnum.Schedule;
 
     private static final Set<String> HOLIDAYS = new HashSet<>(Arrays.asList(
-        "01/01",     // Tet Duong lich
-        "30/04",     // Ngay Giai phong
-        "01/05",     // Quoc te Lao dong
-        "02/09"      // Quoc khanh
+        "01/01",
+        "30/04",
+        "01/05",
+        "02/09"
     ));
 
     private boolean isHoliday(String dateStr) {
-        // dateStr format: dd/MM/yyyy
         if (dateStr == null || dateStr.length() < 5) return false;
         String ddMM = dateStr.substring(0, 5);
         return HOLIDAYS.contains(ddMM);
@@ -52,13 +51,13 @@ public class ScheduleView extends View {
             try {
                 renderCurrentView();
 
-                System.out.println("\n--- Chuc nang ---");
-                System.out.println("1. Xem chi tiet ngay");
-                System.out.println("2. Chon thang khac");
-                System.out.println("3. Chuyen che do xem (Ngay/Tuan/Thang)");
-                System.out.println("4. Hom nay");
-                System.out.println("0. Quay lai");
-                System.out.print("Chon: ");
+                System.out.println("\n--- Chức năng ---");
+                System.out.println("1. Xem chi tiết ngày");
+                System.out.println("2. Chọn tháng khác");
+                System.out.println("3. Chuyển chế độ xem (Ngày/Tuần/Tháng)");
+                System.out.println("4. Hôm nay");
+                System.out.println("0. Quay lại");
+                System.out.print("Chọn: ");
                 handleInput();
 
                 if ("0".equals(question)) {
@@ -79,11 +78,11 @@ public class ScheduleView extends View {
                         controller.goToToday();
                         break;
                     default:
-                        showError("Lenh khong hop le");
+                        showError("Lệnh không hợp lệ");
                         break;
                 }
             } catch (Exception e) {
-                showError("Khong the tai lich lam viec. Vui long thu lai sau.");
+                showError("Không thể tải lịch làm việc. Vui lòng thử lại sau.");
                 break;
             }
         }
@@ -96,24 +95,22 @@ public class ScheduleView extends View {
         String mode = controller.getViewMode();
 
         if ("THANG".equals(mode)) {
-            System.out.println("\n=== LICH CA LAM VIEC - Thang " + controller.getCurrentMonthYear() + " ===");
+            System.out.println("\n=== LỊCH CA LÀM VIỆC - Tháng " + controller.getCurrentMonthYear() + " ===");
             renderMonthView(entries);
         } else if ("TUAN".equals(mode)) {
             String[] weekRange = controller.getWeekRange();
-            System.out.println("\n=== LICH CA LAM VIEC - Tuan " + weekRange[0] + " - " + weekRange[1] + " ===");
+            System.out.println("\n=== LỊCH CA LÀM VIỆC - Tuần " + weekRange[0] + " - " + weekRange[1] + " ===");
             renderWeekView(entries);
         } else {
-            System.out.println("\n=== LICH CA LAM VIEC - Ngay " + controller.getSelectedDateStr() + " ===");
+            System.out.println("\n=== LỊCH CA LÀM VIỆC - Ngày " + controller.getSelectedDateStr() + " ===");
             renderDetailDayView(entries);
         }
     }
 
-    // ---- Month View (grouped per A1.1) ----
-
     private void renderMonthView(List<ScheduleEntry> entries) {
         if (entries.isEmpty()) {
-            System.out.println("Thang " + controller.getCurrentMonthYear()
-                    + " chua co lich lam viec. Vui long lien he HR neu can cap nhat.");
+            System.out.println("Tháng " + controller.getCurrentMonthYear()
+                    + " chưa có lịch làm việc. Vui lòng liên hệ HR nếu cần cập nhật.");
             return;
         }
 
@@ -126,18 +123,16 @@ public class ScheduleView extends View {
             totalDays++;
 
             boolean holiday = isHoliday(date);
-            String dateHeader = "--- " + date + " ---" + (holiday ? " [NGHI LE]" : "");
+            String dateHeader = "--- " + date + " ---" + (holiday ? " [NGHỈ LỄ]" : "");
             System.out.println("\n" + dateHeader);
 
-            // Check conflict/invalid
             if (controller.hasConflicts(dayEntries)) {
-                System.out.println("  !! Xung dot lich");
+                System.out.println("  !! Xung đột lịch");
             }
             if (controller.hasInvalidTime(dayEntries)) {
-                System.out.println("  !! Du lieu ca khong hop le");
+                System.out.println("  !! Dữ liệu ca không hợp lệ");
             }
 
-            // Grouped summary (A1.1)
             int shiftCount = dayEntries.size();
             StringBuilder summary = new StringBuilder();
             summary.append("  [").append(shiftCount).append(" ca: ");
@@ -145,33 +140,30 @@ public class ScheduleView extends View {
             List<String> types = new ArrayList<>();
             for (ScheduleEntry e : dayEntries) {
                 String typeLabel = e.getShiftType();
-                if ("Cong tac".equals(e.getShiftType()) || "Công tác".equals(e.getShiftType())) {
+                if ("Công tác".equals(e.getShiftType())) {
                     String loc = (e.getLocation() != null) ? " (" + e.getLocation() + ")" : "";
-                    typeLabel = "Cong tac" + loc;
+                    typeLabel = "Công tác" + loc;
                 }
                 if (!types.contains(typeLabel)) types.add(typeLabel);
             }
             summary.append(String.join(" + ", types));
             summary.append("]");
 
-            // Status of latest entry
-            String status = "Xac nhan";
+            String status = "Xác nhận";
             for (ScheduleEntry e : dayEntries) {
-                if ("Tam thoi".equals(e.getStatusLabel())) status = "Tam thoi";
+                if ("Tạm thời".equals(e.getStatusLabel())) status = "Tạm thời";
             }
             summary.append(" [").append(status).append("]");
 
             System.out.println(summary.toString());
         }
 
-        System.out.println("\n--- Tong: " + totalDays + " ngay, " + entries.size() + " ca ---");
+        System.out.println("\n--- Tổng: " + totalDays + " ngày, " + entries.size() + " ca ---");
     }
-
-    // ---- Week View (grouped per A1.1) ----
 
     private void renderWeekView(List<ScheduleEntry> entries) {
         if (entries.isEmpty()) {
-            System.out.println("Tuan nay khong co lich lam viec.");
+            System.out.println("Tuần này không có lịch làm việc.");
             return;
         }
 
@@ -182,13 +174,13 @@ public class ScheduleView extends View {
             List<ScheduleEntry> dayEntries = dayEntry.getValue();
 
             boolean holiday = isHoliday(date);
-            String dateHeader = "--- " + date + " ---" + (holiday ? " [NGHI LE]" : "");
+            String dateHeader = "--- " + date + " ---" + (holiday ? " [NGHỈ LỄ]" : "");
             System.out.println("\n" + dateHeader);
             if (controller.hasConflicts(dayEntries)) {
-                System.out.println("  !! Xung dot lich");
+                System.out.println("  !! Xung đột lịch");
             }
             if (controller.hasInvalidTime(dayEntries)) {
-                System.out.println("  !! Du lieu ca khong hop le");
+                System.out.println("  !! Dữ liệu ca không hợp lệ");
             }
 
             int shiftCount = dayEntries.size();
@@ -197,61 +189,57 @@ public class ScheduleView extends View {
             List<String> types = new ArrayList<>();
             for (ScheduleEntry e : dayEntries) {
                 String typeLabel = e.getShiftType();
-                if ("Cong tac".equals(e.getShiftType()) || "Công tác".equals(e.getShiftType())) {
+                if ("Công tác".equals(e.getShiftType())) {
                     String loc = (e.getLocation() != null) ? " (" + e.getLocation() + ")" : "";
-                    typeLabel = "Cong tac" + loc;
+                    typeLabel = "Công tác" + loc;
                 }
                 if (!types.contains(typeLabel)) types.add(typeLabel);
             }
             summary.append(String.join(" + ", types));
             summary.append("]");
 
-            String status = "Xac nhan";
+            String status = "Xác nhận";
             for (ScheduleEntry e : dayEntries) {
-                if ("Tam thoi".equals(e.getStatusLabel())) status = "Tam thoi";
+                if ("Tạm thời".equals(e.getStatusLabel())) status = "Tạm thời";
             }
             summary.append(" [").append(status).append("]");
             System.out.println(summary.toString());
         }
 
-        System.out.println("\n--- Tong: " + entries.size() + " ca ---");
+        System.out.println("\n--- Tổng: " + entries.size() + " ca ---");
     }
-
-    // ---- Day View (full detail - A1.3) ----
 
     private void renderDetailDayView(List<ScheduleEntry> entries) {
         if (entries.isEmpty()) {
-            System.out.println("Ngay " + controller.getSelectedDateStr() + " khong co lich lam viec.");
+            System.out.println("Ngày " + controller.getSelectedDateStr() + " không có lịch làm việc.");
             return;
         }
 
-        System.out.println("\n--- Chi tiet ngay " + controller.getSelectedDateStr() + " ---");
+        System.out.println("\n--- Chi tiết ngày " + controller.getSelectedDateStr() + " ---");
         for (int i = 0; i < entries.size(); i++) {
             ScheduleEntry e = entries.get(i);
             String label = "  " + (i + 1) + ". " + e.getShiftLabel() + " " + e.getShiftType()
                     + " (" + e.getStartTime() + " - " + e.getEndTime() + ") [" + e.getStatusLabel() + "]";
             System.out.println(label);
 
-            if ("Cong tac".equals(e.getShiftType()) || "Công tác".equals(e.getShiftType())) {
+            if ("Công tác".equals(e.getShiftType())) {
                 if (e.getEventName() != null) {
-                    System.out.println("     Su kien: " + e.getEventName());
+                    System.out.println("     Sự kiện: " + e.getEventName());
                 }
                 if (e.getLocation() != null) {
-                    System.out.println("     Dia diem: " + e.getLocation());
+                    System.out.println("     Địa điểm: " + e.getLocation());
                 }
             }
 
             if (e.isInvalidTime()) {
-                System.out.println("     !! Gio vao > gio ra, du lieu khong hop le.");
+                System.out.println("     !! Giờ vào > Giờ ra, dữ liệu không hợp lệ.");
             }
         }
 
         if (controller.hasConflicts(entries)) {
-            System.out.println("\n  !! Phat hien xung dot lich. Vui long bao voi Truong phong de dieu chinh.");
+            System.out.println("\n  !! Phát hiện xung đột lịch. Vui lòng báo với Trưởng phòng để điều chỉnh.");
         }
     }
-
-    // ---- Helpers ----
 
     private Map<String, List<ScheduleEntry>> groupByDate(List<ScheduleEntry> entries) {
         Map<String, List<ScheduleEntry>> grouped = new LinkedHashMap<>();
@@ -261,15 +249,13 @@ public class ScheduleView extends View {
         return grouped;
     }
 
-    // ---- Handlers ----
-
     private void handleViewDayDetail() {
         try {
             int savedMonth = controller.getCurrentMonth();
             int savedYear = controller.getCurrentYear();
             String savedMode = controller.getViewMode();
 
-            System.out.print("Nhap ngay (dd/MM/yyyy) hoac Enter de xem ngay "
+            System.out.print("Nhập ngày (dd/MM/yyyy) hoặc Enter để xem ngày "
                     + controller.getSelectedDateStr() + ": ");
             String input = netIn.readLine();
             if (input == null || input.isEmpty()) {
@@ -281,21 +267,21 @@ public class ScheduleView extends View {
                 controller.setViewMode(savedMode);
                 controller.setSelectedDate("01/" + String.format("%02d", savedMonth) + "/" + savedYear);
             } else {
-                showError("Ngay khong hop le.");
+                showError("Ngày không hợp lệ.");
             }
-            System.out.println("\nNhan Enter de tiep tuc...");
+            System.out.println("\nNhấn Enter để tiếp tục...");
             netIn.readLine();
         } catch (Exception e) {
-            showError("Loi xu ly.");
+            showError("Lỗi xử lý.");
         }
     }
 
     private void handleChangeMonth() {
         try {
-            System.out.println("Gioi han: toi da 6 thang truoc va 3 thang sau.");
-            System.out.print("Nhap thang (1-12): ");
+            System.out.println("Giới hạn: tối đa 6 tháng trước và 3 tháng sau.");
+            System.out.print("Nhập tháng (1-12): ");
             String inputMonth = netIn.readLine();
-            System.out.print("Nhap nam (yyyy): ");
+            System.out.print("Nhập năm (yyyy): ");
             String inputYear = netIn.readLine();
 
             if (inputMonth == null || inputYear == null) return;
@@ -304,7 +290,7 @@ public class ScheduleView extends View {
             int year = Integer.parseInt(inputYear.trim());
 
             if (month < 1 || month > 12) {
-                showError("Thang khong hop le.");
+                showError("Tháng không hợp lệ.");
                 return;
             }
 
@@ -316,15 +302,15 @@ public class ScheduleView extends View {
             String dateStr = "01/" + String.format("%02d", month) + "/" + year;
             controller.setSelectedDate(dateStr);
         } catch (NumberFormatException e) {
-            showError("Vui long nhap so.");
+            showError("Vui lòng nhập số.");
         } catch (Exception e) {
-            showError("Loi xu ly.");
+            showError("Lỗi xử lý.");
         }
     }
 
     private void handleChangeViewMode() {
         try {
-            System.out.print("Chon che do xem (1. Ngay / 2. Tuan / 3. Thang): ");
+            System.out.print("Chọn chế độ xem (1. Ngày / 2. Tuần / 3. Tháng): ");
             String input = netIn.readLine();
             if (input == null) return;
 
@@ -339,11 +325,11 @@ public class ScheduleView extends View {
                     controller.setViewMode("THANG");
                     break;
                 default:
-                    showError("Lua chon khong hop le.");
+                    showError("Lựa chọn không hợp lệ.");
                     break;
             }
         } catch (Exception e) {
-            showError("Loi xu ly.");
+            showError("Lỗi xử lý.");
         }
     }
 }

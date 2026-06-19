@@ -27,11 +27,6 @@ public class ScreenManager {
                     listView.push(sc);
                     sc.showOn();
                     break;
-                case "ChangePassword":
-                    ChangePasswordController cpc = new ChangePasswordController();
-                    listView.push(cpc);
-                    cpc.showOn();
-                    break;
                 case "EmployeeList":
                     EmployeeListController elc = new EmployeeListController();
                     listView.push(elc);
@@ -41,6 +36,11 @@ public class ScreenManager {
                     AttendanceController ac = new AttendanceController();
                     listView.push(ac);
                     ac.showOn();
+                    break;
+                case "ChangePassword":
+                    ChangePasswordController cpc = new ChangePasswordController();
+                    listView.push(cpc);
+                    cpc.showOn();
                     break;
                 default:
                     return false;

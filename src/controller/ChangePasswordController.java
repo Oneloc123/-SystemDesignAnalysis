@@ -22,13 +22,6 @@ public class ChangePasswordController extends Controller {
     }
 
     public String changePassword(String oldPw, String newPw, String confirmPw) {
-        if (!newPw.equals(confirmPw)) return "Xác nhận mật khẩu không khớp.";
-        if (oldPw.equals(newPw)) return "Mật khẩu mới không được trùng mật khẩu hiện tại.";
-        if (newPw.length() < 8) return "Mật khẩu phải có ít nhất 8 ký tự.";
-        if (!newPw.matches(".*[A-Z].*")) return "Mật khẩu phải có chữ hoa.";
-        if (!newPw.matches(".*[a-z].*")) return "Mật khẩu phải có chữ thường.";
-        if (!newPw.matches(".*[0-9].*")) return "Mật khẩu phải có chữ số.";
-        if (!newPw.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) return "Mật khẩu phải có ký tự đặc biệt.";
-        return "SUCCESS";
+        return ScreenManager.getCurrentUser().changePassword(oldPw, newPw, confirmPw);
     }
 }

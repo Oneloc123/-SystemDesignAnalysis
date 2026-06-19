@@ -1,5 +1,6 @@
 package controller;
 
+import controller.profileManagement.ProfileController;
 import controller.recruimentManagement.RecruitmentManagementController;
 import enumModel.RoleEnum;
 import model.Recruitment.Employer;
@@ -54,6 +55,7 @@ public class HomeController {
 
         pc.showEmployeeList();
     }
+
     public void functionRecruitmentManagement() throws Exception {
         RecruitmentManagementController rmc = new RecruitmentManagementController();
         boolean result = rmc.navigate();

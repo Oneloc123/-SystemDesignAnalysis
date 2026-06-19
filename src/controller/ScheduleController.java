@@ -1,7 +1,6 @@
 package controller;
 
 import controller.base.Controller;
-import data.ScheduleDAO;
 import model.ScheduleEntry;
 import view.ScheduleView;
 
@@ -18,7 +17,7 @@ public class ScheduleController extends Controller {
 
     private int currentMonth;
     private int currentYear;
-    private String viewMode = "THANG"; // NGAY, TUAN, THANG
+    private String viewMode = "THANG";
     private LocalDate selectedDate;
 
     public ScheduleController() {
@@ -26,14 +25,6 @@ public class ScheduleController extends Controller {
         this.currentMonth = now.getMonthValue();
         this.currentYear = now.getYear();
         this.selectedDate = now;
-        this.scheduleView = new ScheduleView(this);
-        this.view = this.scheduleView;
-    }
-
-    public ScheduleController(int month, int year) {
-        this.currentMonth = month;
-        this.currentYear = year;
-        this.selectedDate = LocalDate.of(year, month, 1);
         this.scheduleView = new ScheduleView(this);
         this.view = this.scheduleView;
     }
@@ -48,7 +39,7 @@ public class ScheduleController extends Controller {
         return ScreenManager.getCurrentUser() != null;
     }
 
-    // ---- Navigation ----
+
 
     public String getCurrentMonthYear() {
         return String.format("%02d/%d", currentMonth, currentYear);
@@ -78,17 +69,6 @@ public class ScheduleController extends Controller {
         return false;
     }
 
-    public boolean setSelectedDate(int day) {
-        try {
-            int maxDay = getDaysInMonth(currentMonth, currentYear);
-            if (day < 1 || day > maxDay) return false;
-            selectedDate = LocalDate.of(currentYear, currentMonth, day);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     public boolean setSelectedDate(String dateStr) {
         try {
             selectedDate = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -100,11 +80,10 @@ public class ScheduleController extends Controller {
         }
     }
 
-    // ---- Data ----
 
     public List<ScheduleEntry> getSchedule() {
-        return ScheduleDAO.findSchedule(
-                (long) ScreenManager.getCurrentUser().getId(),
+        return ScheduleEntry.findByEmployeeAndMonth(
+                ScreenManager.getCurrentUser().getUserId(),
                 currentMonth, currentYear);
     }
 
@@ -121,7 +100,7 @@ public class ScheduleController extends Controller {
                         return !d.isBefore(weekStart) && !d.isAfter(weekEnd);
                     })
                     .collect(Collectors.toList());
-        } else { // NGAY
+        } else {
             String dateStr = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             return all.stream()
                     .filter(e -> e.getDate().equals(dateStr))
@@ -135,7 +114,6 @@ public class ScheduleController extends Controller {
                 .collect(Collectors.toList());
     }
 
-    // ---- Validation ----
 
     public boolean validateRange(int month, int year) {
         LocalDate now = LocalDate.now();
@@ -200,10 +178,6 @@ public class ScheduleController extends Controller {
 
     public int getDaysInMonth(int month, int year) {
         return LocalDate.of(year, month, 1).lengthOfMonth();
-    }
-
-    public int getCurrentDay() {
-        return selectedDate.getDayOfMonth();
     }
 
     public int getCurrentMonth() { return currentMonth; }

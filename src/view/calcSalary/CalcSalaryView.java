@@ -2,7 +2,6 @@ package view.calcSalary;
 
 import model.calcSalary.AttendancePeriod;
 import model.calcSalary.Parameter;
-import test.CalcSalaryControllerTest;
 import view.View;
 import controller.CalcSalaryController;
 

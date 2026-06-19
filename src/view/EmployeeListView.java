@@ -3,6 +3,9 @@ package view;
 import controller.EmployeeListController;
 import controller.MainController;
 import enumModel.AddressEnum;
+import model.Department;
+import model.hr.Employee;
+import java.util.List;
 
 public class EmployeeListView extends View {
     EmployeeListController controller;
@@ -20,8 +23,9 @@ public class EmployeeListView extends View {
     public void showDeptSelection() {
         while (true) {
             System.out.println("\n========== DANH SÁCH PHÒNG BAN ==========");
-            for (String[] d : controller.getMockDepartments()) {
-                System.out.println(d[0] + ". " + d[1] + " (" + d[2] + ")");
+            List<Department> depts = controller.getDepartments();
+            for (Department d : depts) {
+                System.out.println(d.getDepartmentId() + ". " + d.getName() + " (" + d.getCode() + ")");
             }
             System.out.println("0. Quay lại");
             System.out.print("Chọn phòng ban: ");
@@ -43,17 +47,18 @@ public class EmployeeListView extends View {
 
     private void showEmployeeList() {
         while (true) {
-            String[][] employees = controller.getFilteredEmployees();
+            List<Employee> employees = controller.getFilteredEmployees();
             System.out.println("\n========== NHÂN VIÊN PHÒNG BAN ==========");
             System.out.println(String.format("%-4s %-8s %-22s %-15s %-12s %-10s",
                     "STT", "Mã NV", "Họ tên", "Chức danh", "SĐT", "Trạng thái"));
             System.out.println("------------------------------------------------------------");
             int i = 1;
-            for (String[] emp : employees) {
+            for (Employee emp : employees) {
                 System.out.println(String.format("%-4d %-8s %-22s %-15s %-12s %-10s",
-                        i++, emp[0], emp[1], emp[2], emp[3], emp[7]));
+                        i++, emp.getEmployeeCode(), emp.getFullName(),
+                        emp.getPosition(), emp.getPhone(), emp.getEmployeeStatus()));
             }
-            System.out.println("Tổng: " + employees.length + " nhân viên");
+            System.out.println("Tổng: " + employees.size() + " nhân viên");
             System.out.println("\n1. Tìm kiếm");
             System.out.println("2. Lọc trạng thái");
             System.out.println("3. Xem chi tiết");

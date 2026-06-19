@@ -3,6 +3,8 @@ package view;
 import controller.AttendanceController;
 import controller.MainController;
 import enumModel.AddressEnum;
+import model.Department;
+import java.util.List;
 
 public class AttendanceView extends View {
     AttendanceController controller;
@@ -20,8 +22,9 @@ public class AttendanceView extends View {
     public void showDeptSelection() {
         while (true) {
             System.out.println("\n========== CHỌN PHÒNG BAN (CHẤM CÔNG) ==========");
-            for (String[] d : controller.getMockDepartments()) {
-                System.out.println(d[0] + ". " + d[1] + " (" + d[2] + ")");
+            List<Department> depts = controller.getDepartments();
+            for (Department d : depts) {
+                System.out.println(d.getDepartmentId() + ". " + d.getName() + " (" + d.getCode() + ")");
             }
             System.out.println("0. Quay lại");
             System.out.print("Chọn phòng ban: ");

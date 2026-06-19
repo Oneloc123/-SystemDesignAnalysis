@@ -3,7 +3,7 @@ package view.profileManagement;
 import controller.MainController;
 import controller.profileManagement.ProfileController;
 import enumModel.AddressEnum;
-import model.Employee;
+import model.hr.Employee;
 import view.View;
 
 public class ProfileView extends View {
@@ -27,7 +27,7 @@ public class ProfileView extends View {
 
         System.out.println("\n--- Thông tin cá nhân ---");
         String fullName = emp.getDisplayValue(emp.getFullName());
-        String dob = emp.getDisplayValue(emp.getDateOfBirth());
+        String dob = emp.getDateOfBirth() != null ? emp.getDateOfBirth().toString() : "Chưa cập nhật";
         String gender = emp.getDisplayValue(emp.getGender());
         String idCard = emp.getMaskedIdCard();
         String hometown = emp.getDisplayValue(emp.getHometown());
@@ -45,7 +45,7 @@ public class ProfileView extends View {
         System.out.println("Email: " + email);
 
         if (emp.getFullName() == null) { hasMissing = true; missingFields.append("- Họ tên\n"); }
-        if (emp.getIdCard() == null) { hasMissing = true; missingFields.append("- CCCD\n"); }
+        if (emp.getCitizenIdentificationCard() == null) { hasMissing = true; missingFields.append("- CCCD\n"); }
 
         System.out.println("\n--- Thông tin công việc ---");
         String empCode = emp.getDisplayValue(emp.getEmployeeCode());
@@ -53,7 +53,7 @@ public class ProfileView extends View {
         String position = emp.getDisplayValue(emp.getPosition());
         String startDate = emp.getDisplayValue(emp.getStartDate());
         String contract = emp.getDisplayValue(emp.getContractType());
-        String status = emp.getDisplayValue(emp.getStatus());
+        String status = emp.getDisplayValue(emp.getEmployeeStatus());
 
         System.out.println("Mã NV: " + empCode);
         System.out.println("Phòng ban: " + dept);

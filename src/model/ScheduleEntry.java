@@ -1,13 +1,20 @@
 package model;
 
+import dao.ScheduleDAO;
+import java.util.List;
+
 public class ScheduleEntry {
-    private String date;        // dd/MM/yyyy
-    private String shiftType;   // Sáng, Chiều, Tối, Công tác
-    private String startTime;   // HH:mm
-    private String endTime;     // HH:mm
-    private String status;      // Xác nhận, Tạm thời
-    private String eventName;   // Tên sự kiện (chỉ cho Công tác)
-    private String location;    // Địa điểm (chỉ cho Công tác)
+    private int scheduleId;
+    private int employeeId;
+    private String date;
+    private String shiftType;
+    private String startTime;
+    private String endTime;
+    private String status;
+    private String eventName;
+    private String location;
+
+    private static ScheduleDAO dao = new ScheduleDAO();
 
     public ScheduleEntry() {}
 
@@ -29,6 +36,7 @@ public class ScheduleEntry {
         this.eventName = eventName;
         this.location = location;
     }
+
 
     public String getShiftLabel() {
         switch (shiftType) {
@@ -64,6 +72,22 @@ public class ScheduleEntry {
         return Integer.parseInt(parts[0]) * 60 + Integer.parseInt(parts[1]);
     }
 
+
+    public boolean save() { return dao.save(this); }
+    public boolean update() { return dao.update(this); }
+    public boolean delete() { return dao.delete(this.scheduleId); }
+
+    public static ScheduleEntry findById(int id) { return dao.findById(id); }
+    public static List<ScheduleEntry> findAll() { return dao.findAll(); }
+    public static List<ScheduleEntry> findByEmployeeAndMonth(int employeeId, int month, int year) {
+        return dao.findByEmployeeAndMonth(employeeId, month, year);
+    }
+
+
+    public int getScheduleId() { return scheduleId; }
+    public void setScheduleId(int scheduleId) { this.scheduleId = scheduleId; }
+    public int getEmployeeId() { return employeeId; }
+    public void setEmployeeId(int employeeId) { this.employeeId = employeeId; }
     public String getDate() { return date; }
     public void setDate(String date) { this.date = date; }
     public String getShiftType() { return shiftType; }

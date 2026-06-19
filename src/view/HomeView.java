@@ -33,7 +33,7 @@ public class HomeView extends View {
             printList(funcs);
             printAddress();
             handleInput();
-            if(question.equals("0")) {System.out.println("Thoat thanh cong"); break loop;}
+            if(question.equals("0")) {System.out.println("Thoát thành công"); break loop;}
             hc.excuteComent(question);
         }
     }
