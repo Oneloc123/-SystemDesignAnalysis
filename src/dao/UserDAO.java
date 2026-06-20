@@ -1,5 +1,6 @@
 package dao;
 
+import enumModel.RoleEnum;
 import model.User;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class UserDAO implements DAO<User> {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getRole());
+            stmt.setString(4, user.getRole().name());
             int affected = stmt.executeUpdate();
             if (affected > 0) {
                 ResultSet rs = stmt.getGeneratedKeys();
@@ -37,7 +38,7 @@ public class UserDAO implements DAO<User> {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getRole());
+            stmt.setString(4, user.getRole().name());
             stmt.setInt(5, user.getUserId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -70,7 +71,7 @@ public class UserDAO implements DAO<User> {
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setEmail(rs.getString("email"));
-                user.setRole(rs.getString("role"));
+                user.setRole(RoleEnum.valueOf(rs.getString("role")));
                 return user;
             }
         } catch (SQLException e) {
@@ -91,7 +92,7 @@ public class UserDAO implements DAO<User> {
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setEmail(rs.getString("email"));
-                user.setRole(rs.getString("role"));
+                user.setRole(RoleEnum.valueOf(rs.getString("role")));
                 list.add(user);
             }
         } catch (SQLException e) {

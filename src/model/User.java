@@ -1,31 +1,33 @@
 package model;
 
-import dao.UserDAO;
+import dao.ProfileDao.ProfileDao;
 import enumModel.RoleEnum;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class User {
-    private int userId;
-    private String username;
+
+    //Lộc
     private String password;
-    private String email;
-    private String role;
+    private int userId;
+    private  String username;
+
 
     private int id;
+    private RoleEnum role;
     private String fullName;
     private Date dateOfBirth;
     private String gender;
     private String phone;
+    private String email;
     private String citizenIdentificationCard;
     private String address;
 
-    private static UserDAO userDAO = new UserDAO();
 
-    public User() {
-    }
 
     public User(String address, String citizenIdentificationCard, String phone, String gender, Date dateOfBirth, String fullName, RoleEnum role, int id) {
         this.address = address;
@@ -34,48 +36,20 @@ public class User {
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.fullName = fullName;
-        this.role = role.name();
+        this.role = role;
         this.id = id;
     }
 
-    public User(int userId, String username, String password, String email, String role) {
+    public User() {
+    }
+
+    public User(int userId, String username, String password, String email, RoleEnum role) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
     }
-
-
-    public String changePassword(String oldPw, String newPw, String confirmPw) {
-        if (!newPw.equals(confirmPw)) return "Xác nhận mật khẩu không khớp.";
-        if (oldPw.equals(newPw)) return "Mật khẩu mới không được trùng mật khẩu hiện tại.";
-        if (newPw.length() < 8) return "Mật khẩu phải có ít nhất 8 ký tự.";
-        if (!newPw.matches(".*[A-Z].*")) return "Mật khẩu phải có chữ hoa.";
-        if (!newPw.matches(".*[a-z].*")) return "Mật khẩu phải có chữ thường.";
-        if (!newPw.matches(".*[0-9].*")) return "Mật khẩu phải có chữ số.";
-        if (!newPw.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) return "Mật khẩu phải có ký tự đặc biệt.";
-
-        this.password = newPw;
-        if (userDAO.update(this)) {
-            return "SUCCESS";
-        }
-        return "Lỗi cập nhật mật khẩu, vui lòng thử lại.";
-    }
-
-    public String getMaskedCitizenId() {
-        if (citizenIdentificationCard == null || citizenIdentificationCard.length() < 4) return "Chưa cập nhật";
-        return "****" + citizenIdentificationCard.substring(citizenIdentificationCard.length() - 4);
-    }
-
-    public String getDisplayValue(String value) {
-        return (value == null || value.isEmpty()) ? "Chưa cập nhật" : value;
-    }
-
-
-    public boolean save() { return userDAO.save(this); }
-    public boolean update() { return userDAO.update(this); }
-    public boolean delete() { return userDAO.delete(this.userId); }
 
 
     public int getUserId() { return userId; }
@@ -90,29 +64,8 @@ public class User {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
-
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
-
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
-    public Date getDateOfBirth() { return dateOfBirth; }
-    public void setDateOfBirth(Date dateOfBirth) { this.dateOfBirth = dateOfBirth; }
-
-    public String getGender() { return gender; }
-    public void setGender(String gender) { this.gender = gender; }
-
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public String getCitizenIdentificationCard() { return citizenIdentificationCard; }
-    public void setCitizenIdentificationCard(String citizenIdentificationCard) { this.citizenIdentificationCard = citizenIdentificationCard; }
-
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public RoleEnum getRole() { return role; }
+    public void setRole(RoleEnum role) { this.role = role; }
 
     @Override
     public String toString() {
@@ -140,11 +93,41 @@ public class User {
         return Objects.hash(userId, username, email, role);
     }
 
+
+
+    public String getFullName() { return fullName; }
+    public int getId() { return id; }
+
+
     public static List<User> getMockData() {
         List<User> list = new ArrayList<>();
+        // Nhét luôn new Date() cho nhanh, bỏ qua định dạng ngày tháng phức tạp
         list.add(new User("Hà Nội", "001", "0901", "Nam", new Date(), "Nguyễn Văn Lộc", RoleEnum.ADMIN, 1));
         list.add(new User("HCM", "002", "0902", "Nữ", new Date(), "Trần Thị Ánh", RoleEnum.HR, 2));
         list.add(new User("Đà Nẵng", "003", "0903", "Nam", new Date(), "Lê Đình Cương", RoleEnum.EMPLOYER, 3));
         return list;
     }
+
+    public void setId(int id) {this.id = id;}
+
+    public void setFullName(String fullName) {this.fullName = fullName;}
+    public Date getDateOfBirth() {return dateOfBirth;}
+    public void setDateOfBirth(Date dateOfBirth) {this.dateOfBirth = dateOfBirth;}
+    public String getGender() {return gender;}
+    public void setGender(String gender) {this.gender = gender;}
+    public String getPhone() {return phone;}
+    public void setPhone(String phone) {this.phone = phone;}
+    public String getCitizenIdentificationCard() {return citizenIdentificationCard;}
+    public void setCitizenIdentificationCard(String citizenIdentificationCard) {this.citizenIdentificationCard = citizenIdentificationCard;}
+    public String getAddress() {return address;}
+    public void setAddress(String address) {this.address = address;}
+
+
+
+    public static List<User> getAllEmployee() throws SQLException {
+        ProfileDao pd = new ProfileDao();
+        return pd.getAllUsers();
+    }
+
 }
+

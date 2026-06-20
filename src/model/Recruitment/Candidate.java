@@ -2,6 +2,7 @@ package model.Recruitment;
 
 import dao.recruitment.CandidateDAO;
 import dao.recruitment.JobApplicationDAO;
+import enumModel.RoleEnum;
 import model.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class Candidate extends User {
         this.applications = new ArrayList<>();
     }
 
-    public Candidate(int userId, String username, String password, String email, String role) {
+    public Candidate(int userId, String username, String password, String email, RoleEnum role) {
         super(userId, username, password, email, role);
         this.applications = new ArrayList<>();
     }
