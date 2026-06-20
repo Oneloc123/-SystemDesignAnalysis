@@ -13,7 +13,7 @@ public class HomeController {
 
     public HomeController() {
         MainController.currentUser = new Employer();
-        MainController.currentUser.setRole(RoleEnum.EMPLOYER.toString());
+        MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
         this.hv = new HomeView(this);
         this.calcSalaryController = new CalcSalaryController();
     }
