@@ -1,5 +1,6 @@
-package dao; // Bạn có thể sửa lại thành dao.ProfileDao tùy theo package thực tế của bạn
+package dao.ProfileDao;
 
+import dao.DatabaseConnection;
 import enumModel.RoleEnum;
 import model.User;
 
@@ -9,10 +10,10 @@ import java.util.List;
 
 public class ProfileDao {
 
-    // Đã đổi sang lấy kết nối từ DatabaseConnection giống y hệt cách làm của EmployerDAO
+
     private Connection connection = DatabaseConnection.getInstance().getConnection();
 
-    // 1. Hàm lấy danh sách toàn bộ User từ Database
+
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         String sql = "SELECT id, fullName, dateOfBirth, gender, phone, citizenIdentificationCard, address, role FROM users";
@@ -47,7 +48,7 @@ public class ProfileDao {
             ps.setString(2, user.getFullName());
 
             if (user.getDateOfBirth() != null) {
-                ps.setDate(3, new java.sql.Date(user.getDateOfBirth().getTime()));
+                ps.setDate(3, new Date(user.getDateOfBirth().getTime()));
             } else {
                 ps.setNull(3, Types.DATE);
             }
