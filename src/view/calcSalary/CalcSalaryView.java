@@ -6,7 +6,6 @@ import model.calcSalary.Parameter;
 import view.View;
 import controller.CalcSalaryController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CalcSalaryView extends View {
@@ -23,6 +22,7 @@ public class CalcSalaryView extends View {
         attendancePeriods = calcSalaryController.getAttendancePeriods();
 
         calcSalaryMethod();
+        return false;
     }
 
     private void calcSalaryMethod() {

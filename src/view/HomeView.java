@@ -22,7 +22,8 @@ public class HomeView extends View {
         "Danh sách nhân viên phòng ban",
         "Bảng chấm công phòng ban",
         "Quản lý tuyển dụng",
-        "Tính lương"
+        "Tính lương",
+        "Quản lý hợp đồng"
     };
 
     @Override

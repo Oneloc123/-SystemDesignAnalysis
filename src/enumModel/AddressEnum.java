@@ -1,6 +1,7 @@
 package enumModel;
 
 public enum AddressEnum {
+    Login,
     Home,
     Profile,
     Schedule,
@@ -12,5 +13,7 @@ public enum AddressEnum {
     SubmitCV,
     ReviewApplications,
     ScheduleInterview,
-    MyProfile
+    ContractManagement,
+    CreateContract,
+    ContractList
 }

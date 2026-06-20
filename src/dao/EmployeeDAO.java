@@ -210,4 +210,20 @@ public class EmployeeDAO implements DAO<Employee> {
         if (value != null) stmt.setDouble(index, value);
         else stmt.setNull(index, Types.DOUBLE);
     }
+    public Employee findByEmployeeCode(String employeeCode) {
+        String sql = "SELECT e.*, u.username, u.password, u.email, u.role, " +
+                "u.full_name, u.date_of_birth, u.gender, u.phone, u.citizen_id, u.address " +
+                "FROM employees e JOIN users u ON e.employee_id = u.user_id " +
+                "WHERE e.employee_code = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, employeeCode);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return extractEmployee(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

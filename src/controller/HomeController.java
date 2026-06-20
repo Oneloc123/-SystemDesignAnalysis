@@ -12,8 +12,10 @@ public class HomeController {
     CalcSalaryController calcSalaryController;
 
     public HomeController() {
-        MainController.currentUser = new Employer();
-        MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
+        if (MainController.currentUser == null) {
+            MainController.currentUser = new Employer();
+            MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
+        }
         this.hv = new HomeView(this);
         this.calcSalaryController = new CalcSalaryController();
     }
@@ -41,6 +43,9 @@ public class HomeController {
                 break;
             case "6":
                 functionRecruitmentManagement();
+                break;
+            case "7":
+                functionContractManagement();
                 break;
             default:
                 hv.showError("Lệnh không hợp lệ");
@@ -78,6 +83,14 @@ public class HomeController {
         boolean result = rmc.navigate();
         if(!result){
             hv.showError("Không có quyền truy cập");
+        }
+    }
+    public void functionContractManagement() throws Exception {
+        controller.contract.ContractManagementController cmc =
+                new controller.contract.ContractManagementController();
+        boolean result = cmc.navigate();
+        if (!result) {
+            hv.showError("Không có quyền truy cập chức năng quản lý hợp đồng");
         }
     }
 
