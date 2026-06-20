@@ -1,7 +1,7 @@
 package controller;
 
 import controller.base.Controller;
-import controller.profileManagement.ProfileController;
+import controller.profileManagement.MyProfileController;
 import model.User;
 
 import java.util.Stack;
@@ -17,11 +17,6 @@ public class ScreenManager {
     public static boolean navigateTo(String screenName) {
         try {
             switch (screenName) {
-                case "Profile":
-                    ProfileController pc = new ProfileController();
-                    listView.push(pc);
-                    pc.showOn();
-                    break;
                 case "Schedule":
                     ScheduleController sc = new ScheduleController();
                     listView.push(sc);
@@ -41,6 +36,11 @@ public class ScreenManager {
                     ChangePasswordController cpc = new ChangePasswordController();
                     listView.push(cpc);
                     cpc.showOn();
+                    break;
+                case "MyProfile":
+                    MyProfileController mpc = new MyProfileController();
+                    listView.push(mpc);
+                    mpc.showOn();
                     break;
                 default:
                     return false;

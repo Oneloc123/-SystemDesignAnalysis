@@ -11,5 +11,6 @@ public enum AddressEnum {
     CreatePostRecruitment,
     SubmitCV,
     ReviewApplications,
-    ScheduleInterview
+    ScheduleInterview,
+    MyProfile
 }

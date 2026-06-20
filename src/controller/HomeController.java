@@ -25,9 +25,7 @@ public class HomeController {
     public void excuteComent(String question) throws Exception {
         switch(question) {
             case "1":
-                hv.printAddress();
-                System.out.println("Chuc nang 1 dang thuc hien");
-                // thuc thi 1
+                functionViewMyProfile();
                 break;
             case "2":
                 functionRecruitmentManagement();
@@ -40,6 +38,10 @@ public class HomeController {
                 hv.showError("Lệnh không hợp lệ");
                 break;
         }
+    }
+
+    public void functionViewMyProfile() {
+        ScreenManager.navigateTo("MyProfile");
     }
 
     public void function() throws Exception {

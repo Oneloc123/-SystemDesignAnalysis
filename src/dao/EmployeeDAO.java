@@ -1,5 +1,6 @@
 package dao;
 
+import enumModel.RoleEnum;
 import model.User;
 import model.hr.Employee;
 import java.sql.*;
@@ -172,7 +173,10 @@ public class EmployeeDAO implements DAO<Employee> {
         emp.setUsername(rs.getString("username"));
         emp.setPassword(rs.getString("password"));
         emp.setEmail(rs.getString("email"));
-        emp.setRole(rs.getString("role"));
+        String roleStr = rs.getString("role");
+        if (roleStr != null) {
+            emp.setRole(RoleEnum.valueOf(roleStr));
+        }
         emp.setFullName(rs.getString("full_name"));
         emp.setDateOfBirth(rs.getDate("date_of_birth"));
         emp.setGender(rs.getString("gender"));
