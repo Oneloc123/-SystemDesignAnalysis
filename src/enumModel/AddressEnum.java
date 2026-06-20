@@ -12,5 +12,8 @@ public enum AddressEnum {
     CreatePostRecruitment,
     SubmitCV,
     ReviewApplications,
-    ScheduleInterview
+    ScheduleInterview,
+    ContractManagement,
+    CreateContract,
+    ContractList
 }

@@ -42,6 +42,11 @@ public class ScreenManager {
                     listView.push(mpc);
                     mpc.showOn();
                     break;
+                case "ContractManagement":
+                    controller.contract.ContractManagementController cmc =
+                            new controller.contract.ContractManagementController();
+                    cmc.navigate();
+                    return true;
                 default:
                     return false;
             }
