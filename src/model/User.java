@@ -7,16 +7,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class User {
+
+    //Lộc
+    private String password;
+    private int userId;
+    private  String username;
+
+
     private int id;
     private RoleEnum role;
     private String fullName;
     private Date dateOfBirth;
     private String gender;
     private String phone;
+    private String email;
     private String citizenIdentificationCard;
     private String address;
+
+
 
     public User(String address, String citizenIdentificationCard, String phone, String gender, Date dateOfBirth, String fullName, RoleEnum role, int id) {
         this.address = address;
@@ -117,3 +128,6 @@ public class User {
         ProfileDao pd = new ProfileDao();
         return pd.getAllUsers();
     }
+
+}
+
