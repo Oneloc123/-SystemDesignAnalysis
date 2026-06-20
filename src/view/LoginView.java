@@ -1,68 +1,74 @@
 package view;
 
 import controller.LoginController;
-import model.User;
+import controller.MainController;
+import enumModel.AddressEnum;
 
-public class LoginView extends  View {
-    private final LoginController loginController;
-    public LoginView(LoginController loginController) {
-        this.loginController = loginController;
+import static controller.MainController.printList;
+
+public class LoginView extends View {
+    LoginController lc;
+
+    AddressEnum address = AddressEnum.Login;
+
+    public LoginView(LoginController lc) {
+        MainController.addresses.add(address);
+        this.lc = lc;
     }
 
+    public String[] funcs = {"Đăng nhập", "Quên mật khẩu"};
+
     @Override
-    public void show() throws Exception{
-        int maxAttempts = loginController.getMaxAttempts();
-        int attempts = 0;
-
-        printWelcome("===HE THONG QUAN LY NHAN SU===");
-        while(attempts < maxAttempts) {
-            int remaining = maxAttempts - attempts;
-            if (attempts >0){
-                System.out.println("Còn " + remaining + " lần thử.");
-            }
-            System.out.println(" Nhập '0' để thoát.");
-            System.out.println("--------------------------");
-
+    public void show() throws Exception {
+        loop:
+        while (true) {
             printAddress();
-            System.out.println("Tên đăng nhập: ");
-            String username = netIn.readLine();
-            if ("0".equals(username)) {
-                showMessage("Đã thoát khỏi hệ thống");
-                loginController.setLoggedIn(false);
-                return ;
-            }
+            printList(funcs);
             printAddress();
-            System.out.println("Mật khẩu: ");
-            String password = netIn.readLine();
-            if ("0".equals(password)) {
-                showMessage("Đã thoát khỏi hệ thống");
-                loginController.setLoggedIn(false);
-                return ;
+            handleInput();
+
+            if (question.equals("0")) {
+                System.out.println("Thoat thanh cong");
+                break loop;
             }
-            User user = loginController.login(username,password);
-            if (user != null) {
-                System.out.println("--------------------------");
-                System.out.println("Đăng nhập thành công!");
-                System.out.println("Xin chào," + user.getUsername() +"[" + user.getRole() + "]");
-                System.out.println("--------------------------");
-                loginController.setLoggedIn(true);
-            }else{
-                attempts++;
-                showError("Tên đăng nhập hoặc mật khẩu không đúng!");
+
+            switch (question) {
+                case "1":
+                    if (handleLogin()) {
+                        lc.goToHome();
+                        if (!MainController.addresses.isEmpty()
+                                && MainController.addresses.get(MainController.addresses.size() - 1) != address) {
+                            MainController.addresses.remove(MainController.addresses.size() - 1);
+                        }
+                    }
+                    break;
+                case "2":
+                    handleForgotPassword();
+                    break;
+                default:
+                    showError("Lệnh không hợp lệ");
+                    break;
             }
         }
-        System.out.println("==========================================");
-        System.out.println("Tài khoản bị tạm khóa do nhập sai mật khẩu nhiều lần.");
-        System.out.println("Vui lòng liên hệ quản trị viên");
-        System.out.println("============================================");
-        loginController.setLoggedIn(false);
+    }
+
+    private boolean handleLogin() throws Exception {
+        String username = handleParam("tên đăng nhập");
+        String password = handleParam("mật khẩu");
+        return lc.login(username, password);
+    }
+
+    private void handleForgotPassword() throws Exception {
+        String email = handleParam("email đã đăng ký");
+        String newPassword = handleParam("mật khẩu mới");
+        String confirmPassword = handleParam("xác nhận mật khẩu mới");
+        lc.forgotPassword(email, newPassword, confirmPassword);
     }
 
     @Override
     public void showError(String error) {
-        System.out.println("==========================================");
-        System.out.println("Lôĩ: " + error);
-        System.out.println("==========================================");
+        System.out.println("------------------------");
+        System.out.println("LOI: " + error);
+        System.out.println("------------------------");
     }
-
 }

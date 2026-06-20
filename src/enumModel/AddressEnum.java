@@ -1,11 +1,11 @@
 package enumModel;
 
 public enum AddressEnum {
-    LOGIN,
+    Login,
     Home,
     RecruitmentManagement,
     CreatePostRecruitment,
     SubmitCV,
     ReviewApplications,
-    ScheduleInterview
+     ScheduleInterview
 }

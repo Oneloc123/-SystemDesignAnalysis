@@ -12,8 +12,10 @@ public class HomeController {
     CalcSalaryController calcSalaryController;
 
     public HomeController() {
-        MainController.currentUser = new Employer();
-        MainController.currentUser.setRole(RoleEnum.EMPLOYER.toString());
+        if (MainController.currentUser == null) {
+            MainController.currentUser = new Employer();
+            MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
+        }
         this.hv = new HomeView(this);
         this.calcSalaryController = new CalcSalaryController();
     }
@@ -52,8 +54,11 @@ public class HomeController {
 
     public void handleProfile() throws Exception {
         ProfileController pc = new ProfileController();
+        boolean check = pc.navigate();
+        if (!check){
+            hv.showError("Không có quyền truy cập");
+        }
 
-        pc.showEmployeeList();
     }
     public void functionRecruitmentManagement() throws Exception {
         RecruitmentManagementController rmc = new RecruitmentManagementController();
