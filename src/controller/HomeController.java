@@ -3,18 +3,21 @@ package controller;
 import controller.profileManagement.ProfileController;
 import controller.recruimentManagement.RecruitmentManagementController;
 import enumModel.RoleEnum;
+import model.Recruitment.Employer;
 import model.User;
 import view.HomeView;
 
 public class HomeController {
     HomeView hv;
-    // login thanhf confg
+    CalcSalaryController calcSalaryController;
 
     public HomeController() {
-        MainController.currentUser = new User();
-        MainController.currentUser.setRole(RoleEnum.EMPLOYER);
+        MainController.currentUser = new Employer();
+        MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
         this.hv = new HomeView(this);
+        this.calcSalaryController = new CalcSalaryController();
     }
+
     public void show() throws Exception {
         hv.show();
     }
@@ -24,7 +27,7 @@ public class HomeController {
             case "1":
                 hv.printAddress();
                 System.out.println("Chuc nang 1 dang thuc hien");
-                // thuc thi 1
+                function();
                 break;
             case "2":
                 functionRecruitmentManagement();
@@ -38,11 +41,13 @@ public class HomeController {
                 break;
         }
     }
-    public void function(){
-        CalcSalaryController cc = new CalcSalaryController();
-        if(!cc.execute(MainController.currentUser)){
+
+    public void function() throws Exception {
+        if (!calcSalaryController.checkRole(MainController.currentUser)) {
             hv.showError("Khong co quyen");
+            return;
         }
+        calcSalaryController.execute(MainController.currentUser);
     }
 
     public void handleProfile() throws Exception {
