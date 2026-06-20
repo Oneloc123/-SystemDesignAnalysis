@@ -34,8 +34,8 @@ public class CalcSalaryController {
     }
 
     public boolean checkRole(User current) {
-        RoleEnum role = current.getRole();
-        if (role == RoleEnum.ACCOUNT || role == RoleEnum.ADMIN) {
+        String role = current.getRole();
+        if ("ACCOUNT".equals(role) || "ADMIN".equals(role)) {
             return true;
         }
         return false;
