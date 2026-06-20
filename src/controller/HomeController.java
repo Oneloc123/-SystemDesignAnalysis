@@ -52,8 +52,11 @@ public class HomeController {
 
     public void handleProfile() throws Exception {
         ProfileController pc = new ProfileController();
+        boolean check = pc.navigate();
+        if (!check){
+            hv.showError("Không có quyền truy cập");
+        }
 
-        pc.showEmployeeList();
     }
     public void functionRecruitmentManagement() throws Exception {
         RecruitmentManagementController rmc = new RecruitmentManagementController();
