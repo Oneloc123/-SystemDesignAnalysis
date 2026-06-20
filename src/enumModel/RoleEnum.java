@@ -1,7 +1,7 @@
 package enumModel;
 
 public enum RoleEnum {
-    ACCOUNT,
+    ACCOUNTANT,
     HR,
     ADMIN,
     EMPLOYER,

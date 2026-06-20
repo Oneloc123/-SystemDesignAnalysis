@@ -10,6 +10,7 @@ public class Parameter {
     private double personalDeduction;
     private double dependentDeduction;
     private double overtimeRate;
+    private int standardWorkingDays;
     private List<TaxBraket> taxBraket;
 
 
@@ -25,6 +26,7 @@ public class Parameter {
         this.personalDeduction = other.personalDeduction;
         this.dependentDeduction = other.dependentDeduction;
         this.overtimeRate = other.overtimeRate;
+        this.standardWorkingDays = other.standardWorkingDays;
         this.taxBraket = new ArrayList<>();
         if (other.taxBraket != null) {
             for (int i = 0; i < other.taxBraket.size(); i++) {
@@ -58,6 +60,9 @@ public class Parameter {
         }
         if (overtimeRate < 1) {
             s += "He so OT phai >= 1\n";
+        }
+        if (standardWorkingDays <= 0) {
+            s += "Ngay cong chuan phai lon hon 0\n";
         }
         if (taxBraket == null || taxBraket.isEmpty()) {
             s += "Danh sach muc thue ko duoc de trong\n";
@@ -121,6 +126,14 @@ public class Parameter {
         this.overtimeRate = overtimeRate;
     }
 
+    public int getStandardWorkingDays() {
+        return standardWorkingDays;
+    }
+
+    public void setStandardWorkingDays(int standardWorkingDays) {
+        this.standardWorkingDays = standardWorkingDays;
+    }
+
     public List<TaxBraket> getTaxBraket() {
         return taxBraket;
     }
@@ -137,6 +150,7 @@ public class Parameter {
                 "\nBao hiem that nghiep: " + unemploymentInsuranceRate +
                 "\nGiam tru ban than: " + personalDeduction +
                 "\nGiam tru nguoi phu thuoc: " + dependentDeduction +
+                "\nNgay cong chuan: " + standardWorkingDays +
                 "\nHe so OT: " + overtimeRate +
                 "\nMuc thue: " + taxBraket.toString();
     }
