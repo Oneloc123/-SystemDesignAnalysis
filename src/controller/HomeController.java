@@ -27,21 +27,35 @@ public class HomeController {
     public void excuteComent(String question) throws Exception {
         switch(question) {
             case "1":
-                hv.printAddress();
-                System.out.println("Chuc nang 1 dang thuc hien");
-                function();
+                functionViewMyProfile();
                 break;
             case "2":
-                functionRecruitmentManagement();
+                functionViewSchedule();
                 break;
             case "3":
-                System.out.println("Chuc nang 3 dang thuc hien");
-                handleProfile();
+                ScreenManager.navigateTo("ChangePassword");
+                break;
+            case "4":
+                ScreenManager.navigateTo("EmployeeList");
+                break;
+            case "5":
+                ScreenManager.navigateTo("Attendance");
+                break;
+            case "6":
+                functionRecruitmentManagement();
                 break;
             default:
                 hv.showError("Lệnh không hợp lệ");
                 break;
         }
+    }
+
+    public void functionViewSchedule() {
+        ScreenManager.navigateTo("Schedule");
+    }
+
+    public void functionViewMyProfile() {
+        ScreenManager.navigateTo("MyProfile");
     }
 
     public void function() throws Exception {
@@ -60,6 +74,7 @@ public class HomeController {
         }
 
     }
+
     public void functionRecruitmentManagement() throws Exception {
         RecruitmentManagementController rmc = new RecruitmentManagementController();
         boolean result = rmc.navigate();
