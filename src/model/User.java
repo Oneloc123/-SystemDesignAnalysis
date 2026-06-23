@@ -17,12 +17,21 @@ public class User {
     private String password;
     private int userId;
     private  String username;
+    private String email;
 
 
-    private int id;
+    private long id;
     private RoleEnum role;
     private Double basicSalary;
     private int dependentNumber;
+
+    private String fullName;
+    private Date dateOfBirth;
+    private String gender;
+    private String phone;
+    private String citizenIdentificationCard;
+    private String address;
+
 
     public User() {}
 
@@ -38,10 +47,6 @@ public class User {
         this.id = id;
     }
 
-    public RoleEnum getRole() {
-        return role;
-    }
-
     public User(int userId, String username, String password, String email, RoleEnum role) {
         this.userId = userId;
         this.username = username;
@@ -52,7 +57,8 @@ public class User {
 
     public Double getBasicSalary() {
         return basicSalary;
-      
+    }
+
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
 
@@ -90,7 +96,8 @@ public class User {
         this.dependentNumber = dependentNumber;
     }
 
-    public void setId(int id) {this.id = id;}
+    public long getId(){return this.id;}
+    public void setId(Long id) {this.id = id;}
 
     public void setFullName(String fullName) {this.fullName = fullName;}
     public Date getDateOfBirth() {return dateOfBirth;}
@@ -103,7 +110,8 @@ public class User {
     public void setCitizenIdentificationCard(String citizenIdentificationCard) {this.citizenIdentificationCard = citizenIdentificationCard;}
     public String getAddress() {return address;}
     public void setAddress(String address) {this.address = address;}
-
+    public String getFullName() {return fullName;}
+    public void setFullname(String fullName){ this.fullName = fullName;}
 
 
     public String changePassword(String oldPw, String newPw, String confirmPw) {

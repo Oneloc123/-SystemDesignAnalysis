@@ -45,7 +45,7 @@ public class CreateProfileView extends View {
 
     private void handleForm() throws IOException {
         user = new User();
-        user.setId(Integer.parseInt(handleParam("ID:")));
+        user.setId(Long.parseLong(handleParam("ID:")));
         user.setRole(RoleEnum.valueOf(handleParam("Vai trò:")));
         user.setFullName(handleParam("Họ và tên:"));
         user.setDateOfBirth(handleDateParam("ngày tháng năm sinh"));

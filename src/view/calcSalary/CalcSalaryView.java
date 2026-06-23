@@ -23,7 +23,6 @@ public class CalcSalaryView extends View {
         attendancePeriods = calcSalaryController.getAttendancePeriods();
 
         calcSalaryMethod();
-        return false;
     }
 
     private void calcSalaryMethod() {

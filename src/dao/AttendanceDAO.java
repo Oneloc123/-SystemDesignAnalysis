@@ -51,7 +51,7 @@ public class AttendanceDAO {
                 "unpaid_leave, paid_leave, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, detail.getPeriodId());
-            stmt.setInt(2, detail.getEmployeeId());
+            stmt.setLong(2, detail.getEmployeeId());
             stmt.setString(3, detail.getEmployeeCode());
             stmt.setString(4, detail.getEmployeeName());
             stmt.setInt(5, detail.getActualWorkingDays());
@@ -117,7 +117,7 @@ public class AttendanceDAO {
         return period;
     }
 
-    private AttendanceDetail createDetail(int empId, String code, String name, int workDays, int standard,
+    private AttendanceDetail createDetail(long empId, String code, String name, int workDays, int standard,
                                           int ot, int late, int early, int unpaid, int paid, String status) {
         AttendanceDetail d = new AttendanceDetail();
         d.setEmployeeId(empId);
@@ -159,7 +159,7 @@ public class AttendanceDAO {
         AttendanceDetail d = new AttendanceDetail();
         d.setId(rs.getLong("id"));
         d.setPeriodId(rs.getLong("period_id"));
-        d.setEmployeeId(rs.getInt("employee_id"));
+        d.setEmployeeId(rs.getLong("employee_id"));
         d.setEmployeeCode(rs.getString("employee_code"));
         d.setEmployeeName(rs.getString("employee_name"));
         d.setActualWorkingDays(rs.getInt("actual_working_days"));
