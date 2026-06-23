@@ -73,4 +73,13 @@ public class AttendancePeriod {
             detail.setPeriodId(this.id);
         }
     }
+
+    /**
+     * Alias for addDetail() — duy trì tên method cũ cho tương thích.
+     */
+    public void addAttendanceDetail(AttendanceDetail detail) {
+        addDetail(detail);
+    }
+
+
 }
