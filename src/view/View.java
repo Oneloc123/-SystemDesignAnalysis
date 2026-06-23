@@ -20,7 +20,7 @@ public abstract class View {
     }
     public void handleInput() throws IOException {
         String input = netIn.readLine();
-        question = input.toUpperCase();
+        question = input == null ? "0" : input.trim().toUpperCase();
     }
     public void printAddress(){
         String result = "";

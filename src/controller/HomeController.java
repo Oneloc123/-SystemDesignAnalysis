@@ -12,8 +12,10 @@ public class HomeController {
     CalcSalaryController calcSalaryController;
 
     public HomeController() {
-        MainController.currentUser = new Employer();
-        MainController.currentUser.setRole(RoleEnum.EMPLOYER.toString());
+        if (MainController.currentUser == null) {
+            MainController.currentUser = new Employer();
+            MainController.currentUser.setRole(RoleEnum.EMPLOYER.toString());
+        }
         this.hv = new HomeView(this);
         this.calcSalaryController = new CalcSalaryController();
     }
@@ -35,6 +37,9 @@ public class HomeController {
             case "3":
                 System.out.println("Chuc nang 3 dang thuc hien");
                 handleProfile();
+                break;
+            case "4":
+                functionAdminManagement();
                 break;
             default:
                 hv.showError("Lệnh không hợp lệ");
@@ -61,6 +66,11 @@ public class HomeController {
         if(!result){
             hv.showError("Không có quyền truy cập");
         }
+    }
+
+    public void functionAdminManagement() throws Exception {
+        AdminController adminController = new AdminController();
+        adminController.show();
     }
 
 }
