@@ -21,14 +21,10 @@ public class User {
 
     private int id;
     private RoleEnum role;
-    private String fullName;
-    private Date dateOfBirth;
-    private String gender;
-    private String phone;
-    private String email;
-    private String citizenIdentificationCard;
-    private String address;
+    private Double basicSalary;
+    private int dependentNumber;
 
+    public User() {}
 
 
     public User(String address, String citizenIdentificationCard, String phone, String gender, Date dateOfBirth, String fullName, RoleEnum role, int id) {
@@ -42,7 +38,8 @@ public class User {
         this.id = id;
     }
 
-    public User() {
+    public RoleEnum getRole() {
+        return role;
     }
 
     public User(int userId, String username, String password, String email, RoleEnum role) {
@@ -53,7 +50,9 @@ public class User {
         this.role = role;
     }
 
-
+    public Double getBasicSalary() {
+        return basicSalary;
+      
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
 
@@ -79,35 +78,16 @@ public class User {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return userId == user.userId &&
-                Objects.equals(username, user.username) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(role, user.role);
+    public void setBasicSalary(Double basicSalary) {
+        this.basicSalary = basicSalary;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, username, email, role);
+    public int getDependentNumber() {
+        return dependentNumber;
     }
 
-
-
-    public String getFullName() { return fullName; }
-    public int getId() { return id; }
-
-
-    public static List<User> getMockData() {
-        List<User> list = new ArrayList<>();
-        // Nhét luôn new Date() cho nhanh, bỏ qua định dạng ngày tháng phức tạp
-        list.add(new User("Hà Nội", "001", "0901", "Nam", new Date(), "Nguyễn Văn Lộc", RoleEnum.ADMIN, 1));
-        list.add(new User("HCM", "002", "0902", "Nữ", new Date(), "Trần Thị Ánh", RoleEnum.HR, 2));
-        list.add(new User("Đà Nẵng", "003", "0903", "Nam", new Date(), "Lê Đình Cương", RoleEnum.EMPLOYER, 3));
-        return list;
+    public void setDependentNumber(int dependentNumber) {
+        this.dependentNumber = dependentNumber;
     }
 
     public void setId(int id) {this.id = id;}
@@ -177,4 +157,3 @@ public class User {
     }
 
 }
-

@@ -13,6 +13,9 @@ public class AttendanceDetail {
     private int earlyCount;
     private int unpaidLeave;
     private int paidLeave;
+    private double basicSalary;
+    private double allowance;
+    private int dependentNumber;
     private String status;
 
     public AttendanceDetail() {}
