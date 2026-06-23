@@ -3,7 +3,7 @@ package model.calcSalary;
 public class AttendanceDetail {
     private long id;
     private long periodId;
-    private int employeeId;
+    private long employeeId;
     private String employeeCode;
     private String employeeName;
     private int actualWorkingDays;
@@ -34,8 +34,8 @@ public class AttendanceDetail {
     public void setId(long id) { this.id = id; }
     public long getPeriodId() { return periodId; }
     public void setPeriodId(long periodId) { this.periodId = periodId; }
-    public int getEmployeeId() { return employeeId; }
-    public void setEmployeeId(int employeeId) { this.employeeId = employeeId; }
+    public long getEmployeeId() { return employeeId; }
+    public void setEmployeeId(long employeeId) { this.employeeId = employeeId; }
     public String getEmployeeCode() { return employeeCode; }
     public void setEmployeeCode(String employeeCode) { this.employeeCode = employeeCode; }
     public String getEmployeeName() { return employeeName; }
@@ -54,6 +54,12 @@ public class AttendanceDetail {
     public void setUnpaidLeave(int unpaidLeave) { this.unpaidLeave = unpaidLeave; }
     public int getPaidLeave() { return paidLeave; }
     public void setPaidLeave(int paidLeave) { this.paidLeave = paidLeave; }
+    public double getBasicSalary() { return basicSalary; }
+    public void setBasicSalary(double basicSalary) { this.basicSalary = basicSalary; }
+    public double getAllowance() { return allowance; }
+    public void setAllowance(double allowance) { this.allowance = allowance; }
+    public int getDependentNumber() { return dependentNumber; }
+    public void setDependentNumber(int dependentNumber) { this.dependentNumber = dependentNumber; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 }
