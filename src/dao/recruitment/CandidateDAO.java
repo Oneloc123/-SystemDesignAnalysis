@@ -3,6 +3,7 @@ package dao.recruitment;
 import dao.DAO;
 import dao.DatabaseConnection;
 import dao.UserDAO;
+import enumModel.RoleEnum;
 import model.Recruitment.Candidate;
 import model.User;
 
@@ -56,7 +57,7 @@ public class CandidateDAO implements DAO<Candidate> {
                 cand.setUsername(rs.getString("username"));
                 cand.setPassword(rs.getString("password"));
                 cand.setEmail(rs.getString("email"));
-                cand.setRole(rs.getString("role"));
+                cand.setRole(RoleEnum.valueOf(rs.getString("role")));
                 list.add(cand);
             }
         } catch (SQLException e) {

@@ -1,6 +1,9 @@
 package view.calcSalary;
 
 import model.calcSalary.*;
+import model.calcSalary.AttendancePeriod;
+import model.calcSalary.Parameter;
+//import test.CalcSalaryControllerTest;
 import view.View;
 import controller.CalcSalaryController;
 
@@ -20,6 +23,7 @@ public class CalcSalaryView extends View {
         attendancePeriods = calcSalaryController.getAttendancePeriods();
 
         calcSalaryMethod();
+        return false;
     }
 
     private void calcSalaryMethod() {
