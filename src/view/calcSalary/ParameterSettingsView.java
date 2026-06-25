@@ -32,7 +32,7 @@ public class ParameterSettingsView extends View {
             System.out.println("0. Luu tham so");
             System.out.println("00. Bo qua, ko luu");
             System.out.println("-----------------------------------------");
-            System.out.print("Chon truong can sua (0-7): ");
+            System.out.print("Chon truong can sua (0-8): ");
 
             String input = netIn.readLine().trim();
 
@@ -80,8 +80,12 @@ public class ParameterSettingsView extends View {
                 case "7":
                     editTaxBrackets(workingCopy);
                     break;
+                case "8":
+                    workingCopy.setStandardWorkingDays(
+                            (int) readDouble("Ngay cong chuan", 1, 31));
+                    break;
                 default:
-                    System.out.println("Lua chon ko hop le. Nhap 0-7.");
+                    System.out.println("Lua chon ko hop le. Nhap 0-8.");
             }
         }
     }
@@ -95,9 +99,10 @@ public class ParameterSettingsView extends View {
         System.out.println("4. Giam tru ban than: " + p.getPersonalDeduction() + " VND");
         System.out.println("5. Giam tru nguoi phu thuoc: " + p.getDependentDeduction() + " VND");
         System.out.println("6. He so OT: " + p.getOvertimeRate());
+        System.out.println("7. Ngay cong chuan: " + p.getStandardWorkingDays());
 
         List<TaxBraket> taxList = p.getTaxBraket();
-        System.out.print("7. Cac muc thue: ");
+        System.out.print("8. Cac muc thue: ");
         if (taxList == null || taxList.isEmpty()) {
             System.out.println("(trong)");
         } else {

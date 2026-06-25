@@ -6,7 +6,6 @@ import enumModel.RoleEnum;
 import model.User;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -37,7 +36,7 @@ public class HomeTest {
                 roleName = "ADMIN";
                 break;
             case "2":
-                testUser.setRole(RoleEnum.ACCOUNT);
+                testUser.setRole(RoleEnum.ACCOUNTANT);
                 roleName = "ACCOUNT";
                 break;
             case "3":
