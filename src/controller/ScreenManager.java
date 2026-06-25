@@ -1,0 +1,71 @@
+package controller;
+
+import controller.base.Controller;
+import controller.profileManagement.MyProfileController;
+import model.User;
+
+import java.util.Stack;
+
+public class ScreenManager {
+    private static Stack<Controller> listView = new Stack<>();
+    private static User currentUser;
+
+    public static void init(User user) {
+        currentUser = user;
+    }
+
+    public static boolean navigateTo(String screenName) {
+        try {
+            switch (screenName) {
+                case "Schedule":
+                    ScheduleController sc = new ScheduleController();
+                    listView.push(sc);
+                    sc.showOn();
+                    break;
+                case "EmployeeList":
+                    EmployeeListController elc = new EmployeeListController();
+                    listView.push(elc);
+                    elc.showOn();
+                    break;
+                case "Attendance":
+                    AttendanceController ac = new AttendanceController();
+                    listView.push(ac);
+                    ac.showOn();
+                    break;
+                case "ChangePassword":
+                    ChangePasswordController cpc = new ChangePasswordController();
+                    listView.push(cpc);
+                    cpc.showOn();
+                    break;
+                case "MyProfile":
+                    MyProfileController mpc = new MyProfileController();
+                    listView.push(mpc);
+                    mpc.showOn();
+                    break;
+                case "ContractManagement":
+                    controller.contract.ContractManagementController cmc =
+                            new controller.contract.ContractManagementController();
+                    cmc.navigate();
+                    return true;
+                default:
+                    return false;
+            }
+            ScreenManager.back();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Lỗi điều hướng: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static void back() {
+        if (!listView.isEmpty()) {
+            Controller c = listView.pop();
+            c.showOff();
+        }
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+}

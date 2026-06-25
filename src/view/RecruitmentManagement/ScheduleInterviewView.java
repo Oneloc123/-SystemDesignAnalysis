@@ -30,6 +30,7 @@ public class ScheduleInterviewView extends View {
             }
             controller.handleMainMenuCommand(question);
         }
+//        return false;
     }
 
     public void displayJobPostingList(List<JobPosting> jobPostings) throws Exception {
