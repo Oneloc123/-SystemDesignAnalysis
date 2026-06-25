@@ -1,7 +1,5 @@
 package controller;
 
-import controller.profileManagement.ProfileController;
-import controller.recruimentManagement.RecruitmentManagementController;
 import enumModel.RoleEnum;
 import model.Recruitment.Employer;
 import model.User;
@@ -22,7 +20,7 @@ public class HomeController {
         hv.show();
     }
 
-    public void excuteComent(String question) throws Exception {
+    public void executeCommand(String question) throws Exception {
         switch(question) {
             case "1":
                 functionViewMyProfile();
@@ -40,13 +38,17 @@ public class HomeController {
                 ScreenManager.navigateTo("Attendance");
                 break;
             case "6":
-                functionRecruitmentManagement();
+                if (!ScreenManager.navigateTo("RecruitmentManagement")) {
+                    hv.showError("Không có quyền truy cập chức năng quản lý tuyển dụng");
+                }
                 break;
             case "7":
                 ScreenManager.navigateTo("CalcSalary");
                 break;
             case "8":
-                functionContractManagement();
+                if (!ScreenManager.navigateTo("ContractManagement")) {
+                    hv.showError("Không có quyền truy cập chức năng quản lý hợp đồng");
+                }
                 break;
             default:
                 hv.showError("Lệnh không hợp lệ");
@@ -62,29 +64,6 @@ public class HomeController {
         ScreenManager.navigateTo("MyProfile");
     }
 
-    public void handleProfile() throws Exception {
-        ProfileController pc = new ProfileController();
-        boolean check = pc.navigate();
-        if (!check){
-            hv.showError("Không có quyền truy cập");
-        }
 
-    }
-
-    public void functionRecruitmentManagement() throws Exception {
-        RecruitmentManagementController rmc = new RecruitmentManagementController();
-        boolean result = rmc.navigate();
-        if(!result){
-            hv.showError("Không có quyền truy cập");
-        }
-    }
-    public void functionContractManagement() throws Exception {
-        controller.contract.ContractManagementController cmc =
-                new controller.contract.ContractManagementController();
-        boolean result = cmc.navigate();
-        if (!result) {
-            hv.showError("Không có quyền truy cập chức năng quản lý hợp đồng");
-        }
-    }
 
 }

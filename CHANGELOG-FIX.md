@@ -87,82 +87,107 @@ Mỗi lần sửa xong một lỗi, cập nhật thông tin vào bảng dưới 
 
 ---
 
-## PHASE 1 — P1: QUAN TRỌNG (IMPORTANT)
+## PHASE 1 — P1: QUAN TRỌNG (IMPORTANT) ✅ ĐÃ HOÀN THÀNH
 
-### P1-1: Chuẩn hóa naming convention
-
-| # | File | Lỗi | Trạng thái | Thay đổi |
-|---|---|---|---|---|
-| 1 | `HomeController.java` | `excuteComent()` → `executeCommand()` | ⬜ Chưa sửa | |
-| 2 | `recruimentManagement/` folder | → `recruitmentManagement/` | ⬜ Chưa sửa | |
-| 3 | `RecruitmentManagementController.java` | `excuteCommand()` → `executeCommand()` | ⬜ Chưa sửa | |
-| 4 | `CreatePostRecruimentView.java` | `Recruiment` → `Recruitment` | ⬜ Chưa sửa | |
-
----
-
-### P1-2: Controller gọi UI trực tiếp
-
-| File | Trạng thái | Thay đổi |
-|---|---|---|
-| `CreateNewProfileController.java` | ⬜ Chưa sửa | Chuyển `System.out.println` → `view.showMessage()` |
-
----
-
-### P1-3: Thêm method showMessage/showError cho View
-
-| File | Trạng thái | Thay đổi |
-|---|---|---|
-| `CreateProfileView.java` | ⬜ Chưa sửa | Thêm `showMessage()` + `showError()` |
-
----
-
-### P1-4: `User.java` — hai trường id + userId
-
-| File | Trạng thái | Thay đổi |
-|---|---|---|
-| `User.java` | ⬜ Chưa sửa | Xóa `id`, giữ `userId` |
-| `ProfileView.java` | ⬜ Chưa sửa | `u.getId()` → `u.getUserId()` |
-| `ProfileDao.java` | ⬜ Chưa sửa | Sửa SQL từ `id` → `user_id` |
-| `CreateProfileView.java` | ⬜ Chưa sửa | `user.setId()` → `user.setUserId()` |
-
----
-
-### P1-5: `User.changePassword()` gọi DAO
-
-| File | Trạng thái | Thay đổi |
-|---|---|---|
-| `User.java` | ⬜ Chưa sửa | Chuyển logic lên Controller |
-| `ChangePasswordController.java` | ⬜ Chưa sửa | Nhận logic từ User |
-
----
-
-### P1-6: `User.getAllEmployee()` static
-
-| File | Trạng thái | Thay đổi |
-|---|---|---|
-| `User.java` | ⬜ Chưa sửa | Xóa method |
-| `ViewEmployeeProfileController.java` | ⬜ Chưa sửa | Dùng `new EmployeeDAO().findAll()` |
-
----
-
-## PHASE 2 — P2: NÊN SỬA (SHOULD)
+### P1-1: Chuẩn hóa naming convention ✅
 
 | # | File | Lỗi | Trạng thái | Thay đổi |
 |---|---|---|---|---|
-| 1 | `AttendanceDAO.java` | `createDefaultPeriod()` hardcode | ⬜ Chưa sửa | |
-| 2 | `calcSalary/*.java` | `double` → `BigDecimal` | ⬜ Chưa sửa | |
-| 3 | `UserDAO.java` | Code duplicate mapUser | ⬜ Chưa sửa | |
-| 4 | `ScheduleDAO.java` | `STR_TO_DATE` kém hiệu quả | ⬜ Chưa sửa | |
-| 5 | `ProfileDao.java` | SQL sai tên cột | ⬜ Chưa sửa | |
+| 1 | `HomeController.java` | `excuteComent()` → `executeCommand()` | ✅ Đã sửa | Rename method, đồng bộ `HomeView.java` gọi `hc.executeCommand()` |
+| 2 | `ProfileController.java` | `excuteComent()` → `executeCommand()` | ✅ Đã sửa | Rename method, đồng bộ `ProfileManagementView.java` gọi `pc.executeCommand()` |
+| 3 | `RecruitmentManagementController.java` | `excuteCommand()` → `executeCommand()` | ✅ Đã sửa | Rename method, đồng bộ `RecruitmentManagementView.java` gọi `rmc.executeCommand()` |
+| 4 | `recruimentManagement/` folder | → `recruitmentManagement/` | ✅ Đã sửa | Tạo folder mới, copy 5 files, update package + import ở 8 files, xóa folder cũ |
+| 5 | `CreatePostRecruimentView.java` + Controller | `Recruiment` → `Recruitment` | ✅ Đã sửa | Rename class + file + constructor + tất cả references |
+
+---
+
+### P1-2: Controller gọi UI trực tiếp ✅
+
+| File | Trạng thái | Thay đổi |
+|---|---|---|
+| `CreateNewProfileController.java` | ✅ Đã sửa | `System.out.println("Tạo hồ sơ thành công")` → `cpv.showMessage(...)`; `System.out.println("Lỗi: " + e.getMessage())` → `cpv.showError(...)` |
+
+### P1-3: Thêm method showMessage/showError cho View ✅
+
+| File | Trạng thái | Thay đổi |
+|---|---|---|
+| `CreateProfileView.java` | ✅ Không cần sửa | `View` base class đã có `showMessage(String)` + `showError(String)` — `CreateProfileView` extends `View` nên kế thừa sẵn |
+
+---
+
+### P1-4: `User.java` — hợp nhất id + userId ✅
+
+| File | Trạng thái | Thay đổi |
+|---|---|---|
+| `User.java` | ✅ Đã sửa | Xóa field `private long id` + getter/setter `getId()`/`setId()`. Sửa constructor dùng `userId` thay `id` |
+| `ProfileDao.java` | ✅ Đã sửa | `user.getId()` → `user.getUserId()`, `ps.setLong()` → `ps.setInt()` |
+| `CreateProfileView.java` | ✅ Đã sửa | `user.setId(Long.parseLong(...))` → `user.setUserId(Integer.parseInt(...))` |
+| `ProfileView.java` | ✅ Đã sửa | Đã dùng `u.getUserId()` từ trước |
+
+---
+
+### P1-5: `User.changePassword()` gọi DAO ✅
+
+| File | Trạng thái | Thay đổi |
+|---|---|---|
+| `User.java` | ✅ Đã sửa | Xóa hoàn toàn method `changePassword()` + `validatePasswordStrength()`. Xóa imports `UserDAO`, `Pattern` |
+| `ChangePasswordController.java` | ✅ Đã sửa | Nhận logic changePassword từ User: validate oldPw, strength check, gọi `userDAO.updatePassword()` + `currentUser.setPassword()` |
+
+---
+
+### P1-6: `User.getAllEmployee()` static ✅
+
+| File | Trạng thái | Thay đổi |
+|---|---|---|
+| `User.java` | ✅ Đã sửa từ trước | Method đã được xóa |
+| `ViewEmployeeProfileController.java` | ✅ Đã sửa từ trước | Đã dùng `new EmployeeDAO().findAll()` |
+
+---
+
+## PHASE 2 — P2: NÊN SỬA (SHOULD) ✅ ĐÃ HOÀN THÀNH
+
+| # | File | Lỗi | Trạng thái | Thay đổi |
+|---|---|---|---|---|
+| 1 | `AttendanceDAO.java` | `createDefaultPeriod()` hardcode | ✅ Đã sửa | Xóa method `createDefaultPeriod()` + `createDetail()`. `getByDepartment()` trả `findByMonth()` trực tiếp |
+| 2 | `src/model/calcSalary/*.java` | `double` → `BigDecimal` | ❌ Giữ nguyên | Theo kế hoạch cũ (knowledge.md): "Không đổi double → BigDecimal" |
+| 3 | `UserDAO.java` | Code duplicate mapUser | ✅ Đã sửa | Extract `private User mapUser(ResultSet)`. 4 methods (`findById`, `findAll`, `findByUsername`, `findByEmail`) dùng chung |
+| 4 | `ScheduleDAO.java` | `STR_TO_DATE` kém hiệu quả | ✅ Đã sửa | `MONTH(STR_TO_DATE(...))` → `SUBSTRING(date, 4, 2)`; `YEAR(STR_TO_DATE(...))` → `SUBSTRING(date, 7, 4)` |
+| 5 | `ProfileDao.java` | SQL sai tên cột | ✅ Đã sửa | `id`→`user_id`, `fullName`→`full_name`, `dateOfBirth`→`date_of_birth`, `citizenIdentificationCard`→`citizen_id` (cả SELECT, INSERT, ResultSet) |
+
+---
+
+## PHASE 3 — P3: CÓ THỂ SỬA (NICE TO HAVE)
+
+### P3-2: ScreenManager — thêm navigation cho tất cả màn hình ✅
+
+| File | Trạng thái | Thay đổi |
+|---|---|---|
+| `ScreenManager.java` | ✅ Đã sửa | Thêm case `RecruitmentManagement` + `ProfileManagement`. Sửa `ContractManagement` trả về `cmc.navigate()` trực tiếp, không còn `System.out.println` trùng lặp |
+| `HomeController.java` | ✅ Đã sửa | Xóa dead code (`handleProfile`, `functionRecruitmentManagement`, `functionContractManagement`). Case 6, 8 gọi `ScreenManager.navigateTo()` trực tiếp + xử lý lỗi. Xóa imports không dùng |
+
+---
+
+## RENAME: TaxBraket → TaxBracket ✅
+
+| File | Trạng thái | Thay đổi |
+|---|---|---|
+| `TaxBraket.java` → `TaxBracket.java` | ✅ Đã sửa | Rename file + class + constructor |
+| `TaxBraketTest.java` → `TaxBracketTest.java` | ✅ Đã sửa | Rename file + class + tất cả references |
+| `Parameter.java` | ✅ Đã sửa | Field `taxBraket`→`taxBracket`, getter/setter, copy constructor |
+| `ParameterSettingsView.java` | ✅ Đã sửa | Import, type declarations, method calls |
+| `CalcSalaryView.java` | ✅ Đã sửa | `getTaxBraket()` → `getTaxBracket()` |
+| `CalcSalaryController.java` | ✅ Đã sửa | Type + method calls |
+| `ParameterDAO.java` | ✅ Đã sửa | Import, type, method calls |
+| `PayrollTest.java` | ✅ Đã sửa | Type + method calls |
+| `ParameterTest.java` | ✅ Đã sửa | Type + method calls + fix 2 syntax errors (mất `System.out.println`) |
 
 ---
 
 ## GHI CHÚ THÊM
 
-- **TaxBraket → TaxBracket:** Theo kế hoạch cũ, giữ nguyên để không ảnh hưởng
 - **double → BigDecimal cho tiền tệ:** Theo kế hoạch cũ, chưa đổi
-- **AttendanceDAO hardcode:** Đã biết, sẽ sửa sau khi có DB thật
+- **P0-4 (Security):** Chưa sửa — cần thảo luận thêm về hash password và config DB
 
 ---
 
-*Changelog được tạo ngày 25/06/2026. Cập nhật sau mỗi lần sửa lỗi.*
+*Changelog được tạo ngày 25/06/2026. Cập nhật lần cuối: 27/06/2026.*

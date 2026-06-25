@@ -11,11 +11,11 @@ public class Parameter {
     private double dependentDeduction;
     private double overtimeRate;
     private int standardWorkingDays;
-    private List<TaxBraket> taxBraket;
+    private List<TaxBracket> taxBracket;
 
 
     public Parameter() {
-        taxBraket = new ArrayList<>();
+        taxBracket = new ArrayList<>();
     }
 
     //copy tu tham so khac
@@ -27,15 +27,15 @@ public class Parameter {
         this.dependentDeduction = other.dependentDeduction;
         this.overtimeRate = other.overtimeRate;
         this.standardWorkingDays = other.standardWorkingDays;
-        this.taxBraket = new ArrayList<>();
-        if (other.taxBraket != null) {
-            for (int i = 0; i < other.taxBraket.size(); i++) {
-                TaxBraket t = other.taxBraket.get(i);
-                TaxBraket copy = new TaxBraket();
+        this.taxBracket = new ArrayList<>();
+        if (other.taxBracket != null) {
+            for (int i = 0; i < other.taxBracket.size(); i++) {
+                TaxBracket t = other.taxBracket.get(i);
+                TaxBracket copy = new TaxBracket();
                 copy.setMinIncome(t.getMinIncome());
                 copy.setMaxIncome(t.getMaxIncome());
                 copy.setTaxRate(t.getTaxRate());
-                this.taxBraket.add(copy);
+                this.taxBracket.add(copy);
             }
         }
     }
@@ -64,11 +64,11 @@ public class Parameter {
         if (standardWorkingDays <= 0) {
             s += "Ngay cong chuan phai lon hon 0\n";
         }
-        if (taxBraket == null || taxBraket.isEmpty()) {
+        if (taxBracket == null || taxBracket.isEmpty()) {
             s += "Danh sach muc thue ko duoc de trong\n";
         } else {
-            for (int i = 0; i < taxBraket.size(); i++) {
-                String e = taxBraket.get(i).validation();
+            for (int i = 0; i < taxBracket.size(); i++) {
+                String e = taxBracket.get(i).validation();
                 if (e != null) {
                     s += "Muc thue " + (i + 1) + ": " + e + "\n";
                 }
@@ -134,12 +134,12 @@ public class Parameter {
         this.standardWorkingDays = standardWorkingDays;
     }
 
-    public List<TaxBraket> getTaxBraket() {
-        return taxBraket;
+    public List<TaxBracket> getTaxBracket() {
+        return taxBracket;
     }
 
-    public void setTaxBraket(List<TaxBraket> taxBraket) {
-        this.taxBraket = taxBraket;
+    public void setTaxBracket(List<TaxBracket> taxBracket) {
+        this.taxBracket = taxBracket;
     }
 
     @Override
@@ -152,7 +152,7 @@ public class Parameter {
                 "\nGiam tru nguoi phu thuoc: " + dependentDeduction +
                 "\nNgay cong chuan: " + standardWorkingDays +
                 "\nHe so OT: " + overtimeRate +
-                "\nMuc thue: " + taxBraket.toString();
+                "\nMuc thue: " + taxBracket.toString();
     }
 
 

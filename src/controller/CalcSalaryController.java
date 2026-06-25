@@ -160,7 +160,7 @@ public class CalcSalaryController {
         pd.setTaxableIncome(thuNhapChiuThue);
 
         //tinh thue TNCN luy tien
-        double thue = tinhThueLuyTien(thuNhapChiuThue, param.getTaxBraket());
+        double thue = tinhThueLuyTien(thuNhapChiuThue, param.getTaxBracket());
         pd.setIncomeTax(thue);
 
         //luong thuc nhan
@@ -168,10 +168,10 @@ public class CalcSalaryController {
         pd.setNetSalary(net);
     }
 
-    private double tinhThueLuyTien(double thuNhap, List<TaxBraket> brackets) {
+    private double tinhThueLuyTien(double thuNhap, List<TaxBracket> brackets) {
         double thue = 0;
         for (int i = 0; i < brackets.size(); i++) {
-            TaxBraket b = brackets.get(i);
+            TaxBracket b = brackets.get(i);
             if (thuNhap > b.getMinIncome()) {
                 double trongKhoan = Math.min(thuNhap, b.getMaxIncome()) - b.getMinIncome();
                 if (trongKhoan > 0) {

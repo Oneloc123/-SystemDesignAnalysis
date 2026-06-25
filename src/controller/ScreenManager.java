@@ -54,10 +54,18 @@ public class ScreenManager {
                 case "ContractManagement":
                     controller.contract.ContractManagementController cmc =
                             new controller.contract.ContractManagementController();
-                    cmc.navigate();
-                    return true;
+                    return cmc.navigate();
+                case "RecruitmentManagement":
+                    controller.recruitmentManagement.RecruitmentManagementController rmc =
+                            new controller.recruitmentManagement.RecruitmentManagementController();
+                    return rmc.navigate();
+                case "ProfileManagement":
+                    controller.profileManagement.ProfileController pc =
+                            new controller.profileManagement.ProfileController();
+                    return pc.navigate();
                 default:
                     return false;
+
             }
             ScreenManager.back();
             return true;

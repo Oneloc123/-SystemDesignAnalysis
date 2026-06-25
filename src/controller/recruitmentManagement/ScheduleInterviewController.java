@@ -1,4 +1,4 @@
-package controller.recruimentManagement;
+package controller.recruitmentManagement;
 
 import controller.MainController;
 import dao.recruitment.InterviewScheduleDAO;

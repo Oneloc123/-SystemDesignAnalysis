@@ -189,7 +189,7 @@ public class CalcSalaryView extends View {
             return;
         }
 
-        if (parameter == null || parameter.getTaxBraket() == null || parameter.getTaxBraket().isEmpty()) {
+        if (parameter == null || parameter.getTaxBracket() == null || parameter.getTaxBracket().isEmpty()) {
             System.out.println("Tham so tinh luong chua duoc cau hinh. Vao chinh sua tham so truoc.");
             return;
         }

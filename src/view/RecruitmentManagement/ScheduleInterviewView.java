@@ -1,6 +1,6 @@
 package view.RecruitmentManagement;
 
-import controller.recruimentManagement.ScheduleInterviewController;
+import controller.recruitmentManagement.ScheduleInterviewController;
 import model.Recruitment.InterviewSchedule;
 import model.Recruitment.JobApplication;
 import model.Recruitment.JobPosting;

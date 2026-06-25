@@ -1,6 +1,6 @@
 package test;
 
-import controller.recruimentManagement.SubmitCVController;
+import controller.recruitmentManagement.SubmitCVController;
 import view.RecruitmentManagement.SubmitCVView;
 
 public class SubmmitedCV {

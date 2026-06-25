@@ -1,7 +1,7 @@
 package dao;
 
 import model.calcSalary.Parameter;
-import model.calcSalary.TaxBraket;
+import model.calcSalary.TaxBracket;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class ParameterDAO {
                 ResultSet rs = stmt.getGeneratedKeys();
                 if (rs.next()) {
                     long paramId = rs.getLong(1);
-                    saveTaxBrackets(paramId, parameter.getTaxBraket());
+                    saveTaxBrackets(paramId, parameter.getTaxBracket());
                 }
                 return true;
             }
@@ -53,7 +53,7 @@ public class ParameterDAO {
             if (affected > 0) {
                 // Delete old tax brackets and re-insert
                 deleteTaxBrackets(paramId);
-                saveTaxBrackets(paramId, parameter.getTaxBraket());
+                saveTaxBrackets(paramId, parameter.getTaxBracket());
                 return true;
             }
         } catch (SQLException e) {
@@ -76,7 +76,7 @@ public class ParameterDAO {
                 param.setDependentDeduction(rs.getDouble("dependent_deduction"));
                 param.setOvertimeRate(rs.getDouble("overtime_rate"));
                 param.setStandardWorkingDays(rs.getInt("standard_working_days"));
-                param.setTaxBraket(loadTaxBrackets(paramId));
+                param.setTaxBracket(loadTaxBrackets(paramId));
                 return param;
             }
         } catch (SQLException e) {
@@ -85,10 +85,10 @@ public class ParameterDAO {
         return null;
     }
 
-    private void saveTaxBrackets(long paramId, List<TaxBraket> brackets) {
+    private void saveTaxBrackets(long paramId, List<TaxBracket> brackets) {
         String sql = "INSERT INTO tax_brackets (param_id, min_income, max_income, tax_rate) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            for (TaxBraket b : brackets) {
+            for (TaxBracket b : brackets) {
                 stmt.setLong(1, paramId);
                 stmt.setDouble(2, b.getMinIncome());
                 stmt.setDouble(3, b.getMaxIncome());
@@ -110,14 +110,14 @@ public class ParameterDAO {
         }
     }
 
-    private List<TaxBraket> loadTaxBrackets(long paramId) {
-        List<TaxBraket> list = new ArrayList<>();
+    private List<TaxBracket> loadTaxBrackets(long paramId) {
+        List<TaxBracket> list = new ArrayList<>();
         String sql = "SELECT * FROM tax_brackets WHERE param_id=? ORDER BY id ASC";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, paramId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                TaxBraket b = new TaxBraket();
+                TaxBracket b = new TaxBracket();
                 b.setId(rs.getLong("id"));
                 b.setMinIncome(rs.getDouble("min_income"));
                 b.setMaxIncome(rs.getDouble("max_income"));

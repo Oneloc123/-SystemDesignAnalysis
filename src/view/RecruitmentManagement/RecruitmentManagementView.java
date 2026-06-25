@@ -1,6 +1,6 @@
 package view.RecruitmentManagement;
 
-import controller.recruimentManagement.RecruitmentManagementController;
+import controller.recruitmentManagement.RecruitmentManagementController;
 import view.View;
 
 import static controller.MainController.printList;
@@ -28,7 +28,7 @@ public class RecruitmentManagementView extends View {
             //exit
             if(question.equals("0")) {System.out.println("Thoat thanh cong"); break loop;}
             // thuc thi func
-            rmc.excuteCommand(question);
+            rmc.executeCommand(question);
         }
 //        return false;
     }

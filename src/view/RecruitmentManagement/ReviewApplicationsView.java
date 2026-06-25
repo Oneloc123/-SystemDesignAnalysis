@@ -1,6 +1,6 @@
 package view.RecruitmentManagement;
 
-import controller.recruimentManagement.ReviewApplicationsController;
+import controller.recruitmentManagement.ReviewApplicationsController;
 import model.Recruitment.JobApplication;
 import model.Recruitment.JobPosting;
 import view.View;

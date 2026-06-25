@@ -1,4 +1,4 @@
-package controller.recruimentManagement;
+package controller.recruitmentManagement;
 
 import controller.MainController;
 import dao.recruitment.JobPostingDAO;
@@ -6,18 +6,18 @@ import enumModel.AddressEnum;
 import enumModel.RoleEnum;
 import model.Recruitment.Employer;
 import model.Recruitment.JobPosting;
-import view.RecruitmentManagement.CreatePostRecruimentView;
+import view.RecruitmentManagement.CreatePostRecruitmentView;
 
 import java.sql.Date;
 
-public class CreatePostRecruimentController {
+public class CreatePostRecruitmentController {
     private JobPosting draf;
-    private CreatePostRecruimentView cprv;
+    private CreatePostRecruitmentView cprv;
     private AddressEnum address = AddressEnum.CreatePostRecruitment;
     private JobPostingDAO jobPostingDAO;
 
-    public CreatePostRecruimentController() {
-        cprv = new CreatePostRecruimentView(this);
+    public CreatePostRecruitmentController() {
+        cprv = new CreatePostRecruitmentView(this);
         this.jobPostingDAO = new JobPostingDAO();
     }
 

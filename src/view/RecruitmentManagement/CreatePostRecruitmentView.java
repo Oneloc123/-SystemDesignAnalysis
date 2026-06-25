@@ -1,6 +1,6 @@
 package view.RecruitmentManagement;
 
-import controller.recruimentManagement.CreatePostRecruimentController;
+import controller.recruitmentManagement.CreatePostRecruitmentController;
 import model.Recruitment.Employer;
 import model.Recruitment.JobPosting;
 import view.View;
@@ -8,11 +8,11 @@ import view.View;
 import static controller.MainController.currentUser;
 import static controller.MainController.printList;
 
-public class CreatePostRecruimentView extends View {
-    private CreatePostRecruimentController cprc;
+public class CreatePostRecruitmentView extends View {
+    private CreatePostRecruitmentController cprc;
     private JobPosting rp;
 
-    public CreatePostRecruimentView(CreatePostRecruimentController cprc){
+    public CreatePostRecruitmentView(CreatePostRecruitmentController cprc){
         this.cprc = cprc;
     }
 

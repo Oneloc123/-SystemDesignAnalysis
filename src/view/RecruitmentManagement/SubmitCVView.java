@@ -1,7 +1,7 @@
 package view.RecruitmentManagement;
 
 import controller.MainController;
-import controller.recruimentManagement.SubmitCVController;
+import controller.recruitmentManagement.SubmitCVController;
 import model.Recruitment.JobApplication;
 import model.Recruitment.JobPosting;
 import view.View;
