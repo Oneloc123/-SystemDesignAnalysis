@@ -1,6 +1,7 @@
 package controller;
 
 import controller.base.Controller;
+import dao.AttendanceDAO;
 import model.Department;
 import model.calcSalary.AttendanceDetail;
 import model.calcSalary.AttendancePeriod;
@@ -9,6 +10,7 @@ import java.util.List;
 
 public class AttendanceController extends Controller {
     AttendanceView attendanceView;
+    private AttendanceDAO attendanceDAO;
     private int selectedDeptId;
     private int currentMonth;
     private int currentYear;
@@ -17,6 +19,7 @@ public class AttendanceController extends Controller {
     public AttendanceController() {
         this.attendanceView = new AttendanceView(this);
         this.view = this.attendanceView;
+        this.attendanceDAO = new AttendanceDAO();
         java.time.LocalDate now = java.time.LocalDate.now();
         this.currentMonth = now.getMonthValue();
         this.currentYear = now.getYear();
@@ -47,7 +50,7 @@ public class AttendanceController extends Controller {
     }
 
     public AttendancePeriod getAttendanceData() {
-        return AttendancePeriod.getByDepartment(selectedDeptId, currentMonth, currentYear);
+        return attendanceDAO.getByDepartment(selectedDeptId, currentMonth, currentYear);
     }
 
     public List<AttendanceDetail> getFilteredDetails() {

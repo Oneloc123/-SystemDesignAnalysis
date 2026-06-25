@@ -1,5 +1,8 @@
 package controller;
 
+import dao.AttendanceDAO;
+import dao.ParameterDAO;
+import dao.PayrollDAO;
 import enumModel.RoleEnum;
 import model.User;
 import model.calcSalary.*;
@@ -11,15 +14,25 @@ import java.util.List;
 
 public class CalcSalaryController {
     private Parameter parameter;
-    private List<AttendancePeriod>  attendancePeriods;
+    private AttendanceDAO attendanceDAO;
+    private PayrollDAO payrollDAO;
+    private ParameterDAO parameterDAO;
     ParameterSettingsView parameterSettingsView;
     CalcSalaryView calcSalaryView;
-    private Payroll payroll;
+    private Payroll currentPayroll;
 
     public CalcSalaryController() {
-        // Todo: Sau phải lấy dữ liệu  từ data base thay vào. Không được để new
-        this.parameter = new Parameter();
-        this.attendancePeriods = new ArrayList<AttendancePeriod>();
+        this.attendanceDAO = new AttendanceDAO();
+        this.payrollDAO = new PayrollDAO();
+        this.parameterDAO = new ParameterDAO();
+
+        // Load parameter from DB, fallback to default
+        Parameter loaded = parameterDAO.load();
+        if (loaded != null) {
+            this.parameter = loaded;
+        } else {
+            this.parameter = new Parameter();
+        }
 
         this.parameterSettingsView = new ParameterSettingsView(this);
         this.calcSalaryView = new CalcSalaryView(this);
@@ -47,6 +60,8 @@ public class CalcSalaryController {
         if (errors != null) {
             return errors;
         }
+        // Save to DB
+        parameterDAO.save(updatedParameter);
         this.parameter = updatedParameter;
         return null;
     }
@@ -59,28 +74,23 @@ public class CalcSalaryController {
         this.parameter = parameter;
     }
 
-    public List<AttendancePeriod> getAttendancePeriods() {
-        return attendancePeriods;
+    public List<AttendancePeriod> getAllAttendancePeriods() {
+        // For now, return all periods from months 1-12 of a given year range
+        // A more complete implementation would query a periods table
+        return attendanceDAO.findAll();
     }
 
-    public void setAttendancePeriods(List<AttendancePeriod> attendancePeriods) {
-        this.attendancePeriods = attendancePeriods;
+    public AttendancePeriod getAttendancePeriod(int month, int year) {
+        return attendanceDAO.findByMonth(month, year);
     }
 
-    public Payroll getPayroll() {
-        return payroll;
+    public Payroll getCurrentPayroll() {
+        return currentPayroll;
     }
 
     //tinh bang luong cho 1 ky cham cong
     public Payroll calculatePayroll(int month, int year) {
-        AttendancePeriod period = null;
-        for (int i = 0; i < attendancePeriods.size(); i++) {
-            AttendancePeriod ap = attendancePeriods.get(i);
-            if (ap.getMonth() == month && ap.getYear() == year) {
-                period = ap;
-                break;
-            }
-        }
+        AttendancePeriod period = attendanceDAO.findByMonth(month, year);
 
         if (period == null) return null;
         if (period.getAttendanceDetails().isEmpty()) return null;
@@ -118,7 +128,10 @@ public class CalcSalaryController {
         payroll.setTotalTax(tongThue);
         payroll.setTotalInsurance(tongBH);
 
-        this.payroll = payroll;
+        // Save to DB
+        payrollDAO.save(payroll);
+
+        this.currentPayroll = payroll;
         return payroll;
     }
 
@@ -173,24 +186,45 @@ public class CalcSalaryController {
         AttendancePeriod period = new AttendancePeriod();
         period.setMonth(month);
         period.setYear(year);
-        attendancePeriods.add(period);
+        attendanceDAO.save(period);
     }
 
     public void themChamCong(int month, int year, long employeeId, int ngayCong, int gioOT,
                              double basicSalary, double allowance, int dependentNumber) {
-        for (int i = 0; i < attendancePeriods.size(); i++) {
-            AttendancePeriod ap = attendancePeriods.get(i);
-            if (ap.getMonth() == month && ap.getYear() == year) {
-                AttendanceDetail ad = new AttendanceDetail();
-                ad.setEmployeeId(employeeId);
-                ad.setActualWorkingDays(ngayCong);
-                ad.setOvertimeHours(gioOT);
-                ad.setBasicSalary(basicSalary);
-                ad.setAllowance(allowance);
-                ad.setDependentNumber(dependentNumber);
-                ap.addAttendanceDetail(ad);
-                break;
-            }
-        }
+        AttendancePeriod period = attendanceDAO.findByMonth(month, year);
+        if (period == null) return;
+
+        AttendanceDetail ad = new AttendanceDetail();
+        ad.setPeriodId(period.getId());
+        ad.setEmployeeId(employeeId);
+        ad.setActualWorkingDays(ngayCong);
+        ad.setOvertimeHours(gioOT);
+        ad.setBasicSalary(basicSalary);
+        ad.setAllowance(allowance);
+        ad.setDependentNumber(dependentNumber);
+        period.addAttendanceDetail(ad);
+
+        // Save detail directly to DB
+        attendanceDAO.saveDetailOnly(ad);
+    }
+
+    public List<Payroll> loadPayrollHistory() {
+        return payrollDAO.findAll();
+    }
+
+    public Payroll loadPayrollByMonth(int month, int year) {
+        return payrollDAO.findByMonth(month, year);
+    }
+
+    public AttendanceDAO getAttendanceDAO() {
+        return attendanceDAO;
+    }
+
+    public PayrollDAO getPayrollDAO() {
+        return payrollDAO;
+    }
+
+    public ParameterDAO getParameterDAO() {
+        return parameterDAO;
     }
 }

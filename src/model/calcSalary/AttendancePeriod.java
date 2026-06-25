@@ -1,6 +1,5 @@
 package model.calcSalary;
 
-import dao.AttendanceDAO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +9,6 @@ public class AttendancePeriod {
     private int year;
 
     private List<AttendanceDetail> attendanceDetails;
-
-    private static AttendanceDAO dao = new AttendanceDAO();
 
     public AttendancePeriod() {
         attendanceDetails = new ArrayList<>();
@@ -44,18 +41,6 @@ public class AttendancePeriod {
 
     public String getPeriodLabel() {
         return String.format("%02d/%d", month, year);
-    }
-
-
-    public boolean save() { return dao.save(this); }
-    public boolean update() { return dao.update(this); }
-
-    public static AttendancePeriod findByMonth(int month, int year) {
-        return dao.findByMonth(month, year);
-    }
-
-    public static AttendancePeriod getByDepartment(int deptId, int month, int year) {
-        return dao.getByDepartment(deptId, month, year);
     }
 
 

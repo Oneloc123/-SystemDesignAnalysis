@@ -9,7 +9,6 @@ import view.HomeView;
 
 public class HomeController {
     HomeView hv;
-    CalcSalaryController calcSalaryController;
 
     public HomeController() {
         if (MainController.currentUser == null) {
@@ -17,7 +16,6 @@ public class HomeController {
             MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
         }
         this.hv = new HomeView(this);
-        this.calcSalaryController = new CalcSalaryController();
     }
 
     public void show() throws Exception {
@@ -45,6 +43,9 @@ public class HomeController {
                 functionRecruitmentManagement();
                 break;
             case "7":
+                ScreenManager.navigateTo("CalcSalary");
+                break;
+            case "8":
                 functionContractManagement();
                 break;
             default:
@@ -59,14 +60,6 @@ public class HomeController {
 
     public void functionViewMyProfile() {
         ScreenManager.navigateTo("MyProfile");
-    }
-
-    public void function() throws Exception {
-        if (!calcSalaryController.checkRole(MainController.currentUser)) {
-            hv.showError("Khong co quyen");
-            return;
-        }
-        calcSalaryController.execute(MainController.currentUser);
     }
 
     public void handleProfile() throws Exception {
