@@ -1,6 +1,8 @@
 package controller.recruimentManagement;
 
 import controller.MainController;
+import dao.recruitment.JobApplicationDAO;
+import dao.recruitment.JobPostingDAO;
 import enumModel.AddressEnum;
 import enumModel.RoleEnum;
 import model.Recruitment.Candidate;
@@ -8,6 +10,7 @@ import model.Recruitment.JobApplication;
 import model.Recruitment.JobPosting;
 import view.RecruitmentManagement.SubmitCVView;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,14 +18,18 @@ public class SubmitCVController {
     private JobApplication draftApplication;
     private SubmitCVView view;
     private AddressEnum address = AddressEnum.SubmitCV;
-    private JobPosting selectedJobPosting; // thêm để lưu tin đã chọn
+    private JobPostingDAO jobPostingDAO;
+    private JobApplicationDAO jobApplicationDAO;
+    private JobPosting selectedJobPosting;
 
     public SubmitCVController() {
         view = new SubmitCVView(this);
+        this.jobPostingDAO = new JobPostingDAO();
+        this.jobApplicationDAO = new JobApplicationDAO();
     }
 
     public boolean navigateTo() throws Exception {
-        if (!MainController.currentUser.getRole().equals(RoleEnum.CANDIDATE.toString())) {
+        if (MainController.currentUser.getRole() != RoleEnum.CANDIDATE) {
             return false;
         }
         MainController.addresses.add(address);
@@ -34,7 +41,7 @@ public class SubmitCVController {
     public void handleMainMenuCommand(String command) throws Exception {
         switch (command) {
             case "1":
-                view.displayJobPostingList(JobPosting.findAll());
+                view.displayJobPostingList(jobPostingDAO.findAll());
                 break;
             case "2":
                 Candidate candidate = (Candidate) MainController.currentUser;
@@ -54,7 +61,6 @@ public class SubmitCVController {
         }
     }
 
-    // Phương thức được gọi từ view sau khi chọn job
     public void selectJobPosting(JobPosting job) {
         this.selectedJobPosting = job;
         try {
@@ -97,7 +103,12 @@ public class SubmitCVController {
                 view.enterApplicationDetails();
                 return;
             }
-            if (!application.save()) {
+            application.setDraft(false);
+            application.setStatus("PENDING");
+            application.setSubmittedDate(LocalDate.now());
+            Candidate candidate = (Candidate) MainController.currentUser;
+            if (candidate != null) candidate.addApplication(application);
+            if (!jobApplicationDAO.save(application)) {
                 view.showMessage("Lưu vào database thất bại, vui lòng thử lại sau.");
                 return;
             }
@@ -120,12 +131,14 @@ public class SubmitCVController {
                 view.enterApplicationDetails();
                 return;
             }
-            if (!application.saveDraft()) {
+            application.setDraft(true);
+            application.setStatus("DRAFT");
+            if (!jobApplicationDAO.saveDraft(application)) {
                 view.showMessage("Lưu nháp thất bại, vui lòng thử lại sau.");
                 return;
             }
             Candidate candidate = (Candidate) MainController.currentUser;
-            if (!candidate.getApplications().contains(application)) {
+            if (candidate != null && !candidate.getApplications().contains(application)) {
                 candidate.addApplication(application);
             }
             view.showMessage("Lưu nháp thành công.");

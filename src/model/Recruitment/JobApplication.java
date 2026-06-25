@@ -1,8 +1,6 @@
 package model.Recruitment;
 
-import dao.recruitment.JobApplicationDAO;
 import java.time.LocalDate;
-import java.util.List;
 
 public class JobApplication {
     private int applicationId;
@@ -16,8 +14,6 @@ public class JobApplication {
     private String status;
     private LocalDate submittedDate;
     private boolean isDraft;
-
-    private static JobApplicationDAO dao = new JobApplicationDAO();
 
     public JobApplication() {
         this.status = "PENDING";
@@ -67,27 +63,7 @@ public class JobApplication {
                 && jobPosting != null;
     }
 
-    public boolean save() {
-        if (!checkValid()) return false;
-        this.isDraft = false;
-        this.status = "PENDING";
-        this.submittedDate = LocalDate.now();
-        if (candidate != null) candidate.addApplication(this);
-        return dao.save(this);
+    public boolean isReadyToSave() {
+        return checkValid();
     }
-
-    public boolean saveDraft() {
-        if (!checkValid()) return false;
-        this.isDraft = true;
-        this.status = "DRAFT";
-        return dao.saveDraft(this);
-    }
-
-    public boolean update() { return dao.update(this); }
-    public boolean delete() { return dao.delete(this.applicationId); }
-
-    public static JobApplication findById(int id) { return dao.findById(id); }
-    public static List<JobApplication> findAll() { return dao.findAll(); }
-    public static List<JobApplication> findByJobPosting(int jobPostingId) { return dao.findByJobPosting(jobPostingId); }
-    public static List<JobApplication> findByCandidate(int candidateId) { return dao.findByCandidate(candidateId); }
 }

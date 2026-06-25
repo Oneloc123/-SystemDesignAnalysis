@@ -1,6 +1,7 @@
 package controller;
 
 import controller.base.Controller;
+import dao.ScheduleDAO;
 import model.ScheduleEntry;
 import view.ScheduleView;
 
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class ScheduleController extends Controller {
     ScheduleView scheduleView;
+    private ScheduleDAO scheduleDAO;
 
     private int currentMonth;
     private int currentYear;
@@ -27,6 +29,7 @@ public class ScheduleController extends Controller {
         this.selectedDate = now;
         this.scheduleView = new ScheduleView(this);
         this.view = this.scheduleView;
+        this.scheduleDAO = new ScheduleDAO();
     }
 
     @Override
@@ -82,7 +85,7 @@ public class ScheduleController extends Controller {
 
 
     public List<ScheduleEntry> getSchedule() {
-        return ScheduleEntry.findByEmployeeAndMonth(
+        return scheduleDAO.findByEmployeeAndMonth(
                 ScreenManager.getCurrentUser().getUserId(),
                 currentMonth, currentYear);
     }

@@ -1,6 +1,8 @@
 package controller;
 
 import controller.base.Controller;
+import dao.DepartmentDAO;
+import dao.EmployeeDAO;
 import model.Department;
 import model.hr.Employee;
 import view.EmployeeListView;
@@ -11,10 +13,14 @@ public class EmployeeListController extends Controller {
     private int selectedDeptId;
     private String searchKeyword = "";
     private String filterStatus = "";
+    private DepartmentDAO departmentDAO;
+    private EmployeeDAO employeeDAO;
 
     public EmployeeListController() {
         this.employeeListView = new EmployeeListView(this);
         this.view = this.employeeListView;
+        this.departmentDAO = new DepartmentDAO();
+        this.employeeDAO = new EmployeeDAO();
     }
 
     @Override
@@ -28,11 +34,11 @@ public class EmployeeListController extends Controller {
     }
 
     public List<Department> getDepartments() {
-        return Department.findAll();
+        return departmentDAO.findAll();
     }
 
     public boolean selectDepartment(int id) {
-        Department dept = Department.findById(id);
+        Department dept = departmentDAO.findById(id);
         if (dept != null) {
             selectedDeptId = id;
             searchKeyword = "";
@@ -43,7 +49,7 @@ public class EmployeeListController extends Controller {
     }
 
     public List<Employee> getFilteredEmployees() {
-        return Employee.search(searchKeyword, filterStatus, selectedDeptId);
+        return employeeDAO.search(searchKeyword, filterStatus, selectedDeptId);
     }
 
     public String getEmployeeDetail(int index) {

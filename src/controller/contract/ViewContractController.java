@@ -1,5 +1,6 @@
 package controller.contract;
 
+import dao.ContractDAO;
 import dao.EmployeeDAO;
 import model.Contract;
 import model.hr.Employee;
@@ -9,9 +10,13 @@ import java.util.List;
 
 public class ViewContractController {
     private ViewContractView view;
+    private ContractDAO contractDAO;
+    private EmployeeDAO employeeDAO;
 
     public ViewContractController() {
         this.view = new ViewContractView(this);
+        this.contractDAO = new ContractDAO();
+        this.employeeDAO = new EmployeeDAO();
     }
 
     public void show() throws Exception {
@@ -19,30 +24,26 @@ public class ViewContractController {
     }
 
     public List<Contract> getAllContracts() {
-        return Contract.findAll();
+        return contractDAO.findAll();
     }
 
     public List<Contract> searchContracts(String keyword, String statusFilter, String typeFilter) {
-        return Contract.search(keyword, statusFilter, typeFilter);
+        return contractDAO.search(keyword, statusFilter, typeFilter);
     }
 
     public Contract getContractById(int id) {
-        return Contract.findById(id);
+        return contractDAO.findById(id);
     }
 
 
     public List<Contract> getContractsByEmployeeCode(String employeeCode) {
-        EmployeeDAO empDAO = new EmployeeDAO();
-        Employee emp = empDAO.findByEmployeeCode(employeeCode);
+        Employee emp = employeeDAO.findByEmployeeCode(employeeCode);
         if (emp == null) return List.of();
-        return Contract.findByEmployee(emp.getUserId());
+        return contractDAO.findByEmployee(emp.getUserId());
     }
 
 
     public boolean cancelContract(int contractId) {
-        Contract c = Contract.findById(contractId);
-        if (c == null) return false;
-        c.setStatus("Đã hủy");
-        return c.delete();
+        return contractDAO.delete(contractId);
     }
 }

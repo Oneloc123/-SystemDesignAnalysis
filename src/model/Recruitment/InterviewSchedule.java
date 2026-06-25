@@ -1,8 +1,6 @@
 package model.Recruitment;
 
-import dao.recruitment.InterviewScheduleDAO;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class InterviewSchedule {
     private int interviewId;
@@ -13,8 +11,6 @@ public class InterviewSchedule {
     private String interviewer;
     private String note;
     private String status;      // DRAFT, CONFIRMED, CANCELLED
-
-    private static InterviewScheduleDAO dao = new InterviewScheduleDAO();
 
     public InterviewSchedule() {
         this.status = "DRAFT";
@@ -53,39 +49,7 @@ public class InterviewSchedule {
                 && interviewer != null && !interviewer.trim().isEmpty();
     }
 
-    public boolean save() {
-        if (!checkValid()) return false;
-        this.status = "CONFIRMED";
-        return dao.save(this);
-    }
-
-    public boolean saveDraft() {
-        if (!checkValid()) return false;
-        this.status = "DRAFT";
-        return dao.saveDraft(this);
-    }
-
-    public boolean update() {
-        return dao.update(this);
-    }
-
-    public boolean delete() {
-        return dao.delete(this.interviewId);
-    }
-
-    public static InterviewSchedule findById(int id) {
-        return dao.findById(id);
-    }
-
-    public static List<InterviewSchedule> findAll() {
-        return dao.findAll();
-    }
-
-    public static InterviewSchedule findDraftByApplication(int applicationId) {
-        return dao.findDraftByApplication(applicationId);
-    }
-
-    public static List<InterviewSchedule> findByApplication(int applicationId) {
-        return dao.findByApplication(applicationId);
+    public boolean isReadyToSave() {
+        return checkValid();
     }
 }

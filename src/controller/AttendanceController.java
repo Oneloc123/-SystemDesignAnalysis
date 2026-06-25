@@ -2,6 +2,7 @@ package controller;
 
 import controller.base.Controller;
 import dao.AttendanceDAO;
+import dao.DepartmentDAO;
 import model.Department;
 import model.calcSalary.AttendanceDetail;
 import model.calcSalary.AttendancePeriod;
@@ -11,6 +12,7 @@ import java.util.List;
 public class AttendanceController extends Controller {
     AttendanceView attendanceView;
     private AttendanceDAO attendanceDAO;
+    private DepartmentDAO departmentDAO;
     private int selectedDeptId;
     private int currentMonth;
     private int currentYear;
@@ -20,6 +22,7 @@ public class AttendanceController extends Controller {
         this.attendanceView = new AttendanceView(this);
         this.view = this.attendanceView;
         this.attendanceDAO = new AttendanceDAO();
+        this.departmentDAO = new DepartmentDAO();
         java.time.LocalDate now = java.time.LocalDate.now();
         this.currentMonth = now.getMonthValue();
         this.currentYear = now.getYear();
@@ -36,11 +39,11 @@ public class AttendanceController extends Controller {
     }
 
     public List<Department> getDepartments() {
-        return Department.findAll();
+        return departmentDAO.findAll();
     }
 
     public boolean selectDepartment(int id) {
-        Department dept = Department.findById(id);
+        Department dept = departmentDAO.findById(id);
         if (dept != null) {
             selectedDeptId = id;
             abnormalOnly = false;
@@ -65,7 +68,7 @@ public class AttendanceController extends Controller {
         AttendancePeriod period = getAttendanceData();
         StringBuilder sb = new StringBuilder();
         sb.append("\n========== BẢNG CHẤM CÔNG ==========\n");
-        Department dept = Department.findById(selectedDeptId);
+        Department dept = departmentDAO.findById(selectedDeptId);
         String deptName = (dept != null) ? dept.getName() : "";
         sb.append("Phòng: ").append(deptName).append(" | Kỳ: ").append(period != null ? period.getPeriodLabel() : "").append("\n");
         if (abnormalOnly) sb.append(" [Đang lọc: Nhân viên bất thường]\n");

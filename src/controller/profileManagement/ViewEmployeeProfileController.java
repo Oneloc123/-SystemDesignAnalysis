@@ -1,26 +1,28 @@
 package controller.profileManagement;
 
 import controller.MainController;
+import dao.EmployeeDAO;
 import enumModel.RoleEnum;
-import model.User;
+import model.hr.Employee;
 import view.profileManagement.ProfileView;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class ViewEmployeeProfileController {
     ProfileView pv;
+    private EmployeeDAO employeeDAO;
 
     public ViewEmployeeProfileController(){
         pv = new ProfileView(this);
+        this.employeeDAO = new EmployeeDAO();
     }
 
-    public List<User> getEmployeeList() throws SQLException {
-        return User.getAllEmployee();
+    public List<Employee> getEmployeeList() {
+        return employeeDAO.findAll();
     }
 
     public boolean navigateTo() throws Exception{
-        if(!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER)){
+        if(MainController.currentUser.getRole() != RoleEnum.EMPLOYER){
             return false;
         }
         pv.show();

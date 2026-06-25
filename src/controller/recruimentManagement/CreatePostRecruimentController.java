@@ -1,23 +1,28 @@
 package controller.recruimentManagement;
 
 import controller.MainController;
+import dao.recruitment.JobPostingDAO;
 import enumModel.AddressEnum;
 import enumModel.RoleEnum;
 import model.Recruitment.Employer;
 import model.Recruitment.JobPosting;
 import view.RecruitmentManagement.CreatePostRecruimentView;
 
+import java.sql.Date;
+
 public class CreatePostRecruimentController {
     private JobPosting draf;
     private CreatePostRecruimentView cprv;
     private AddressEnum address = AddressEnum.CreatePostRecruitment;
+    private JobPostingDAO jobPostingDAO;
 
     public CreatePostRecruimentController() {
         cprv = new CreatePostRecruimentView(this);
+        this.jobPostingDAO = new JobPostingDAO();
     }
 
     public boolean navigateTo() throws Exception {
-        if (!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER.toString())) {
+        if (MainController.currentUser.getRole() != RoleEnum.EMPLOYER) {
             return false;
         }
         MainController.addresses.add(address);
@@ -76,10 +81,14 @@ public class CreatePostRecruimentController {
                 cprv.enterJobPostingDetails();
                 return;
             }
-            if (!rp.save()) { // gọi model.save() -> gọi DAO
+            rp.setStatus("OPEN");
+            rp.setCreatedDate(new Date(System.currentTimeMillis()));
+            if (!jobPostingDAO.save(rp)) {
                 cprv.showMessage("lưu database thất bại, vui lòng vào lại lần sau");
                 return;
             }
+            Employer employer = rp.getEmployer();
+            if (employer != null) employer.addPostedJob(rp);
             cprv.showMessage("lưu thành công");
             return;
         }
@@ -99,7 +108,8 @@ public class CreatePostRecruimentController {
                 cprv.enterJobPostingDetails();
                 return;
             }
-            if (!rp.saveDraf()) {
+            rp.setStatus("DRAFT");
+            if (!jobPostingDAO.saveDraft(rp)) {
                 cprv.showMessage("lưu database thất bại, vui lòng vào lại lần sau");
                 return;
             }

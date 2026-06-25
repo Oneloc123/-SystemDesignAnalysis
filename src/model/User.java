@@ -1,14 +1,9 @@
 package model;
 
-import dao.ProfileDao.ProfileDao;
 import dao.UserDAO;
 import enumModel.RoleEnum;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class User {
@@ -157,11 +152,6 @@ public class User {
             return "Mật khẩu phải có ít nhất 1 ký tự đặc biệt";
         }
         return null;
-    }
-
-    public static List<User> getAllEmployee() throws SQLException {
-        ProfileDao pd = new ProfileDao();
-        return pd.getAllUsers();
     }
 
 }

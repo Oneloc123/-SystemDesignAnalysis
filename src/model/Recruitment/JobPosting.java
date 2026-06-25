@@ -1,6 +1,5 @@
 package model.Recruitment;
 
-import dao.recruitment.JobPostingDAO;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,6 @@ public class JobPosting {
     private Date createdDate;
     private String status;
     private List<JobApplication> applications;
-
-    private static JobPostingDAO dao = new JobPostingDAO();
 
     public JobPosting() {
         this.applications = new ArrayList<>();
@@ -77,27 +74,7 @@ public class JobPosting {
                 && salary > 0;
     }
 
-    public boolean save() {
-        if (!checkValid()) return false;
-        this.status = "OPEN";
-        this.createdDate = new Date(System.currentTimeMillis());
-        if (dao.save(this)) {
-            if (employer != null) employer.addPostedJob(this);
-            return true;
-        }
-        return false;
+    public boolean isReadyToSave() {
+        return checkValid();
     }
-
-    public boolean saveDraf() {
-        if (!checkValid()) return false;
-        this.status = "DRAFT";
-        return dao.saveDraft(this);
-    }
-
-    public boolean update() { return dao.update(this); }
-    public boolean delete() { return dao.delete(this.postId); }
-
-    public static JobPosting findById(int id) { return dao.findById(id); }
-    public static List<JobPosting> findAll() { return dao.findAll(); }
-    public static List<JobPosting> findByEmployer(int employerId) { return dao.findByEmployer(employerId); }
 }

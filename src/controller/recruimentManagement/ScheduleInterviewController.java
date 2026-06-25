@@ -1,6 +1,9 @@
 package controller.recruimentManagement;
 
 import controller.MainController;
+import dao.recruitment.InterviewScheduleDAO;
+import dao.recruitment.JobApplicationDAO;
+import dao.recruitment.JobPostingDAO;
 import enumModel.AddressEnum;
 import enumModel.RoleEnum;
 import model.Recruitment.InterviewSchedule;
@@ -14,6 +17,9 @@ import java.util.stream.Collectors;
 public class ScheduleInterviewController {
     private ScheduleInterviewView view;
     private AddressEnum address = AddressEnum.ScheduleInterview;
+    private JobPostingDAO jobPostingDAO;
+    private JobApplicationDAO jobApplicationDAO;
+    private InterviewScheduleDAO interviewScheduleDAO;
 
     private JobPosting selectedJobPosting;
     private JobApplication selectedApplication;
@@ -21,10 +27,13 @@ public class ScheduleInterviewController {
 
     public ScheduleInterviewController() {
         view = new ScheduleInterviewView(this);
+        this.jobPostingDAO = new JobPostingDAO();
+        this.jobApplicationDAO = new JobApplicationDAO();
+        this.interviewScheduleDAO = new InterviewScheduleDAO();
     }
 
     public boolean navigateTo() throws Exception {
-        if (!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER.toString())) {
+        if (MainController.currentUser.getRole() != RoleEnum.EMPLOYER) {
             return false;
         }
         MainController.addresses.add(address);
@@ -36,14 +45,14 @@ public class ScheduleInterviewController {
     public void handleMainMenuCommand(String command) throws Exception {
         switch (command) {
             case "1":
-                List<JobPosting> jobPostings = JobPosting.findAll();
+                List<JobPosting> jobPostings = jobPostingDAO.findAll();
                 view.displayJobPostingList(jobPostings);
                 break;
             case "2":
                 if (selectedJobPosting == null) {
                     view.showError("Vui lòng chọn tin tuyển dụng trước (lệnh 1).");
                 } else {
-                    List<JobApplication> acceptedApps = JobApplication.findByJobPosting(selectedJobPosting.getPostId())
+                    List<JobApplication> acceptedApps = jobApplicationDAO.findByJobPosting(selectedJobPosting.getPostId())
                             .stream()
                             .filter(app -> "ACCEPTED".equals(app.getStatus()))
                             .collect(Collectors.toList());
@@ -63,7 +72,7 @@ public class ScheduleInterviewController {
 
     public void selectCandidate(JobApplication application) throws Exception {
         this.selectedApplication = application;
-        draftSchedule = InterviewSchedule.findDraftByApplication(application.getApplicationId());
+        draftSchedule = interviewScheduleDAO.findDraftByApplication(application.getApplicationId());
         if (draftSchedule == null) {
             draftSchedule = new InterviewSchedule();
             draftSchedule.setApplication(application);
@@ -101,7 +110,8 @@ public class ScheduleInterviewController {
                 view.enterInterviewDetails(schedule);
                 return;
             }
-            if (!schedule.saveDraft()) {
+            schedule.setStatus("DRAFT");
+            if (!interviewScheduleDAO.saveDraft(schedule)) {
                 view.showMessage("Lưu nháp thất bại.");
                 return;
             }
@@ -124,13 +134,14 @@ public class ScheduleInterviewController {
                 view.enterInterviewDetails(schedule);
                 return;
             }
-            if (!schedule.save()) {
+            schedule.setStatus("CONFIRMED");
+            if (!interviewScheduleDAO.save(schedule)) {
                 view.showMessage("Gửi lịch thất bại.");
                 return;
             }
             view.showMessage("Đã gửi lịch phỏng vấn chính thức.");
             selectedApplication.setStatus("INTERVIEW_SCHEDULED");
-            selectedApplication.update();
+            jobApplicationDAO.update(selectedApplication);
             view.displayScheduleDetail(schedule);
             return;
         }

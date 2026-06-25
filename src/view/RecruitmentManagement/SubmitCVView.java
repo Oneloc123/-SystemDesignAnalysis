@@ -12,6 +12,7 @@ import static controller.MainController.printList;
 
 public class SubmitCVView extends View {
     private SubmitCVController controller;
+    private JobApplication currentApplication;
 
     public SubmitCVView(SubmitCVController controller) {
         this.controller = controller;
@@ -32,7 +33,6 @@ public class SubmitCVView extends View {
         }
     }
 
-    // Thêm phương thức hiển thị danh sách job
     public void displayJobPostingList(List<JobPosting> jobPostings) throws Exception {
         showMessage("Chọn tin tuyển dụng bạn muốn ứng tuyển:");
         int index = 1;
@@ -44,26 +44,25 @@ public class SubmitCVView extends View {
     }
 
     public void enterApplicationDetails() throws Exception {
-        JobApplication application = new JobApplication();
+        currentApplication = new JobApplication();
         JobPosting selected = controller.getSelectedJobPosting();
         if (selected == null) {
             showError("Chưa chọn tin tuyển dụng. Vui lòng quay lại.");
             return;
         }
-        application.setJobPosting(selected);
-        application.setFullName(handleParam("Họ và tên"));
-        application.setEmail(handleParam("Email"));
-        application.setPhone(handleParam("Số điện thoại"));
-        application.setCoverLetter(handleParam("Thư xin việc (cover letter)"));
-        application.setCvFilePath(handleParam("Đường dẫn file CV (ví dụ: /cv/nguyenvanA.pdf)"));
-        // Gán candidate hiện tại
-        application.setCandidate((model.Recruitment.Candidate) MainController.currentUser);
+        currentApplication.setJobPosting(selected);
+        currentApplication.setFullName(handleParam("Họ và tên"));
+        currentApplication.setEmail(handleParam("Email"));
+        currentApplication.setPhone(handleParam("Số điện thoại"));
+        currentApplication.setCoverLetter(handleParam("Thư xin việc (cover letter)"));
+        currentApplication.setCvFilePath(handleParam("Đường dẫn file CV (ví dụ: /cv/nguyenvanA.pdf)"));
+        currentApplication.setCandidate((model.Recruitment.Candidate) MainController.currentUser);
         displayFormOptions();
     }
 
     public void displayFormOptions() throws Exception {
         printList(new String[]{"Lưu nháp", "Gửi hồ sơ", "Chỉnh sửa"});
-        controller.processFormOptions(handleParam("Nhập lệnh: "), new JobApplication());
+        controller.processFormOptions(handleParam("Nhập lệnh: "), currentApplication);
     }
 
     public void displayDraft(JobApplication draft) throws Exception {
@@ -100,11 +99,11 @@ public class SubmitCVView extends View {
     }
 
     public void promptSaveDraft() throws Exception {
-        controller.handleSaveDraft(handleParam("Bạn có muốn lưu nháp (Y/N): "), new JobApplication());
+        controller.handleSaveDraft(handleParam("Bạn có muốn lưu nháp (Y/N): "), currentApplication);
     }
 
     public void promptConfirmSubmit() throws Exception {
-        controller.handleConfirmSubmit(handleParam("Xác nhận gửi hồ sơ (Y/N): "), new JobApplication());
+        controller.handleConfirmSubmit(handleParam("Xác nhận gửi hồ sơ (Y/N): "), currentApplication);
     }
 
     public void promptSaveDraft(JobApplication draft) throws Exception {

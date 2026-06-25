@@ -15,7 +15,7 @@ public class RecruitmentManagementController {
 
     public boolean navigate() throws Exception {
         // xác thực quyền
-        if(!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER.toString())){
+        if(MainController.currentUser.getRole() != RoleEnum.EMPLOYER){
             return false;
         }
         // xác thực thành công

@@ -1,6 +1,9 @@
 package controller.recruimentManagement;
 
 import controller.MainController;
+import dao.recruitment.ApplicationReviewDAO;
+import dao.recruitment.JobApplicationDAO;
+import dao.recruitment.JobPostingDAO;
 import enumModel.AddressEnum;
 import enumModel.RoleEnum;
 import model.Recruitment.ApplicationReview;
@@ -14,6 +17,9 @@ import java.util.List;
 public class ReviewApplicationsController {
     private ReviewApplicationsView view;
     private AddressEnum address = AddressEnum.ReviewApplications;
+    private JobPostingDAO jobPostingDAO;
+    private JobApplicationDAO jobApplicationDAO;
+    private ApplicationReviewDAO applicationReviewDAO;
 
     private JobPosting selectedJobPosting;
     private JobApplication selectedApplication;
@@ -21,10 +27,13 @@ public class ReviewApplicationsController {
 
     public ReviewApplicationsController() {
         view = new ReviewApplicationsView(this);
+        this.jobPostingDAO = new JobPostingDAO();
+        this.jobApplicationDAO = new JobApplicationDAO();
+        this.applicationReviewDAO = new ApplicationReviewDAO();
     }
 
     public boolean navigateTo() throws Exception {
-        if (!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER.toString())) {
+        if (MainController.currentUser.getRole() != RoleEnum.EMPLOYER) {
             return false;
         }
         MainController.addresses.add(address);
@@ -36,14 +45,14 @@ public class ReviewApplicationsController {
     public void handleMainMenuCommand(String command) throws Exception {
         switch (command) {
             case "1":
-                List<JobPosting> jobPostings = JobPosting.findAll();
+                List<JobPosting> jobPostings = jobPostingDAO.findAll();
                 view.displayJobPostingList(jobPostings);
                 break;
             case "2":
                 if (selectedJobPosting == null) {
                     view.showError("Vui lòng chọn tin tuyển dụng trước (lệnh 1).");
                 } else {
-                    List<JobApplication> applications = JobApplication.findByJobPosting(selectedJobPosting.getPostId());
+                    List<JobApplication> applications = jobApplicationDAO.findByJobPosting(selectedJobPosting.getPostId());
                     view.displayApplicationList(applications);
                 }
                 break;
@@ -61,7 +70,7 @@ public class ReviewApplicationsController {
     public void selectApplication(JobApplication application) throws Exception {
         this.selectedApplication = application;
         // Tải review nếu có
-        currentReview = ApplicationReview.findByApplication(application.getApplicationId());
+        currentReview = applicationReviewDAO.findByApplication(application.getApplicationId());
         view.displayApplicationDetail(application);
     }
 
@@ -102,10 +111,10 @@ public class ReviewApplicationsController {
         }
         currentReview.setStatus("PENDING_REVIEW");
         currentReview.setNote(note);
-        if (currentReview.save()) {
+        if (applicationReviewDAO.save(currentReview)) {
             view.showMessage("Đã lưu ghi chú.");
             selectedApplication.setStatus("REVIEWING");
-            selectedApplication.update();
+            jobApplicationDAO.update(selectedApplication);
             view.displayApplicationDetail(selectedApplication);
         } else {
             view.showError("Lưu ghi chú thất bại.");
@@ -115,7 +124,7 @@ public class ReviewApplicationsController {
     private void updateApplicationStatus(String status) throws Exception {
         if (selectedApplication == null) return;
         selectedApplication.setStatus(status);
-        if (!selectedApplication.update()) {
+        if (!jobApplicationDAO.update(selectedApplication)) {
             view.showError("Cập nhật trạng thái thất bại.");
             return;
         }
@@ -126,7 +135,7 @@ public class ReviewApplicationsController {
         }
         currentReview.setStatus(status);
         currentReview.setNote(currentReview.getNote() != null ? currentReview.getNote() : "Đánh giá tự động");
-        currentReview.save();
+        applicationReviewDAO.save(currentReview);
         view.showReviewSuccess(status);
         view.displayApplicationDetail(selectedApplication);
     }
