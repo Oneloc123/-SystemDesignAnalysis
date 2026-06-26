@@ -42,6 +42,9 @@ public class HomeController {
             case "7":
                 functionContractManagement();
                 break;
+            case "9":
+                functionProfileManagement();
+                break;
             default:
                 hv.showError("Lệnh không hợp lệ");
                 break;
@@ -64,7 +67,7 @@ public class HomeController {
         calcSalaryController.execute(MainController.currentUser);
     }
 
-    public void handleProfile() throws Exception {
+    public void functionProfileManagement() throws Exception {
         ProfileController pc = new ProfileController();
         boolean check = pc.navigate();
         if (!check){
@@ -88,5 +91,7 @@ public class HomeController {
             hv.showError("Không có quyền truy cập chức năng quản lý hợp đồng");
         }
     }
+
+
 
 }

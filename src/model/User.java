@@ -10,26 +10,21 @@ public class User {
     private String password;
     private int userId;
     private  String username;
-    private String email;
 
 
 
     private RoleEnum role;
-    private Double basicSalary;
-    private int dependentNumber;
-
     private String fullName;
     private Date dateOfBirth;
     private String gender;
     private String phone;
+    private String email;
     private String citizenIdentificationCard;
     private String address;
+    private int dependentNumber;
 
 
-    public User() {}
-
-
-    public User(String address, String citizenIdentificationCard, String phone, String gender, Date dateOfBirth, String fullName, RoleEnum role, int userId) {
+    public User(String address, String citizenIdentificationCard, String phone, String gender, Date dateOfBirth, String fullName, RoleEnum role, long id) {
         this.address = address;
         this.citizenIdentificationCard = citizenIdentificationCard;
         this.phone = phone;
@@ -40,6 +35,9 @@ public class User {
         this.userId = userId;
     }
 
+    public User() {
+    }
+
     public User(int userId, String username, String password, String email, RoleEnum role) {
         this.userId = userId;
         this.username = username;
@@ -48,9 +46,6 @@ public class User {
         this.role = role;
     }
 
-    public Double getBasicSalary() {
-        return basicSalary;
-    }
 
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
@@ -77,19 +72,32 @@ public class User {
                 '}';
     }
 
-    public void setBasicSalary(Double basicSalary) {
-        this.basicSalary = basicSalary;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userId == user.userId &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(role, user.role);
     }
 
-    public int getDependentNumber() {
-        return dependentNumber;
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, username, email, role);
     }
+
+
+
+
+
 
     public void setDependentNumber(int dependentNumber) {
         this.dependentNumber = dependentNumber;
     }
 
-
+    public void setId(long id) {this.id = id;}
 
     public void setFullName(String fullName) {this.fullName = fullName;}
     public Date getDateOfBirth() {return dateOfBirth;}
@@ -107,5 +115,43 @@ public class User {
 
 
 
+        this.password = newPw;
+        UserDAO userDAO = new UserDAO();
+        if (userDAO.update(this)) {
+            return "SUCCESS";
+        }
+        return "Lỗi hệ thống. Vui lòng thử lại sau.";
+    }
 
+    private String validatePasswordStrength(String password) {
+        if (password.length() < 8) {
+            return "Mật khẩu phải có ít nhất 8 ký tự";
+        }
+        if (!Pattern.compile("[A-Z]").matcher(password).find()) {
+            return "Mật khẩu phải có ít nhất 1 chữ hoa";
+        }
+        if (!Pattern.compile("[a-z]").matcher(password).find()) {
+            return "Mật khẩu phải có ít nhất 1 chữ thường";
+        }
+        if (!Pattern.compile("[0-9]").matcher(password).find()) {
+            return "Mật khẩu phải có ít nhất 1 chữ số";
+        }
+        if (!Pattern.compile("[!@#$%^&*(),.?\":{}|<>]").matcher(password).find()) {
+            return "Mật khẩu phải có ít nhất 1 ký tự đặc biệt";
+        }
+        return null;
+    }
+
+    public List<User> getAllEmployee() throws SQLException {
+        ProfileDao pd = new ProfileDao();
+        return pd.getAllUsers();
+    }
+
+    public void editProfile(User u) throws SQLException{
+        ProfileDao pd = new ProfileDao();
+        pd.updateUser(u);
+    }
+
+    public long getId() {return this.id;}
 }
+
