@@ -1,8 +1,9 @@
-package view;
+package view.profileManagement;
 
-import controller.ChangePasswordController;
 import controller.MainController;
+import controller.profileManagement.ChangePasswordController;
 import enumModel.AddressEnum;
+import view.View;
 
 public class ChangePasswordView extends View {
     ChangePasswordController controller;

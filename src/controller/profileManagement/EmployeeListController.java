@@ -1,30 +1,29 @@
-package controller;
+package controller.profileManagement;
 
-import controller.base.Controller;
+import controller.ScreenManager;
+import enumModel.RoleEnum;
 import model.Department;
 import model.hr.Employee;
-import view.EmployeeListView;
+import view.managerView.EmployeeListView;
 import java.util.List;
 
-public class EmployeeListController extends Controller {
-    EmployeeListView employeeListView;
+public class EmployeeListController {
+    private EmployeeListView employeeListView;
     private int selectedDeptId;
     private String searchKeyword = "";
     private String filterStatus = "";
 
     public EmployeeListController() {
         this.employeeListView = new EmployeeListView(this);
-        this.view = this.employeeListView;
     }
 
-    @Override
     public void showOn() {
         employeeListView.showDeptSelection();
     }
 
-    @Override
     public boolean checkAuth() {
-        return ScreenManager.getCurrentUser() != null;
+        return ScreenManager.getCurrentUser() != null
+            && ScreenManager.getCurrentUser().getRole() == RoleEnum.MANAGER;
     }
 
     public List<Department> getDepartments() {
@@ -50,11 +49,19 @@ public class EmployeeListController extends Controller {
         List<Employee> list = getFilteredEmployees();
         if (index < 1 || index > list.size()) return "Không hợp lệ.";
         Employee emp = list.get(index - 1);
-        return "Họ tên: " + emp.getDisplayValue(emp.getFullName())
-             + "\nMã NV: " + emp.getDisplayValue(emp.getEmployeeCode())
-             + "\nChức danh: " + emp.getDisplayValue(emp.getPosition())
-             + "\nSĐT: " + emp.getDisplayValue(emp.getPhone())
-             + "\nEmail: " + emp.getDisplayValue(emp.getEmail())
+        String deptName = emp.getDepartmentName();
+        if (deptName == null) {
+            Department dept = Department.findById(emp.getDepartmentId());
+            deptName = dept != null ? dept.getName() : null;
+        }
+        return "Họ tên    : " + emp.getDisplayValue(emp.getFullName())
+             + "\nMã NV     : " + emp.getDisplayValue(emp.getEmployeeCode())
+             + "\nPhòng ban : " + emp.getDisplayValue(deptName)
+             + "\nChức danh : " + emp.getDisplayValue(emp.getPosition())
+             + "\nSĐT       : " + emp.getDisplayValue(emp.getPhone())
+             + "\nEmail     : " + emp.getDisplayValue(emp.getEmail())
+             + "\nNgày vào  : " + emp.getDisplayValue(emp.getStartDate())
+             + "\nLoại HĐ   : " + emp.getDisplayValue(emp.getContractType())
              + "\nTrạng thái: " + emp.getDisplayValue(emp.getEmployeeStatus())
              + "\n";
     }
