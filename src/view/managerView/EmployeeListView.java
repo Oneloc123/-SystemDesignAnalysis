@@ -1,10 +1,11 @@
-package view;
+package view.managerView;
 
-import controller.EmployeeListController;
 import controller.MainController;
+import controller.profileManagement.EmployeeListController;
 import enumModel.AddressEnum;
 import model.Department;
 import model.hr.Employee;
+import view.View;
 import java.util.List;
 
 public class EmployeeListView extends View {
@@ -49,14 +50,15 @@ public class EmployeeListView extends View {
         while (true) {
             List<Employee> employees = controller.getFilteredEmployees();
             System.out.println("\n========== NHÂN VIÊN PHÒNG BAN ==========");
-            System.out.println(String.format("%-4s %-8s %-22s %-15s %-12s %-10s",
-                    "STT", "Mã NV", "Họ tên", "Chức danh", "SĐT", "Trạng thái"));
-            System.out.println("------------------------------------------------------------");
+            System.out.println(String.format("%-4s %-8s %-22s %-15s %-20s %-12s %-12s",
+                    "STT", "Mã NV", "Họ tên", "Chức danh", "Email", "SĐT", "Trạng thái"));
+            System.out.println("------------------------------------------------------------------------------------------");
             int i = 1;
             for (Employee emp : employees) {
-                System.out.println(String.format("%-4d %-8s %-22s %-15s %-12s %-10s",
+                System.out.println(String.format("%-4d %-8s %-22s %-15s %-20s %-12s %-12s",
                         i++, emp.getEmployeeCode(), emp.getFullName(),
-                        emp.getPosition(), emp.getPhone(), emp.getEmployeeStatus()));
+                        emp.getPosition(), emp.getDisplayValue(emp.getEmail()),
+                        emp.getPhone(), emp.getEmployeeStatus()));
             }
             System.out.println("Tổng: " + employees.size() + " nhân viên");
             System.out.println("\n1. Tìm kiếm");
@@ -75,13 +77,15 @@ public class EmployeeListView extends View {
                         break;
                     case "2":
                         System.out.println("1. Đang làm");
-                        System.out.println("2. Đã nghỉ");
-                        System.out.println("3. Tất cả");
+                        System.out.println("2. Thử việc");
+                        System.out.println("3. Đã nghỉ");
+                        System.out.println("4. Tất cả");
                         System.out.print("Chọn: ");
                         String f = netIn.readLine();
                         if ("1".equals(f)) controller.setFilterStatus("Đang làm");
-                        else if ("2".equals(f)) controller.setFilterStatus("Đã nghỉ");
-                        else if ("3".equals(f)) controller.setFilterStatus("");
+                        else if ("2".equals(f)) controller.setFilterStatus("Thử việc");
+                        else if ("3".equals(f)) controller.setFilterStatus("Đã nghỉ");
+                        else if ("4".equals(f)) controller.setFilterStatus("");
                         else showError("Không hợp lệ");
                         break;
                     case "3":

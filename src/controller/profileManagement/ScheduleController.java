@@ -1,9 +1,9 @@
-package controller;
+package controller.profileManagement;
 
-import controller.base.Controller;
+import controller.ScreenManager;
 import dao.ScheduleDAO;
 import model.ScheduleEntry;
-import view.ScheduleView;
+import view.profileManagement.ScheduleView;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ScheduleController extends Controller {
-    ScheduleView scheduleView;
+public class ScheduleController {
+    private ScheduleView scheduleView;
     private ScheduleDAO scheduleDAO;
 
     private int currentMonth;
@@ -28,16 +28,13 @@ public class ScheduleController extends Controller {
         this.currentYear = now.getYear();
         this.selectedDate = now;
         this.scheduleView = new ScheduleView(this);
-        this.view = this.scheduleView;
         this.scheduleDAO = new ScheduleDAO();
     }
 
-    @Override
     public void showOn() {
         scheduleView.showSchedule();
     }
 
-    @Override
     public boolean checkAuth() {
         return ScreenManager.getCurrentUser() != null;
     }
