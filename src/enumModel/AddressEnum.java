@@ -27,8 +27,12 @@ public enum AddressEnum {
     ContractManagement,
     CreateContract,
     ContractList,
-    RenewContract
+    RenewContract,
     // Profile
-    MyProfile
+    MyProfile,
+    //department,
+    CreateDepartment,
+    DepartmentManagement,
+    ManageDepartment
 
 }
