@@ -30,7 +30,6 @@ public class ViewContractController {
         return Contract.findById(id);
     }
 
-
     public List<Contract> getContractsByEmployeeCode(String employeeCode) {
         EmployeeDAO empDAO = new EmployeeDAO();
         Employee emp = empDAO.findByEmployeeCode(employeeCode);
@@ -38,11 +37,16 @@ public class ViewContractController {
         return Contract.findByEmployee(emp.getUserId());
     }
 
-
     public boolean cancelContract(int contractId) {
         Contract c = Contract.findById(contractId);
         if (c == null) return false;
         c.setStatus("Đã hủy");
         return c.delete();
+    }
+
+
+    public void navigateToRenew() throws Exception {
+        RenewContractController rcc = new RenewContractController();
+        rcc.show();
     }
 }
