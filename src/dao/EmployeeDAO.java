@@ -20,7 +20,7 @@ public class EmployeeDAO implements DAO<Employee> {
                 "start_date, contract_type, status, qualification, major, experience) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, emp.getUserId());
+            stmt.setInt(1, (int) emp.getUserId());
             stmt.setString(2, emp.getEmployeeCode());
             stmt.setString(3, emp.getHometown());
             setDouble(stmt, 4, emp.getBaseSalary());
@@ -72,7 +72,7 @@ public class EmployeeDAO implements DAO<Employee> {
             stmt.setString(15, emp.getQualification());
             stmt.setString(16, emp.getMajor());
             stmt.setString(17, emp.getExperience());
-            stmt.setInt(18, emp.getUserId());
+            stmt.setInt(18, (int) emp.getUserId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

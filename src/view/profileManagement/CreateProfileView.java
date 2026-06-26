@@ -1,8 +1,6 @@
 package view.profileManagement;
 
 import controller.profileManagement.CreateNewProfileController;
-import controller.profileManagement.ProfileController;
-import controller.recruimentManagement.CreatePostRecruimentController;
 import enumModel.RoleEnum;
 import model.User;
 import view.View;
@@ -45,7 +43,7 @@ public class CreateProfileView extends View {
 
     private void handleForm() throws IOException {
         user = new User();
-        user.setId(Long.parseLong(handleParam("ID:")));
+        user.setUserId((int) Long.parseLong(handleParam("ID:")));
         user.setRole(RoleEnum.valueOf(handleParam("Vai trò:")));
         user.setFullName(handleParam("Họ và tên:"));
         user.setDateOfBirth(handleDateParam("ngày tháng năm sinh"));

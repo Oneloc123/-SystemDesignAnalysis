@@ -18,7 +18,7 @@ public class ApplicationReviewDAO implements DAO<ApplicationReview> {
         String sql = "INSERT INTO application_review (candidate_id, reviewer_id, score, comment, result, review_date) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, review.getCandidate().getCandidateId());
-            stmt.setInt(2, review.getReviewer().getUserId());
+            stmt.setInt(2, (int) review.getReviewer().getUserId());
             stmt.setDouble(3, review.getScore());
             stmt.setString(4, review.getComment());
             stmt.setString(5, review.getResult());

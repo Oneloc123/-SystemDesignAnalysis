@@ -49,7 +49,7 @@ public class Employee extends User {
 
     public boolean save() { return employeeDAO.save(this); }
     public boolean update() { return employeeDAO.update(this); }
-    public boolean delete() { return employeeDAO.delete(this.getUserId()); }
+    public boolean delete() { return employeeDAO.delete((int) this.getUserId()); }
 
     public static Employee findById(int id) { return employeeDAO.findById(id); }
     public static Employee findByUserId(int userId) { return employeeDAO.findByUserId(userId); }

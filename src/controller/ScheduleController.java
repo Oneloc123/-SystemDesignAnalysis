@@ -86,7 +86,7 @@ public class ScheduleController extends Controller {
 
     public List<ScheduleEntry> getSchedule() {
         return scheduleDAO.findByEmployeeAndMonth(
-                ScreenManager.getCurrentUser().getUserId(),
+                (int) ScreenManager.getCurrentUser().getUserId(),
                 currentMonth, currentYear);
     }
 
