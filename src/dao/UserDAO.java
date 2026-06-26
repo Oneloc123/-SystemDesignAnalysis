@@ -65,15 +65,7 @@ public class UserDAO implements DAO<User> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                User user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setEmail(rs.getString("email"));
-                user.setRole(RoleEnum.valueOf(rs.getString("role")));
-                return user;
-            }
+            if (rs.next()) return mapUser(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,15 +78,7 @@ public class UserDAO implements DAO<User> {
         String sql = "SELECT * FROM users";
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                User user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setEmail(rs.getString("email"));
-                user.setRole(RoleEnum.valueOf(rs.getString("role")));
-                list.add(user);
-            }
+            while (rs.next()) list.add(mapUser(rs));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -105,15 +89,7 @@ public class UserDAO implements DAO<User> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                User user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setEmail(rs.getString("email"));
-                user.setRole(RoleEnum.valueOf(rs.getString("role")));
-                return user;
-            }
+            if (rs.next()) return mapUser(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -124,19 +100,21 @@ public class UserDAO implements DAO<User> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                User user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setEmail(rs.getString("email"));
-                user.setRole(RoleEnum.valueOf(rs.getString("role")));
-                return user;
-            }
+            if (rs.next()) return mapUser(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private User mapUser(ResultSet rs) throws SQLException {
+        User user = new User();
+        user.setUserId(rs.getInt("user_id"));
+        user.setUsername(rs.getString("username"));
+        user.setPassword(rs.getString("password"));
+        user.setEmail(rs.getString("email"));
+        user.setRole(RoleEnum.valueOf(rs.getString("role")));
+        return user;
     }
     public boolean updatePassword(int userId, String newPassword) {
         String sql = "UPDATE users SET password=? WHERE user_id=?";

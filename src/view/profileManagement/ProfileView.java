@@ -29,7 +29,7 @@ public class ProfileView extends View {
             } else {
                 for (User u : users) {
                     System.out.printf("%-5d | %-20s | %-12s | %-10s | %-12s\n",
-                            u.getId(),
+                            u.getUserId(),
                             u.getFullName(),
                             u.getRole(),
                             u.getGender(),

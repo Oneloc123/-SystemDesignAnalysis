@@ -4,7 +4,7 @@ import dao.DAO;
 import dao.DatabaseConnection;
 import dao.UserDAO;
 import model.Recruitment.ApplicationReview;
-import model.Recruitment.JobApplication;
+import model.Recruitment.Candidate;
 import model.User;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,52 +15,39 @@ public class ApplicationReviewDAO implements DAO<ApplicationReview> {
 
     @Override
     public boolean save(ApplicationReview review) {
-        String sql = "INSERT INTO application_review (application_id, reviewer_id, status, note, review_date) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO application_review (candidate_id, reviewer_id, score, comment, result, review_date) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, review.getApplication().getApplicationId());
-            stmt.setInt(2, review.getReviewer().getUserId());
-            stmt.setString(3, review.getStatus());
-            stmt.setString(4, review.getNote());
-            stmt.setDate(5, review.getReviewDate() != null ? Date.valueOf(review.getReviewDate()) : Date.valueOf(java.time.LocalDate.now()));
+            stmt.setInt(1, review.getCandidate().getCandidateId());
+            stmt.setInt(2, (int) review.getReviewer().getUserId());
+            stmt.setDouble(3, review.getScore());
+            stmt.setString(4, review.getComment());
+            stmt.setString(5, review.getResult());
+            stmt.setDate(6, new Date(System.currentTimeMillis()));
             int affected = stmt.executeUpdate();
             if (affected > 0) {
                 ResultSet rs = stmt.getGeneratedKeys();
-                if (rs.next()) {
-                    review.setReviewId(rs.getInt(1));
-                }
+                if (rs.next()) review.setReviewId(rs.getInt(1));
                 return true;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
         return false;
     }
 
     @Override
     public boolean update(ApplicationReview review) {
-        String sql = "UPDATE application_review SET status=?, note=?, review_date=? WHERE review_id=?";
+        String sql = "UPDATE application_review SET score=?, comment=?, result=? WHERE review_id=?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, review.getStatus());
-            stmt.setString(2, review.getNote());
-            stmt.setDate(3, review.getReviewDate() != null ? Date.valueOf(review.getReviewDate()) : Date.valueOf(java.time.LocalDate.now()));
-            stmt.setInt(4, review.getReviewId());
+            stmt.setDouble(1, review.getScore()); stmt.setString(2, review.getComment());
+            stmt.setString(3, review.getResult()); stmt.setInt(4, review.getReviewId());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        } catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
     @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM application_review WHERE review_id=?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) { stmt.setInt(1, id); return stmt.executeUpdate() > 0; }
+        catch (SQLException e) { e.printStackTrace(); return false; }
     }
 
     @Override
@@ -69,58 +56,44 @@ public class ApplicationReviewDAO implements DAO<ApplicationReview> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return extractReview(rs);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            if (rs.next()) return extractReview(rs);
+        } catch (SQLException e) { e.printStackTrace(); }
         return null;
+    }
+
+    public List<ApplicationReview> findByCandidate(int candidateId) {
+        List<ApplicationReview> list = new ArrayList<>();
+        String sql = "SELECT * FROM application_review WHERE candidate_id=?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, candidateId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) list.add(extractReview(rs));
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
     }
 
     @Override
     public List<ApplicationReview> findAll() {
         List<ApplicationReview> list = new ArrayList<>();
-        String sql = "SELECT * FROM application_review";
+        String sql = "SELECT * FROM application_review ORDER BY review_date DESC";
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                list.add(extractReview(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            while (rs.next()) list.add(extractReview(rs));
+        } catch (SQLException e) { e.printStackTrace(); }
         return list;
-    }
-
-    public ApplicationReview findByApplication(int applicationId) {
-        String sql = "SELECT * FROM application_review WHERE application_id=?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, applicationId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return extractReview(rs);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private ApplicationReview extractReview(ResultSet rs) throws SQLException {
         ApplicationReview review = new ApplicationReview();
         review.setReviewId(rs.getInt("review_id"));
-        // Lấy JobApplication
-        JobApplicationDAO appDao = new JobApplicationDAO();
-        JobApplication app = appDao.findById(rs.getInt("application_id"));
-        review.setApplication(app);
-        // Lấy reviewer (User)
+        CandidateDAO candidateDao = new CandidateDAO();
+        review.setCandidate(candidateDao.findById(rs.getInt("candidate_id")));
         UserDAO userDao = new UserDAO();
-        User reviewer = userDao.findById(rs.getInt("reviewer_id"));
-        review.setReviewer(reviewer);
-        review.setStatus(rs.getString("status"));
-        review.setNote(rs.getString("note"));
-        review.setReviewDate(rs.getDate("review_date").toLocalDate());
+        review.setReviewer(userDao.findById(rs.getInt("reviewer_id")));
+        review.setScore(rs.getDouble("score"));
+        review.setComment(rs.getString("comment"));
+        review.setResult(rs.getString("result"));
+        review.setReviewDate(rs.getDate("review_date"));
         return review;
     }
 }

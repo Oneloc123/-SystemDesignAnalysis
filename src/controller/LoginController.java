@@ -90,11 +90,7 @@ public class LoginController {
     }
 
     public void goToHome() throws Exception {
-        try {
-            HomeController hc = new HomeController();
-            hc.show();
-        } finally {
-            MainController.currentUser = null;
-        }
+        HomeController hc = new HomeController();
+        hc.show();
     }
 }

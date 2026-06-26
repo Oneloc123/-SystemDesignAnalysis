@@ -1,10 +1,7 @@
 package controller;
 
 import controller.profileManagement.ProfileController;
-import controller.recruimentManagement.RecruitmentManagementController;
-import enumModel.RoleEnum;
-import model.Recruitment.Employer;
-import model.User;
+import controller.recruitmentManagement.RecruitmentManagementController;
 import view.HomeView;
 
 public class HomeController {
@@ -13,8 +10,6 @@ public class HomeController {
 
     public HomeController() {
         if (MainController.currentUser == null) {
-            MainController.currentUser = new Employer();
-            MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
         }
         this.hv = new HomeView(this);
         this.calcSalaryController = new CalcSalaryController();

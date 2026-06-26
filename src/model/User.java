@@ -1,15 +1,8 @@
 package model;
 
-import dao.ProfileDao.ProfileDao;
-import dao.UserDAO;
 import enumModel.RoleEnum;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.regex.Pattern;
 
 public class User {
 
@@ -19,7 +12,7 @@ public class User {
     private  String username;
 
 
-    private long id;
+
     private RoleEnum role;
     private String fullName;
     private Date dateOfBirth;
@@ -39,7 +32,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.fullName = fullName;
         this.role = role;
-        this.id = id;
+        this.userId = userId;
     }
 
     public User() {
@@ -121,23 +114,6 @@ public class User {
     public void setFullname(String fullName){ this.fullName = fullName;}
 
 
-    public String changePassword(String oldPw, String newPw, String confirmPw) {
-        if (!this.password.equals(oldPw)) {
-            return "Mật khẩu hiện tại không đúng";
-        }
-
-        if (newPw.equals(oldPw)) {
-            return "Mật khẩu mới không được trùng mật khẩu hiện tại";
-        }
-
-        if (!newPw.equals(confirmPw)) {
-            return "Xác nhận mật khẩu không khớp";
-        }
-
-        String pwError = validatePasswordStrength(newPw);
-        if (pwError != null) {
-            return pwError;
-        }
 
         this.password = newPw;
         UserDAO userDAO = new UserDAO();
