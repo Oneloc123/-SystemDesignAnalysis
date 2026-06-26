@@ -26,7 +26,7 @@ public class ProfileController {
         return true;
     }
 
-    public void executeCommand(String question) throws Exception {
+    public void excuteComent(String question) throws Exception {
         switch (question){
             case "1":
                 functionEditProfile();

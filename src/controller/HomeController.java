@@ -1,22 +1,30 @@
 package controller;
 
-import controller.recruitmentManagement.RecruitmentManagementController;
+import controller.profileManagement.ProfileController;
+import controller.recruimentManagement.RecruitmentManagementController;
 import enumModel.RoleEnum;
+import model.Recruitment.Employer;
 import model.User;
 import view.HomeView;
 
 public class HomeController {
     HomeView hv;
+    CalcSalaryController calcSalaryController;
 
     public HomeController() {
+        if (MainController.currentUser == null) {
+            MainController.currentUser = new Employer();
+            MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
+        }
         this.hv = new HomeView(this);
+        this.calcSalaryController = new CalcSalaryController();
     }
 
     public void show() throws Exception {
         hv.show();
     }
 
-    public void executeCommand(String question) throws Exception {
+    public void excuteComent(String question) throws Exception {
         switch(question) {
             case "1":
                 functionViewMyProfile();
@@ -34,15 +42,10 @@ public class HomeController {
                 ScreenManager.navigateTo("Attendance");
                 break;
             case "6":
-                functionRecruitmentManager();
+                functionRecruitmentManagement();
                 break;
             case "7":
-                ScreenManager.navigateTo("CalcSalary");
-                break;
-            case "8":
-                if (!ScreenManager.navigateTo("ContractManagement")) {
-                    hv.showError("Không có quyền truy cập chức năng quản lý hợp đồng");
-                }
+                functionContractManagement();
                 break;
             default:
                 hv.showError("Lệnh không hợp lệ");
@@ -58,15 +61,37 @@ public class HomeController {
         ScreenManager.navigateTo("MyProfile");
     }
 
-    public void functionRecruitmentManager() throws Exception {
-        if (MainController.currentUser.getRole() == RoleEnum.HR
-                || MainController.currentUser.getRole() == RoleEnum.ADMIN) {
-            RecruitmentManagementController rmc = new RecruitmentManagementController();
-            if(!rmc.navigate()){
-                hv.showError("Bạn không có quyền truy cập quản lý tuyển dụng");
-            }
-        } else {
-            hv.showError("Chức năng quản lý tuyển dụng chỉ dành cho HR và Admin");
+    public void function() throws Exception {
+        if (!calcSalaryController.checkRole(MainController.currentUser)) {
+            hv.showError("Khong co quyen");
+            return;
+        }
+        calcSalaryController.execute(MainController.currentUser);
+    }
+
+    public void handleProfile() throws Exception {
+        ProfileController pc = new ProfileController();
+        boolean check = pc.navigate();
+        if (!check){
+            hv.showError("Không có quyền truy cập");
+        }
+
+    }
+
+    public void functionRecruitmentManagement() throws Exception {
+        RecruitmentManagementController rmc = new RecruitmentManagementController();
+        boolean result = rmc.navigate();
+        if(!result){
+            hv.showError("Không có quyền truy cập");
         }
     }
+    public void functionContractManagement() throws Exception {
+        controller.contract.ContractManagementController cmc =
+                new controller.contract.ContractManagementController();
+        boolean result = cmc.navigate();
+        if (!result) {
+            hv.showError("Không có quyền truy cập chức năng quản lý hợp đồng");
+        }
+    }
+
 }

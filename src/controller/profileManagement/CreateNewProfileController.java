@@ -30,9 +30,9 @@ public class CreateNewProfileController {
         try {
             // Gọi DAO để lưu thẳng xuống Database
             profileDao.addUser(user);
-            cpv.showMessage("Tạo hồ sơ thành công");
+            System.out.println("Tạo hồ sơ thành công");
         } catch (SQLException e) {
-            cpv.showError("Lỗi: " + e.getMessage());
+            System.out.println("Lỗi: " + e.getMessage());
         }
     }
 }

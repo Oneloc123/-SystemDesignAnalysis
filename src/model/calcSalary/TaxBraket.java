@@ -1,6 +1,6 @@
 package model.calcSalary;
 
-public class TaxBracket {
+public class TaxBraket {
     private long id;
 
     private double minIncome;
@@ -8,7 +8,7 @@ public class TaxBracket {
 
     private double taxRate;
 
-    public TaxBracket() {
+    public TaxBraket() {
     }
 
     public long getId() {

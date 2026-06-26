@@ -11,13 +11,9 @@ import java.sql.Date;
 
 public class CreateContractController {
     private CreateContractView view;
-    private ContractDAO contractDAO;
-    private EmployeeDAO employeeDAO;
 
     public CreateContractController() {
         this.view = new CreateContractView(this);
-        this.contractDAO = new ContractDAO();
-        this.employeeDAO = new EmployeeDAO();
     }
 
     public void show() throws Exception {
@@ -28,7 +24,8 @@ public class CreateContractController {
                                String contractType, Date startDate, Date endDate,
                                double baseSalary, double allowance,
                                String position, String notes) {
-        Employee employee = employeeDAO.findByEmployeeCode(employeeCode);
+        EmployeeDAO empDAO = new EmployeeDAO();
+        Employee employee = empDAO.findByEmployeeCode(employeeCode);
         if (employee == null) {
             view.showError("Không tìm thấy nhân viên với mã: " + employeeCode);
             return;
@@ -55,7 +52,7 @@ public class CreateContractController {
                 MainController.currentUser != null ? MainController.currentUser.getUsername() : "system"
         );
 
-        boolean ok = contractDAO.save(contract);
+        boolean ok = contract.save();
         if (ok) {
             view.showMessage("\n✔ Tạo hợp đồng thành công!");
             view.showMessage("  Mã hợp đồng : " + contractCode);
@@ -67,6 +64,7 @@ public class CreateContractController {
     }
 
     private boolean isContractCodeExists(String code) {
-        return contractDAO.findByContractCode(code) != null;
+        ContractDAO dao = new ContractDAO();
+        return dao.findByContractCode(code) != null;
     }
 }

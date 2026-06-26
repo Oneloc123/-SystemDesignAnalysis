@@ -35,7 +35,7 @@ public class HomeView extends View {
             printAddress();
             handleInput();
             if(question.equals("0")) {System.out.println("Thoát thành công"); break loop;}
-            hc.executeCommand(question);
+            hc.excuteComent(question);
         }
     }
 }

@@ -48,8 +48,7 @@ public class AttendanceDAO {
     private boolean saveDetail(AttendanceDetail detail) {
         String sql = "INSERT INTO attendance_details (period_id, employee_id, employee_code, employee_name, " +
                 "actual_working_days, standard_days, overtime_hours, late_count, early_count, " +
-                "unpaid_leave, paid_leave, status, basic_salary, allowance, dependent_number) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "unpaid_leave, paid_leave, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, detail.getPeriodId());
             stmt.setLong(2, detail.getEmployeeId());
@@ -63,9 +62,6 @@ public class AttendanceDAO {
             stmt.setInt(10, detail.getUnpaidLeave());
             stmt.setInt(11, detail.getPaidLeave());
             stmt.setString(12, detail.getStatus());
-            stmt.setDouble(13, detail.getBasicSalary());
-            stmt.setDouble(14, detail.getAllowance());
-            stmt.setInt(15, detail.getDependentNumber());
             int affected = stmt.executeUpdate();
             if (affected > 0) {
                 ResultSet rs = stmt.getGeneratedKeys();
@@ -96,8 +92,46 @@ public class AttendanceDAO {
     }
 
     public AttendancePeriod getByDepartment(int deptId, int month, int year) {
-        // NOTE: Không còn fallback createDefaultPeriod — dữ liệu phải có thật trong DB
-        return findByMonth(month, year);
+        AttendancePeriod period = findByMonth(month, year);
+        if (period == null) {
+            period = createDefaultPeriod(month, year, deptId);
+        }
+        return period;
+    }
+
+    private AttendancePeriod createDefaultPeriod(int month, int year, int deptId) {
+        AttendancePeriod period = new AttendancePeriod();
+        period.setMonth(month);
+        period.setYear(year);
+
+        if (deptId == 1) {
+            period.addDetail(createDetail(1, "NV001", "Nguyễn Văn Lộc", 22, 26, 10, 1, 0, 1, 0, "Đã chốt"));
+            period.addDetail(createDetail(3, "NV003", "Lê Đình Cương", 22, 26, 15, 0, 0, 0, 0, "Đã chốt"));
+        } else if (deptId == 2) {
+            period.addDetail(createDetail(2, "NV002", "Trần Thị Ánh", 20, 26, 5, 2, 1, 2, 1, "Đã chốt"));
+            period.addDetail(createDetail(5, "NV005", "Hoàng Văn Nam", 18, 26, 0, 3, 3, 0, 2, "Chưa chốt"));
+        } else if (deptId == 3) {
+            period.addDetail(createDetail(4, "NV004", "Phạm Thị Hoa", 22, 26, 8, 0, 2, 1, 0, "Đã chốt"));
+        }
+
+        return period;
+    }
+
+    private AttendanceDetail createDetail(long empId, String code, String name, int workDays, int standard,
+                                          int ot, int late, int early, int unpaid, int paid, String status) {
+        AttendanceDetail d = new AttendanceDetail();
+        d.setEmployeeId(empId);
+        d.setEmployeeCode(code);
+        d.setEmployeeName(name);
+        d.setActualWorkingDays(workDays);
+        d.setStandardDays(standard);
+        d.setOvertimeHours(ot);
+        d.setLateCount(late);
+        d.setEarlyCount(early);
+        d.setUnpaidLeave(unpaid);
+        d.setPaidLeave(paid);
+        d.setStatus(status);
+        return d;
     }
 
     private List<AttendanceDetail> findDetailsByPeriod(long periodId) {
@@ -121,55 +155,6 @@ public class AttendanceDAO {
         return period;
     }
 
-    public List<AttendancePeriod> findAll() {
-        List<AttendancePeriod> list = new ArrayList<>();
-        String sql = "SELECT * FROM attendance_periods ORDER BY year DESC, month DESC";
-        try (Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                AttendancePeriod period = extractPeriod(rs);
-                period.setAttendanceDetails(findDetailsByPeriod(period.getId()));
-                list.add(period);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public boolean saveDetailOnly(AttendanceDetail detail) {
-        String sql = "INSERT INTO attendance_details (period_id, employee_id, employee_code, employee_name, " +
-                "actual_working_days, standard_days, overtime_hours, late_count, early_count, " +
-                "unpaid_leave, paid_leave, status, basic_salary, allowance, dependent_number) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setLong(1, detail.getPeriodId());
-            stmt.setLong(2, detail.getEmployeeId());
-            stmt.setString(3, detail.getEmployeeCode());
-            stmt.setString(4, detail.getEmployeeName());
-            stmt.setInt(5, detail.getActualWorkingDays());
-            stmt.setInt(6, detail.getStandardDays());
-            stmt.setInt(7, detail.getOvertimeHours());
-            stmt.setInt(8, detail.getLateCount());
-            stmt.setInt(9, detail.getEarlyCount());
-            stmt.setInt(10, detail.getUnpaidLeave());
-            stmt.setInt(11, detail.getPaidLeave());
-            stmt.setString(12, detail.getStatus());
-            stmt.setDouble(13, detail.getBasicSalary());
-            stmt.setDouble(14, detail.getAllowance());
-            stmt.setInt(15, detail.getDependentNumber());
-            int affected = stmt.executeUpdate();
-            if (affected > 0) {
-                ResultSet rs = stmt.getGeneratedKeys();
-                if (rs.next()) detail.setId(rs.getLong(1));
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     private AttendanceDetail extractDetail(ResultSet rs) throws SQLException {
         AttendanceDetail d = new AttendanceDetail();
         d.setId(rs.getLong("id"));
@@ -185,9 +170,6 @@ public class AttendanceDAO {
         d.setUnpaidLeave(rs.getInt("unpaid_leave"));
         d.setPaidLeave(rs.getInt("paid_leave"));
         d.setStatus(rs.getString("status"));
-        d.setBasicSalary(rs.getDouble("basic_salary"));
-        d.setAllowance(rs.getDouble("allowance"));
-        d.setDependentNumber(rs.getInt("dependent_number"));
         return d;
     }
 }

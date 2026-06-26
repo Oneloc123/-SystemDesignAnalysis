@@ -42,30 +42,13 @@ public class ScreenManager {
                     listView.push(mpc);
                     mpc.showOn();
                     break;
-                case "CalcSalary":
-                    CalcSalaryController csc = new CalcSalaryController();
-                    boolean hasPermission = csc.checkRole(MainController.currentUser);
-                    if (!hasPermission) {
-                        System.out.println("Không có quyền truy cập chức năng tính lương");
-                        return false;
-                    }
-                    csc.execute(getCurrentUser());
-                    return true;
                 case "ContractManagement":
                     controller.contract.ContractManagementController cmc =
                             new controller.contract.ContractManagementController();
-                    return cmc.navigate();
-                case "RecruitmentManagement":
-                    controller.recruitmentManagement.RecruitmentManagementController rmc =
-                            new controller.recruitmentManagement.RecruitmentManagementController();
-                    return rmc.navigate();
-                case "ProfileManagement":
-                    controller.profileManagement.ProfileController pc =
-                            new controller.profileManagement.ProfileController();
-                    return pc.navigate();
+                    cmc.navigate();
+                    return true;
                 default:
                     return false;
-
             }
             ScreenManager.back();
             return true;

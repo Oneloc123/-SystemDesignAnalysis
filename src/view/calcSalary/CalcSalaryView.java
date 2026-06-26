@@ -3,9 +3,9 @@ package view.calcSalary;
 import model.calcSalary.*;
 import model.calcSalary.AttendancePeriod;
 import model.calcSalary.Parameter;
+//import test.CalcSalaryControllerTest;
 import view.View;
 import controller.CalcSalaryController;
-import dao.AttendanceDAO;
 
 import java.util.List;
 
@@ -13,17 +13,14 @@ public class CalcSalaryView extends View {
     private Parameter parameter;
     private List<AttendancePeriod> attendancePeriods;
     CalcSalaryController calcSalaryController;
-    AttendanceDAO attendanceDAO;
-
     public CalcSalaryView(CalcSalaryController calcSalaryController) {
         this.calcSalaryController = calcSalaryController;
-        this.attendanceDAO = calcSalaryController.getAttendanceDAO();
     }
 
     @Override
     public void show() throws Exception {
         parameter = calcSalaryController.getParameter();
-        attendancePeriods = calcSalaryController.getAllAttendancePeriods();
+        attendancePeriods = calcSalaryController.getAttendancePeriods();
 
         calcSalaryMethod();
     }
@@ -34,11 +31,10 @@ public class CalcSalaryView extends View {
             System.out.println("Danh sach ky cham cong:");
             printAttendancePeriod();
             System.out.println("-------------------------------");
-            System.out.println("a. Tao ky cham cong moi");
-            System.out.println("b. Cham cong cho ky");
+//            System.out.println("a. Tao ky cham cong moi");
+//            System.out.println("b. Cham cong cho ky");
             System.out.println("c. Tinh luong");
-            System.out.println("d. Xem bang luong hien tai");
-            System.out.println("e. Lich su bang luong");
+//            System.out.println("d. Xem bang luong");
             System.out.println("0. Quay lai");
             System.out.println("-------------------------------");
             System.out.print("Chon: ");
@@ -59,9 +55,6 @@ public class CalcSalaryView extends View {
                         break;
                     case "d":
                         xemBangLuong();
-                        break;
-                    case "e":
-                        lichSuBangLuong();
                         break;
                     default:
                         System.out.println("Lua chon ko hop le.");
@@ -85,12 +78,6 @@ public class CalcSalaryView extends View {
         }
     }
 
-    // Refresh data from DB
-    private void refreshData() {
-        parameter = calcSalaryController.getParameter();
-        attendancePeriods = calcSalaryController.getAllAttendancePeriods();
-    }
-
     private void themKyChamCong() throws Exception {
         System.out.print("Nhap thang (1-12): ");
         int month = Integer.parseInt(netIn.readLine().trim());
@@ -107,7 +94,7 @@ public class CalcSalaryView extends View {
         }
 
         calcSalaryController.themAttendancePeriod(month, year);
-        refreshData();
+        attendancePeriods = calcSalaryController.getAttendancePeriods();
         System.out.println("Da tao ky cham cong thang " + month + "/" + year);
     }
 
@@ -166,7 +153,7 @@ public class CalcSalaryView extends View {
             System.out.println("Da cham cong cho ma NV " + empId);
         }
 
-        refreshData();
+        attendancePeriods = calcSalaryController.getAttendancePeriods();
     }
 
     private void tinhLuong() throws Exception {
@@ -189,7 +176,7 @@ public class CalcSalaryView extends View {
             return;
         }
 
-        if (parameter == null || parameter.getTaxBracket() == null || parameter.getTaxBracket().isEmpty()) {
+        if (parameter == null || parameter.getTaxBraket() == null || parameter.getTaxBraket().isEmpty()) {
             System.out.println("Tham so tinh luong chua duoc cau hinh. Vao chinh sua tham so truoc.");
             return;
         }
@@ -213,37 +200,12 @@ public class CalcSalaryView extends View {
     }
 
     private void xemBangLuong() {
-        Payroll payroll = calcSalaryController.getCurrentPayroll();
+        Payroll payroll = calcSalaryController.getPayroll();
         if (payroll == null) {
             System.out.println("Chua co bang luong. Tinh luong truoc.");
             return;
         }
         hienThiBangLuong(payroll);
-    }
-
-    private void lichSuBangLuong() {
-        List<Payroll> history = calcSalaryController.loadPayrollHistory();
-        if (history.isEmpty()) {
-            System.out.println("Chua co bang luong nao trong he thong.");
-            return;
-        }
-        System.out.println("\n--- LICH SU BANG LUONG ---");
-        for (int i = 0; i < history.size(); i++) {
-            Payroll p = history.get(i);
-            System.out.println("  " + (i + 1) + ". Thang " + p.getMonth() + "/" + p.getYear()
-                    + " - Tong Gross: " + String.format("%,.0f", p.getTotalGross())
-                    + " - Tong Net: " + String.format("%,.0f", p.getTotalNet()));
-        }
-        System.out.print("\nNhap so thu tu de xem chi tiet (0 de quay lai): ");
-        try {
-            String input = netIn.readLine().trim();
-            int idx = Integer.parseInt(input) - 1;
-            if (idx >= 0 && idx < history.size()) {
-                hienThiBangLuong(history.get(idx));
-            }
-        } catch (Exception e) {
-            // ignore
-        }
     }
 
     private void hienThiBangLuong(Payroll payroll) {

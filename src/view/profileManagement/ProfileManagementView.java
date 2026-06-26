@@ -37,7 +37,7 @@ public class ProfileManagementView extends View {
             //exit
             if(question.equals("0")) {System.out.println("Thoat thanh cong"); break loop;}
             // thuc thi func
-            pc.executeCommand(question);
+            pc.excuteComent(question);
         }
     }
 }
