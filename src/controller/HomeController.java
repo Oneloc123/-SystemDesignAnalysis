@@ -1,10 +1,7 @@
 package controller;
 
 import controller.profileManagement.ProfileController;
-import controller.recruimentManagement.RecruitmentManagementController;
-import enumModel.RoleEnum;
-import model.Recruitment.Employer;
-import model.User;
+import controller.recruitmentManagement.RecruitmentManagementController;
 import view.HomeView;
 
 public class HomeController {
@@ -13,8 +10,6 @@ public class HomeController {
 
     public HomeController() {
         if (MainController.currentUser == null) {
-            MainController.currentUser = new Employer();
-            MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
         }
         this.hv = new HomeView(this);
         this.calcSalaryController = new CalcSalaryController();
@@ -47,6 +42,9 @@ public class HomeController {
             case "7":
                 functionContractManagement();
                 break;
+            case "9":
+                functionProfileManagement();
+                break;
             default:
                 hv.showError("Lệnh không hợp lệ");
                 break;
@@ -69,7 +67,7 @@ public class HomeController {
         calcSalaryController.execute(MainController.currentUser);
     }
 
-    public void handleProfile() throws Exception {
+    public void functionProfileManagement() throws Exception {
         ProfileController pc = new ProfileController();
         boolean check = pc.navigate();
         if (!check){
@@ -93,5 +91,7 @@ public class HomeController {
             hv.showError("Không có quyền truy cập chức năng quản lý hợp đồng");
         }
     }
+
+
 
 }

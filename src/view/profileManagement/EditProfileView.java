@@ -1,83 +1,78 @@
 package view.profileManagement;
 
-import controller.profileManagement.CreateNewProfileController;
+import controller.profileManagement.EditProfileController;
 import enumModel.RoleEnum;
 import model.User;
 import view.View;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static controller.MainController.printList;
+public class EditProfileView extends View {
 
-public class CreateProfileView extends View {
-    private CreateNewProfileController cnpv;
+    private EditProfileController epc;
     User user;
 
-    public CreateProfileView(CreateNewProfileController cnpv) {
+    public EditProfileView(EditProfileController epc) {
         netIn = new BufferedReader(new InputStreamReader(System.in));
-        this.cnpv = cnpv;
+        this.epc = epc;
     }
-
 
     @Override
     public void show() throws Exception {
+
         loop:
         while(true) {
-
             handleForm();
-
-            //
             printAddress();
             handleInput();
-            //
-            //exit
             if(question.equals("0")) {System.out.println("Thoat thanh cong"); break loop;}
-            // thuc thi func
-
         }
     }
 
-    private void handleForm() throws IOException {
-        user = new User();
-        user.setUserId((int) Long.parseLong(handleParam("ID:")));
-        user.setRole(RoleEnum.valueOf(handleParam("Vai trò:")));
-        user.setFullName(handleParam("Họ và tên:"));
-        user.setDateOfBirth((Date) handleValidatedInput("ngày tháng năm sinh", "DATE"));
-        user.setGender(handleParam("giới tính:"));
-        user.setPhone(handleParam("số điện thoại:"));
-        user.setCitizenIdentificationCard(handleParam("cccd:"));
-        user.setAddress(handleParam("địa chỉ:"));
+    private void handleForm() throws Exception {
 
-        cnpv.createProfile(user);
+        user = new User();
+
+
+        user.setId(Integer.parseInt(handleParam("ID nhân viên cần sửa:")));
+
+
+        user.setRole(RoleEnum.valueOf(handleParam("Vai trò mới:")));
+        user.setFullName(handleParam("Họ và tên mới:"));
+        user.setDateOfBirth((Date) handleValidatedInput("ngày tháng năm sinh mới", "DATE"));
+        user.setGender(handleParam("Giới tính mới:"));
+        user.setPhone(handleParam("Số điện thoại mới:"));
+        user.setCitizenIdentificationCard(handleParam("CCCD mới:"));
+        user.setAddress(handleParam("Địa chỉ mới:"));
+
+        epc.editProfile(user);
     }
 
 
     private Date handleDateParam(String name) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setLenient(false);
 
         while (true) {
             try {
-                System.out.println("nhập ngày tháng năm sinh(dd/mm/yyyy):");
+                System.out.print("Nhập " + name + " (dd/MM/yyyy): ");
                 String input = netIn.readLine();
                 return sdf.parse(input);
             } catch (Exception e) {
-                showError("Ngày tháng không hợp lệ!");
-                System.out.print("nhập lại: " + name + " : ");
+                showError("Ngày tháng không hợp lệ! Vui lòng nhập lại.");
             }
-
+        }
     }
-}
 
     private Object handleValidatedInput(String inputs, String dtType) {
         while (true) {
             try {
 
                 String ip = handleParam(inputs);
+
 
                 switch (dtType) {
                     case "INT":
@@ -120,5 +115,6 @@ public class CreateProfileView extends View {
                 showError("Dữ liệu không hợp lệ! Vui lòng nhập lại.");
             }
         }
-    }
 }
+
+    }

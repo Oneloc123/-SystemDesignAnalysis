@@ -8,13 +8,27 @@ public enum AddressEnum {
     ChangePassword,
     EmployeeList,
     Attendance,
+    // Recruitment Management addresses
     RecruitmentManagement,
     CreatePostRecruitment,
-    SubmitCV,
     ReviewApplications,
     ScheduleInterview,
+    RecordInterviewResult,
+    CandidateRecruitment,
+    BrowseJobPostings,
+    ApplicationTracking,
+    // New Recruitment addresses
+    JobPostingManagement,
+    CandidateSubmission,
+    ApplicationReviewManagement,
+    InterviewScheduleManagement,
+    InterviewEvaluationManagement,
+    // Contract addresses
     ContractManagement,
     CreateContract,
     ContractList,
     RenewContract
+    // Profile
+    MyProfile
+
 }

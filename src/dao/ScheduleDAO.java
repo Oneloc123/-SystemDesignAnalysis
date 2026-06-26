@@ -92,7 +92,8 @@ public class ScheduleDAO implements DAO<ScheduleEntry> {
 
     public List<ScheduleEntry> findByEmployeeAndMonth(int employeeId, int month, int year) {
         List<ScheduleEntry> list = new ArrayList<>();
-        String sql = "SELECT * FROM schedules WHERE employee_id=? AND MONTH(STR_TO_DATE(date, '%d/%m/%Y'))=? AND YEAR(STR_TO_DATE(date, '%d/%m/%Y'))=?";
+        // date stored as dd/MM/yyyy — use SUBSTRING for efficient month/year extraction
+        String sql = "SELECT * FROM schedules WHERE employee_id=? AND SUBSTRING(date, 4, 2)=? AND SUBSTRING(date, 7, 4)=?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, employeeId);
             stmt.setInt(2, month);

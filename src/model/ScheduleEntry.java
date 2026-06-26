@@ -1,8 +1,5 @@
 package model;
 
-import dao.ScheduleDAO;
-import java.util.List;
-
 public class ScheduleEntry {
     private int scheduleId;
     private int employeeId;
@@ -13,8 +10,6 @@ public class ScheduleEntry {
     private String status;
     private String eventName;
     private String location;
-
-    private static ScheduleDAO dao = new ScheduleDAO();
 
     public ScheduleEntry() {}
 
@@ -70,17 +65,6 @@ public class ScheduleEntry {
         if (time == null || !time.contains(":")) return 0;
         String[] parts = time.split(":");
         return Integer.parseInt(parts[0]) * 60 + Integer.parseInt(parts[1]);
-    }
-
-
-    public boolean save() { return dao.save(this); }
-    public boolean update() { return dao.update(this); }
-    public boolean delete() { return dao.delete(this.scheduleId); }
-
-    public static ScheduleEntry findById(int id) { return dao.findById(id); }
-    public static List<ScheduleEntry> findAll() { return dao.findAll(); }
-    public static List<ScheduleEntry> findByEmployeeAndMonth(int employeeId, int month, int year) {
-        return dao.findByEmployeeAndMonth(employeeId, month, year);
     }
 
 

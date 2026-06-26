@@ -1,15 +1,8 @@
 package model;
 
-import dao.ProfileDao.ProfileDao;
-import dao.UserDAO;
 import enumModel.RoleEnum;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.regex.Pattern;
 
 public class User {
 
@@ -17,26 +10,21 @@ public class User {
     private String password;
     private int userId;
     private  String username;
-    private String email;
 
 
-    private long id;
+
     private RoleEnum role;
-    private Double basicSalary;
-    private int dependentNumber;
-
     private String fullName;
     private Date dateOfBirth;
     private String gender;
     private String phone;
+    private String email;
     private String citizenIdentificationCard;
     private String address;
+    private int dependentNumber;
 
 
-    public User() {}
-
-
-    public User(String address, String citizenIdentificationCard, String phone, String gender, Date dateOfBirth, String fullName, RoleEnum role, int id) {
+    public User(String address, String citizenIdentificationCard, String phone, String gender, Date dateOfBirth, String fullName, RoleEnum role, long id) {
         this.address = address;
         this.citizenIdentificationCard = citizenIdentificationCard;
         this.phone = phone;
@@ -44,7 +32,10 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.fullName = fullName;
         this.role = role;
-        this.id = id;
+        this.userId = userId;
+    }
+
+    public User() {
     }
 
     public User(int userId, String username, String password, String email, RoleEnum role) {
@@ -55,9 +46,6 @@ public class User {
         this.role = role;
     }
 
-    public Double getBasicSalary() {
-        return basicSalary;
-    }
 
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
@@ -84,20 +72,32 @@ public class User {
                 '}';
     }
 
-    public void setBasicSalary(Double basicSalary) {
-        this.basicSalary = basicSalary;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userId == user.userId &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(role, user.role);
     }
 
-    public int getDependentNumber() {
-        return dependentNumber;
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, username, email, role);
     }
+
+
+
+
+
 
     public void setDependentNumber(int dependentNumber) {
         this.dependentNumber = dependentNumber;
     }
 
-    public long getId(){return this.id;}
-    public void setId(Long id) {this.id = id;}
+    public void setId(long id) {this.id = id;}
 
     public void setFullName(String fullName) {this.fullName = fullName;}
     public Date getDateOfBirth() {return dateOfBirth;}
@@ -114,23 +114,6 @@ public class User {
     public void setFullname(String fullName){ this.fullName = fullName;}
 
 
-    public String changePassword(String oldPw, String newPw, String confirmPw) {
-        if (!this.password.equals(oldPw)) {
-            return "Mật khẩu hiện tại không đúng";
-        }
-
-        if (newPw.equals(oldPw)) {
-            return "Mật khẩu mới không được trùng mật khẩu hiện tại";
-        }
-
-        if (!newPw.equals(confirmPw)) {
-            return "Xác nhận mật khẩu không khớp";
-        }
-
-        String pwError = validatePasswordStrength(newPw);
-        if (pwError != null) {
-            return pwError;
-        }
 
         this.password = newPw;
         UserDAO userDAO = new UserDAO();
@@ -159,9 +142,16 @@ public class User {
         return null;
     }
 
-    public static List<User> getAllEmployee() throws SQLException {
+    public List<User> getAllEmployee() throws SQLException {
         ProfileDao pd = new ProfileDao();
         return pd.getAllUsers();
     }
 
+    public void editProfile(User u) throws SQLException{
+        ProfileDao pd = new ProfileDao();
+        pd.updateUser(u);
+    }
+
+    public long getId() {return this.id;}
 }
+
