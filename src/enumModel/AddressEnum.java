@@ -16,5 +16,5 @@ public enum AddressEnum {
     ContractManagement,
     CreateContract,
     ContractList,
-    MyProfile
+    RenewContract
 }
