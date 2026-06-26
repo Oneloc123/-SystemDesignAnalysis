@@ -29,17 +29,19 @@ public class ViewContractView extends View {
                 System.out.println("3. Xem hợp đồng theo nhân viên");
                 System.out.println("4. Xem chi tiết hợp đồng");
                 System.out.println("5. Hủy hợp đồng");
+                System.out.println("6. Gia hạn hợp đồng");
                 System.out.println("------------------------");
                 printAddress();
                 handleInput();
 
                 switch (question) {
                     case "0": break loop;
-                    case "1": showAllContracts(); break;
-                    case "2": searchContracts(); break;
-                    case "3": showContractsByEmployee(); break;
-                    case "4": showContractDetail(); break;
-                    case "5": cancelContract(); break;
+                    case "1": showAllContracts();          break;
+                    case "2": searchContracts();           break;
+                    case "3": showContractsByEmployee();   break;
+                    case "4": showContractDetail();        break;
+                    case "5": cancelContract();            break;
+                    case "6": renewContract();             break;
                     default:  showError("Lệnh không hợp lệ");
                 }
             }
@@ -127,6 +129,12 @@ public class ViewContractView extends View {
         }
     }
 
+
+    private void renewContract() throws Exception {
+        controller.navigateToRenew();
+    }
+
+
     private void printContractTable(List<Contract> list) {
         if (list == null || list.isEmpty()) {
             showMessage("Không có hợp đồng nào.");
@@ -178,6 +186,10 @@ public class ViewContractView extends View {
         System.out.println("  Ngày tạo       : " + c.getCreatedDate());
         System.out.println("  Ghi chú        : " + (c.getNotes() != null && !c.getNotes().isEmpty() ? c.getNotes() : "(không có)"));
         System.out.println("═════════════════════════════════════════════");
+    }
+
+    public void showMessage(String msg) {
+        System.out.println(msg);
     }
 
     private String truncate(String s, int max) {
