@@ -63,4 +63,37 @@ public class ProfileDao {
             ps.executeUpdate();
         }
     }
+
+    public void updateUser(User user) throws SQLException {
+
+        String sql = "UPDATE users SET fullName = ?, dateOfBirth = ?, gender = ?, phone = ?, citizenIdentificationCard = ?, address = ?, role = ? WHERE id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, user.getFullName());
+
+            if (user.getDateOfBirth() != null) {
+                ps.setDate(2, new java.sql.Date(user.getDateOfBirth().getTime()));
+            } else {
+                ps.setNull(2, Types.DATE);
+            }
+
+            ps.setString(3, user.getGender());
+            ps.setString(4, user.getPhone());
+            ps.setString(5, user.getCitizenIdentificationCard());
+            ps.setString(6, user.getAddress());
+            ps.setString(7, user.getRole().name());
+
+            ps.setInt(8, user.getId());
+
+            int rowsAffected = ps.executeUpdate();
+
+
+            if (rowsAffected > 0) {
+                System.out.println("Cập nhật thành công user có ID: " + user.getId());
+            } else {
+                System.out.println("Không tìm thấy user nào có ID: " + user.getId() + " để cập nhật.");
+            }
+        }
+    }
 }

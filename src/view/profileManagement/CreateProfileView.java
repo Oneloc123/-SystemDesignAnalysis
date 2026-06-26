@@ -57,10 +57,10 @@ public class CreateProfileView extends View {
         cnpv.createProfile(user);
     }
 
-    //hàm chuyển String từ handleParam thành date
+
     private Date handleDateParam(String name) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-        sdf.setLenient(false);//validate du lieu nhap
+        sdf.setLenient(false);
 
         while (true) {
             try {
@@ -72,7 +72,46 @@ public class CreateProfileView extends View {
                 System.out.print("nhập lại: " + name + " : ");
             }
 
-
     }
 }
+
+    private Object handleValidatedInput(String inputs, String dtType) {
+        while (true) {
+            try {
+
+                String ip = handleParam(inputs);
+
+                switch (dtType) {
+                    case "INT":
+                        return Integer.parseInt(ip);
+
+                    case "ROLE":
+                        return RoleEnum.valueOf(ip.toUpperCase().trim());
+
+                    case "DATE":
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        sdf.setLenient(false);
+                        Date dob = sdf.parse(ip);
+
+
+                        java.util.Calendar cal = java.util.Calendar.getInstance();
+                        cal.add(java.util.Calendar.YEAR, -18);
+                        Date eighteenYearsAgo = cal.getTime();
+
+                        if (dob.after(eighteenYearsAgo)) {
+                            showError("Nhân viên phải từ đủ 18 tuổi trở lên!");
+                            continue;
+                        }
+
+                        return dob;
+
+                    default:
+                        return ip;
+                }
+            } catch (Exception e) {
+
+                showError("Dữ liệu không hợp lệ! Vui lòng nhập lại.");
+            }
+        }
+    }
 }

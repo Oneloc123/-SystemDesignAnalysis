@@ -28,7 +28,7 @@ public class CreateNewProfileController {
 
     public void createProfile(User user) {
         try {
-            // Gọi DAO để lưu thẳng xuống Database
+
             profileDao.addUser(user);
             System.out.println("Tạo hồ sơ thành công");
         } catch (SQLException e) {

@@ -5,6 +5,7 @@ import controller.MainController;
 
 import enumModel.RoleEnum;
 import model.User;
+import view.profileManagement.EditProfileView;
 import view.profileManagement.ProfileManagementView;
 import view.profileManagement.ProfileView;
 
@@ -55,6 +56,11 @@ public class ProfileController {
 
     private void functionEditProfile() throws Exception {
 
+        EditProfileController epc = new EditProfileController();
+        boolean rs = epc.navigateTo();
+        if (!rs){
+            pmv.showError("Không có quyền truy cập");
+        }
     }
 
     public void showEmployeeList() throws Exception {

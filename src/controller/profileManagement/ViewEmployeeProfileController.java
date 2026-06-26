@@ -10,13 +10,14 @@ import java.util.List;
 
 public class ViewEmployeeProfileController {
     ProfileView pv;
+    User u = new User();
 
     public ViewEmployeeProfileController(){
         pv = new ProfileView(this);
     }
 
     public List<User> getEmployeeList() throws SQLException {
-        return User.getAllEmployee();
+        return u.getAllEmployee();
     }
 
     public boolean navigateTo() throws Exception{

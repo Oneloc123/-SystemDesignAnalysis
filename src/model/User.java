@@ -99,14 +99,6 @@ public class User {
     public int getId() { return id; }
 
 
-    public static List<User> getMockData() {
-        List<User> list = new ArrayList<>();
-        // Nhét luôn new Date() cho nhanh, bỏ qua định dạng ngày tháng phức tạp
-        list.add(new User("Hà Nội", "001", "0901", "Nam", new Date(), "Nguyễn Văn Lộc", RoleEnum.ADMIN, 1));
-        list.add(new User("HCM", "002", "0902", "Nữ", new Date(), "Trần Thị Ánh", RoleEnum.HR, 2));
-        list.add(new User("Đà Nẵng", "003", "0903", "Nam", new Date(), "Lê Đình Cương", RoleEnum.EMPLOYER, 3));
-        return list;
-    }
 
     public void setId(int id) {this.id = id;}
 
@@ -124,9 +116,14 @@ public class User {
 
 
 
-    public static List<User> getAllEmployee() throws SQLException {
+    public List<User> getAllEmployee() throws SQLException {
         ProfileDao pd = new ProfileDao();
         return pd.getAllUsers();
+    }
+
+    public void editProfile(User u) throws SQLException{
+        ProfileDao pd = new ProfileDao();
+        pd.updateUser(u);
     }
 
 }
