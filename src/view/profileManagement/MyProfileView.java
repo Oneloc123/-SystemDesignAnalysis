@@ -42,6 +42,11 @@ public class MyProfileView extends View {
                 printAddress();
                 System.out.println("\n================== HỒ SƠ CÁ NHÂN ==================\n");
 
+                if (hasMissingInfo(emp)) {
+                    System.out.println("  ⚠ Một số thông tin chưa được cập nhật, vui lòng liên hệ HR.");
+                    System.out.println();
+                }
+
                 System.out.println("--- THÔNG TIN CÁ NHÂN ---");
                 System.out.println("  Họ tên        : " + emp.getDisplayValue(emp.getFullName()));
                 System.out.println("  Ngày sinh     : " + formatDate(emp.getDateOfBirth()));
@@ -70,6 +75,7 @@ public class MyProfileView extends View {
                 System.out.println("--- BẢO HIỂM & THUẾ ---");
                 System.out.println("  Số sổ BHXH    : " + emp.getDisplayValue(emp.getSocialInsuranceNumber()));
                 System.out.println("  Mã số thuế    : " + emp.getDisplayValue(emp.getTaxCode()));
+                System.out.println("  Người phụ thuộc: " + emp.getDependentNumber() + " người");
                 System.out.println();
 
                 System.out.println("--- TÀI KHOẢN NGÂN HÀNG ---");
@@ -96,6 +102,29 @@ public class MyProfileView extends View {
         }
 
         MainController.addresses.remove(address);
+    }
+
+    private boolean hasMissingInfo(Employee emp) {
+        return emp.getDateOfBirth() == null
+            || isBlank(emp.getGender())
+            || isBlank(emp.getCitizenIdentificationCard())
+            || isBlank(emp.getHometown())
+            || isBlank(emp.getAddress())
+            || isBlank(emp.getPhone())
+            || isBlank(emp.getEmail())
+            || isBlank(emp.getEmployeeCode())
+            || isBlank(emp.getPosition())
+            || isBlank(emp.getStartDate())
+            || isBlank(emp.getContractType())
+            || isBlank(emp.getSocialInsuranceNumber())
+            || isBlank(emp.getTaxCode())
+            || isBlank(emp.getBankName())
+            || isBlank(emp.getBankAccountHolder())
+            || emp.getBaseSalary() == null;
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
     }
 
     private String formatDate(java.util.Date date) {

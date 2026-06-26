@@ -1,22 +1,19 @@
-package controller;
+package controller.profileManagement;
 
-import controller.base.Controller;
-import view.ChangePasswordView;
+import controller.ScreenManager;
+import view.profileManagement.ChangePasswordView;
 
-public class ChangePasswordController extends Controller {
-    ChangePasswordView changePasswordView;
+public class ChangePasswordController {
+    private ChangePasswordView changePasswordView;
 
     public ChangePasswordController() {
         this.changePasswordView = new ChangePasswordView(this);
-        this.view = this.changePasswordView;
     }
 
-    @Override
     public void showOn() {
         changePasswordView.showForm();
     }
 
-    @Override
     public boolean checkAuth() {
         return ScreenManager.getCurrentUser() != null;
     }

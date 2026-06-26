@@ -1,9 +1,10 @@
-package view;
+package view.profileManagement;
 
 import controller.MainController;
-import controller.ScheduleController;
+import controller.profileManagement.ScheduleController;
 import enumModel.AddressEnum;
 import model.ScheduleEntry;
+import view.View;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

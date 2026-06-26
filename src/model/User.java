@@ -3,6 +3,12 @@ package model;
 import enumModel.RoleEnum;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.regex.Pattern;
+import java.sql.SQLException;
+import dao.UserDAO;
+import dao.ProfileDao.ProfileDao;
 
 public class User {
 
@@ -22,6 +28,7 @@ public class User {
     private String citizenIdentificationCard;
     private String address;
     private int dependentNumber;
+    private long id;
 
 
     public User(String address, String citizenIdentificationCard, String phone, String gender, Date dateOfBirth, String fullName, RoleEnum role, long id) {
@@ -93,6 +100,8 @@ public class User {
 
 
 
+    public int getDependentNumber() { return dependentNumber; }
+
     public void setDependentNumber(int dependentNumber) {
         this.dependentNumber = dependentNumber;
     }
@@ -113,8 +122,20 @@ public class User {
     public String getFullName() {return fullName;}
     public void setFullname(String fullName){ this.fullName = fullName;}
 
-
-
+    public String changePassword(String oldPw, String newPw, String confirmPw) {
+        if (!this.password.equals(oldPw)) {
+            return "Mật khẩu hiện tại không đúng";
+        }
+        if (newPw.equals(oldPw)) {
+            return "Mật khẩu mới không được trùng mật khẩu hiện tại";
+        }
+        if (!newPw.equals(confirmPw)) {
+            return "Xác nhận mật khẩu không khớp";
+        }
+        String validationError = validatePasswordStrength(newPw);
+        if (validationError != null) {
+            return validationError;
+        }
         this.password = newPw;
         UserDAO userDAO = new UserDAO();
         if (userDAO.update(this)) {
