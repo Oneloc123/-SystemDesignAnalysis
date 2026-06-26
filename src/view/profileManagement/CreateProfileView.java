@@ -45,10 +45,10 @@ public class CreateProfileView extends View {
 
     private void handleForm() throws IOException {
         user = new User();
-        user.setId(Integer.parseInt(handleParam("ID:")));
+        user.setId(Long.parseLong(handleParam("ID:")));
         user.setRole(RoleEnum.valueOf(handleParam("Vai trò:")));
         user.setFullName(handleParam("Họ và tên:"));
-        user.setDateOfBirth(handleDateParam("ngày tháng năm sinh"));
+        user.setDateOfBirth((Date) handleValidatedInput("ngày tháng năm sinh", "DATE"));
         user.setGender(handleParam("giới tính:"));
         user.setPhone(handleParam("số điện thoại:"));
         user.setCitizenIdentificationCard(handleParam("cccd:"));
@@ -100,6 +100,15 @@ public class CreateProfileView extends View {
 
                         if (dob.after(eighteenYearsAgo)) {
                             showError("Nhân viên phải từ đủ 18 tuổi trở lên!");
+                            continue;
+                        }
+
+                        cal = java.util.Calendar.getInstance();
+                        cal.add(java.util.Calendar.YEAR, -70);
+                        Date seventyYearsAgo = cal.getTime();
+
+                        if (dob.before(seventyYearsAgo)) {
+                            showError("Nhân viên không được quá 70 tuổi!");
                             continue;
                         }
 

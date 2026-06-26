@@ -21,7 +21,7 @@ public class ViewEmployeeProfileController {
     }
 
     public boolean navigateTo() throws Exception{
-        if(!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER)){
+        if(!MainController.currentUser.getRole().equals(RoleEnum.HR)){
             return false;
         }
         pv.show();

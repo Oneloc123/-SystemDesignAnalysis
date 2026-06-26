@@ -19,8 +19,7 @@ public class ProfileController {
     };
 
     public boolean navigate() throws Exception {
-        // xác thực quyền
-        if (!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER)) {
+        if(!MainController.currentUser.getRole().equals(RoleEnum.HR)){
             return false;
         }
         pmv.show();

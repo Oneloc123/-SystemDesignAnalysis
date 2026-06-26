@@ -6,7 +6,6 @@ import enumModel.RoleEnum;
 import model.User;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -24,7 +23,7 @@ public class HomeTest {
         System.out.println("1. ADMIN    (có quyền tính lương)");
         System.out.println("2. ACCOUNT  (có quyền tính lương)");
         System.out.println("3. HR       (không có quyền)");
-        System.out.println("4. EMPLOYER (không có quyền)");
+        System.out.println("4. EMPLOYEE (không có quyền)");
         System.out.println("5. NULL     (chưa set role - test lỗi)");
         System.out.print("Nhập lựa chọn (1-5): ");
         String choice = reader.readLine();
@@ -37,7 +36,7 @@ public class HomeTest {
                 roleName = "ADMIN";
                 break;
             case "2":
-                testUser.setRole(RoleEnum.ACCOUNT);
+                testUser.setRole(RoleEnum.ACCOUNTANT);
                 roleName = "ACCOUNT";
                 break;
             case "3":

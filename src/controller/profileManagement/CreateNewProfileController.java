@@ -18,7 +18,7 @@ public class CreateNewProfileController {
     }
 
     public boolean navigateTo() throws Exception{
-        if(!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER)){
+        if(!MainController.currentUser.getRole().equals(RoleEnum.HR)){
             return false;
         }
 

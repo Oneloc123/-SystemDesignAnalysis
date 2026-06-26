@@ -42,7 +42,7 @@ public class EditProfileView extends View {
 
         user.setRole(RoleEnum.valueOf(handleParam("Vai trò mới:")));
         user.setFullName(handleParam("Họ và tên mới:"));
-        user.setDateOfBirth(handleDateParam("ngày tháng năm sinh mới"));
+        user.setDateOfBirth((Date) handleValidatedInput("ngày tháng năm sinh mới", "DATE"));
         user.setGender(handleParam("Giới tính mới:"));
         user.setPhone(handleParam("Số điện thoại mới:"));
         user.setCitizenIdentificationCard(handleParam("CCCD mới:"));
@@ -93,6 +93,15 @@ public class EditProfileView extends View {
 
                         if (dob.after(eighteenYearsAgo)) {
                             showError("Nhân viên phải từ đủ 18 tuổi trở lên!");
+                            continue;
+                        }
+
+                        cal = java.util.Calendar.getInstance();
+                        cal.add(java.util.Calendar.YEAR, -70);
+                        Date seventyYearsAgo = cal.getTime();
+
+                        if (dob.before(seventyYearsAgo)) {
+                            showError("Nhân viên không được quá 70 tuổi!");
                             continue;
                         }
 

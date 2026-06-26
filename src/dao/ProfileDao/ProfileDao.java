@@ -44,7 +44,7 @@ public class ProfileDao {
         String sql = "INSERT INTO users (id, fullName, dateOfBirth, gender, phone, citizenIdentificationCard, address, role) VALUES (?,?,?,?,?,?,?,?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, user.getId());
+            ps.setLong(1, user.getId());
             ps.setString(2, user.getFullName());
 
             if (user.getDateOfBirth() != null) {
@@ -84,7 +84,7 @@ public class ProfileDao {
             ps.setString(6, user.getAddress());
             ps.setString(7, user.getRole().name());
 
-            ps.setInt(8, user.getId());
+            ps.setLong(8, user.getId());
 
             int rowsAffected = ps.executeUpdate();
 

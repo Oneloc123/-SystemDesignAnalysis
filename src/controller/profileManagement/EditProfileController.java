@@ -18,10 +18,10 @@ public class EditProfileController {
     }
 
     public boolean navigateTo() throws Exception{
-        if(!MainController.currentUser.getRole().equals(RoleEnum.EMPLOYER)){
-            return false;
+        if(MainController.currentUser.getRole().equals(RoleEnum.HR)){
+            epp.show();
+            return true;
         }
-        epp.show();
-        return true;
+        return false;
     }
 }

@@ -1,6 +1,7 @@
 package model;
 
 import dao.ProfileDao.ProfileDao;
+import dao.UserDAO;
 import enumModel.RoleEnum;
 
 import java.sql.SQLException;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class User {
 
@@ -17,7 +19,7 @@ public class User {
     private  String username;
 
 
-    private int id;
+    private long id;
     private RoleEnum role;
     private String fullName;
     private Date dateOfBirth;
@@ -26,10 +28,10 @@ public class User {
     private String email;
     private String citizenIdentificationCard;
     private String address;
+    private int dependentNumber;
 
 
-
-    public User(String address, String citizenIdentificationCard, String phone, String gender, Date dateOfBirth, String fullName, RoleEnum role, int id) {
+    public User(String address, String citizenIdentificationCard, String phone, String gender, Date dateOfBirth, String fullName, RoleEnum role, long id) {
         this.address = address;
         this.citizenIdentificationCard = citizenIdentificationCard;
         this.phone = phone;
@@ -95,12 +97,14 @@ public class User {
 
 
 
-    public String getFullName() { return fullName; }
-    public int getId() { return id; }
 
 
 
-    public void setId(int id) {this.id = id;}
+    public void setDependentNumber(int dependentNumber) {
+        this.dependentNumber = dependentNumber;
+    }
+
+    public void setId(long id) {this.id = id;}
 
     public void setFullName(String fullName) {this.fullName = fullName;}
     public Date getDateOfBirth() {return dateOfBirth;}
@@ -113,8 +117,54 @@ public class User {
     public void setCitizenIdentificationCard(String citizenIdentificationCard) {this.citizenIdentificationCard = citizenIdentificationCard;}
     public String getAddress() {return address;}
     public void setAddress(String address) {this.address = address;}
+    public String getFullName() {return fullName;}
+    public void setFullname(String fullName){ this.fullName = fullName;}
 
 
+    public String changePassword(String oldPw, String newPw, String confirmPw) {
+        if (!this.password.equals(oldPw)) {
+            return "Mật khẩu hiện tại không đúng";
+        }
+
+        if (newPw.equals(oldPw)) {
+            return "Mật khẩu mới không được trùng mật khẩu hiện tại";
+        }
+
+        if (!newPw.equals(confirmPw)) {
+            return "Xác nhận mật khẩu không khớp";
+        }
+
+        String pwError = validatePasswordStrength(newPw);
+        if (pwError != null) {
+            return pwError;
+        }
+
+        this.password = newPw;
+        UserDAO userDAO = new UserDAO();
+        if (userDAO.update(this)) {
+            return "SUCCESS";
+        }
+        return "Lỗi hệ thống. Vui lòng thử lại sau.";
+    }
+
+    private String validatePasswordStrength(String password) {
+        if (password.length() < 8) {
+            return "Mật khẩu phải có ít nhất 8 ký tự";
+        }
+        if (!Pattern.compile("[A-Z]").matcher(password).find()) {
+            return "Mật khẩu phải có ít nhất 1 chữ hoa";
+        }
+        if (!Pattern.compile("[a-z]").matcher(password).find()) {
+            return "Mật khẩu phải có ít nhất 1 chữ thường";
+        }
+        if (!Pattern.compile("[0-9]").matcher(password).find()) {
+            return "Mật khẩu phải có ít nhất 1 chữ số";
+        }
+        if (!Pattern.compile("[!@#$%^&*(),.?\":{}|<>]").matcher(password).find()) {
+            return "Mật khẩu phải có ít nhất 1 ký tự đặc biệt";
+        }
+        return null;
+    }
 
     public List<User> getAllEmployee() throws SQLException {
         ProfileDao pd = new ProfileDao();
@@ -126,5 +176,6 @@ public class User {
         pd.updateUser(u);
     }
 
+    public long getId() {return this.id;}
 }
 
