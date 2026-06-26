@@ -1,7 +1,7 @@
 package controller;
 
+import controller.recruitmentManagement.RecruitmentManagementController;
 import enumModel.RoleEnum;
-import model.Recruitment.Employer;
 import model.User;
 import view.HomeView;
 
@@ -9,10 +9,6 @@ public class HomeController {
     HomeView hv;
 
     public HomeController() {
-        if (MainController.currentUser == null) {
-            MainController.currentUser = new Employer();
-            MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
-        }
         this.hv = new HomeView(this);
     }
 
@@ -38,9 +34,7 @@ public class HomeController {
                 ScreenManager.navigateTo("Attendance");
                 break;
             case "6":
-                if (!ScreenManager.navigateTo("RecruitmentManagement")) {
-                    hv.showError("Không có quyền truy cập chức năng quản lý tuyển dụng");
-                }
+                functionRecruitmentManager();
                 break;
             case "7":
                 ScreenManager.navigateTo("CalcSalary");
@@ -64,6 +58,15 @@ public class HomeController {
         ScreenManager.navigateTo("MyProfile");
     }
 
-
-
+    public void functionRecruitmentManager() throws Exception {
+        if (MainController.currentUser.getRole() == RoleEnum.HR
+                || MainController.currentUser.getRole() == RoleEnum.ADMIN) {
+            RecruitmentManagementController rmc = new RecruitmentManagementController();
+            if(!rmc.navigate()){
+                hv.showError("Bạn không có quyền truy cập quản lý tuyển dụng");
+            }
+        } else {
+            hv.showError("Chức năng quản lý tuyển dụng chỉ dành cho HR và Admin");
+        }
+    }
 }

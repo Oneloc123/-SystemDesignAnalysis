@@ -1,55 +1,38 @@
 package model.Recruitment;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 public class InterviewSchedule {
-    private int interviewId;
-    private JobApplication application;
-    private LocalDateTime interviewTime;
-    private String location;
-    private String format;      // ONLINE, OFFLINE
+    private int scheduleId;
+    private Candidate candidate;
     private String interviewer;
+    private Timestamp interviewDate;
+    private String location;
     private String note;
-    private String status;      // DRAFT, CONFIRMED, CANCELLED
+    private String status;
 
-    public InterviewSchedule() {
-        this.status = "DRAFT";
-    }
+    public InterviewSchedule() { this.status = "SCHEDULED"; }
 
-    // Getters & Setters
-    public int getInterviewId() { return interviewId; }
-    public void setInterviewId(int interviewId) { this.interviewId = interviewId; }
-
-    public JobApplication getApplication() { return application; }
-    public void setApplication(JobApplication application) { this.application = application; }
-
-    public LocalDateTime getInterviewTime() { return interviewTime; }
-    public void setInterviewTime(LocalDateTime interviewTime) { this.interviewTime = interviewTime; }
-
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
-    public String getFormat() { return format; }
-    public void setFormat(String format) { this.format = format; }
-
+    public int getScheduleId() { return scheduleId; }
+    public void setScheduleId(int scheduleId) { this.scheduleId = scheduleId; }
+    public Candidate getCandidate() { return candidate; }
+    public void setCandidate(Candidate candidate) { this.candidate = candidate; }
     public String getInterviewer() { return interviewer; }
     public void setInterviewer(String interviewer) { this.interviewer = interviewer; }
-
+    public Timestamp getInterviewDate() { return interviewDate; }
+    public void setInterviewDate(Timestamp interviewDate) { this.interviewDate = interviewDate; }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
     public String getNote() { return note; }
     public void setNote(String note) { this.note = note; }
-
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    // Nghiệp vụ
-    public boolean checkValid() {
-        return interviewTime != null
-                && location != null && !location.trim().isEmpty()
-                && format != null && !format.trim().isEmpty()
-                && interviewer != null && !interviewer.trim().isEmpty();
+    public void schedule() { this.status = "SCHEDULED"; }
+    public void update(Timestamp interviewDate, String location, String interviewer) {
+        this.interviewDate = interviewDate; this.location = location; this.interviewer = interviewer;
     }
+    public void cancel() { this.status = "CANCELLED"; }
 
-    public boolean isReadyToSave() {
-        return checkValid();
-    }
+    public boolean isValid() { return candidate != null && interviewDate != null && interviewer != null && !interviewer.trim().isEmpty(); }
 }
