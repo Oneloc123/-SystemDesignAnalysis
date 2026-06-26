@@ -34,6 +34,7 @@ public class HomeTest {
             case "1":
                 testUser.setRole(RoleEnum.ADMIN);
                 roleName = "ADMIN";
+                AdminTest.main(args);
                 break;
             case "2":
                 testUser.setRole(RoleEnum.ACCOUNTANT);
