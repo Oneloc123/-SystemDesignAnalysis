@@ -17,8 +17,8 @@ public class EmployeeDAO implements DAO<Employee> {
 
         String sql = "INSERT INTO employees (employee_id, employee_code, hometown, base_salary, fixed_allowance, " +
                 "bank_account, bank_name, bank_holder, tax_code, social_insurance, position, department_id, " +
-                "start_date, contract_type, status, qualification, major, experience) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "start_date, contract_type, status, dependent_number, qualification, major, experience) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, (int) emp.getUserId());
             stmt.setString(2, emp.getEmployeeCode());
@@ -36,9 +36,10 @@ public class EmployeeDAO implements DAO<Employee> {
             stmt.setString(13, emp.getStartDate());
             stmt.setString(14, emp.getContractType());
             stmt.setString(15, emp.getEmployeeStatus());
-            stmt.setString(16, emp.getQualification());
-            stmt.setString(17, emp.getMajor());
-            stmt.setString(18, emp.getExperience());
+            stmt.setInt(16, emp.getDependentNumber());
+            stmt.setString(17, emp.getQualification());
+            stmt.setString(18, emp.getMajor());
+            stmt.setString(19, emp.getExperience());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,7 +52,7 @@ public class EmployeeDAO implements DAO<Employee> {
         userDAO.update(emp);
         String sql = "UPDATE employees SET employee_code=?, hometown=?, base_salary=?, fixed_allowance=?, " +
                 "bank_account=?, bank_name=?, bank_holder=?, tax_code=?, social_insurance=?, position=?, " +
-                "department_id=?, start_date=?, contract_type=?, status=?, qualification=?, major=?, experience=? " +
+                "department_id=?, start_date=?, contract_type=?, status=?, dependent_number=?, qualification=?, major=?, experience=? " +
                 "WHERE employee_id=?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, emp.getEmployeeCode());
@@ -69,10 +70,11 @@ public class EmployeeDAO implements DAO<Employee> {
             stmt.setString(12, emp.getStartDate());
             stmt.setString(13, emp.getContractType());
             stmt.setString(14, emp.getEmployeeStatus());
-            stmt.setString(15, emp.getQualification());
-            stmt.setString(16, emp.getMajor());
-            stmt.setString(17, emp.getExperience());
-            stmt.setInt(18, (int) emp.getUserId());
+            stmt.setInt(15, emp.getDependentNumber());
+            stmt.setString(16, emp.getQualification());
+            stmt.setString(17, emp.getMajor());
+            stmt.setString(18, emp.getExperience());
+            stmt.setInt(19, emp.getUserId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

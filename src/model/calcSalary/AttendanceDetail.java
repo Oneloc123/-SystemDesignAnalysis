@@ -9,10 +9,11 @@ public class AttendanceDetail {
     private int actualWorkingDays;
     private int standardDays;
     private int overtimeHours;
-    private int lateCount;
-    private int earlyCount;
+
     private int unpaidLeave;
     private int paidLeave;
+    private int lateCount;
+    private int earlyCount;
     private double basicSalary;
     private double allowance;
     private int dependentNumber;
@@ -22,7 +23,7 @@ public class AttendanceDetail {
 
 
     public boolean isAbnormal() {
-        return lateCount >= 3 || earlyCount >= 3 || unpaidLeave >= 2 || overtimeHours > 40;
+        return unpaidLeave >= 2 || overtimeHours > 40;
     }
 
     public String getAssessment() {
@@ -46,14 +47,15 @@ public class AttendanceDetail {
     public void setStandardDays(int standardDays) { this.standardDays = standardDays; }
     public int getOvertimeHours() { return overtimeHours; }
     public void setOvertimeHours(int overtimeHours) { this.overtimeHours = overtimeHours; }
-    public int getLateCount() { return lateCount; }
-    public void setLateCount(int lateCount) { this.lateCount = lateCount; }
-    public int getEarlyCount() { return earlyCount; }
-    public void setEarlyCount(int earlyCount) { this.earlyCount = earlyCount; }
+
     public int getUnpaidLeave() { return unpaidLeave; }
     public void setUnpaidLeave(int unpaidLeave) { this.unpaidLeave = unpaidLeave; }
     public int getPaidLeave() { return paidLeave; }
     public void setPaidLeave(int paidLeave) { this.paidLeave = paidLeave; }
+    public int getLateCount() { return lateCount; }
+    public void setLateCount(int lateCount) { this.lateCount = lateCount; }
+    public int getEarlyCount() { return earlyCount; }
+    public void setEarlyCount(int earlyCount) { this.earlyCount = earlyCount; }
     public double getBasicSalary() { return basicSalary; }
     public void setBasicSalary(double basicSalary) { this.basicSalary = basicSalary; }
     public double getAllowance() { return allowance; }

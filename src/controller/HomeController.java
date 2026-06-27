@@ -1,18 +1,25 @@
 package controller;
 
+import dao.PayrollDAO;
+import enumModel.RoleEnum;
+//import model.Recruitment.Employer;
+import model.User;
+import model.calcSalary.Payroll;
+import model.calcSalary.PayrollDetail;
 import controller.profileManagement.ProfileController;
 import controller.recruitmentManagement.RecruitmentManagementController;
 import view.HomeView;
+import view.View;
 
 public class HomeController {
     HomeView hv;
-    CalcSalaryController calcSalaryController;
 
     public HomeController() {
         if (MainController.currentUser == null) {
+//            MainController.currentUser = new Employer();
+            MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
         }
         this.hv = new HomeView(this);
-        this.calcSalaryController = new CalcSalaryController();
     }
 
     public void show() throws Exception {
@@ -37,13 +44,22 @@ public class HomeController {
                 ScreenManager.navigateTo("Attendance");
                 break;
             case "6":
-                functionRecruitmentManagement();
+                if (!ScreenManager.navigateTo("RecruitmentManagement")) {
+                    hv.showError("Không có quyền truy cập chức năng quản lý tuyển dụng");
+                }
                 break;
             case "7":
-                functionContractManagement();
+                if (MainController.currentUser != null
+                        && MainController.currentUser.getRole() == RoleEnum.EMPLOYEE) {
+                    xemBangLuongCaNhan();
+                } else {
+                    ScreenManager.navigateTo("CalcSalary");
+                }
                 break;
-            case "9":
-                functionProfileManagement();
+            case "8":
+                if (!ScreenManager.navigateTo("ContractManagement")) {
+                    hv.showError("Không có quyền truy cập chức năng quản lý hợp đồng");
+                }
                 break;
             default:
                 hv.showError("Lệnh không hợp lệ");
@@ -59,39 +75,58 @@ public class HomeController {
         ScreenManager.navigateTo("MyProfile");
     }
 
-    public void function() throws Exception {
-        if (!calcSalaryController.checkRole(MainController.currentUser)) {
-            hv.showError("Khong co quyen");
+    /** Employee xem bang luong cua chinh minh */
+    private void xemBangLuongCaNhan() {
+        User current = MainController.currentUser;
+        if (current == null) {
+            System.out.println("Vui long dang nhap truoc.");
             return;
         }
-        calcSalaryController.execute(MainController.currentUser);
-    }
 
-    public void functionProfileManagement() throws Exception {
-        ProfileController pc = new ProfileController();
-        boolean check = pc.navigate();
-        if (!check){
-            hv.showError("Không có quyền truy cập");
+        PayrollDAO payrollDAO = new PayrollDAO();
+        java.util.List<Payroll> allPayrolls = payrollDAO.findAll();
+        if (allPayrolls.isEmpty()) {
+            System.out.println("\nChua co bang luong nao duoc tao.");
+            return;
         }
 
-    }
+        System.out.println("\n========== BANG LUONG CUA TOI ==========");
 
-    public void functionRecruitmentManagement() throws Exception {
-        RecruitmentManagementController rmc = new RecruitmentManagementController();
-        boolean result = rmc.navigate();
-        if(!result){
-            hv.showError("Không có quyền truy cập");
+        boolean found = false;
+        for (Payroll payroll : allPayrolls) {
+            if (payroll.getDetails() == null) continue;
+            for (PayrollDetail pd : payroll.getDetails()) {
+                if (pd.getEmployeeId() == current.getUserId()) {
+                    System.out.println("Thang " + payroll.getMonth() + "/" + payroll.getYear());
+                    System.out.println("----------------------------------------");
+                    System.out.println("Luong co ban:       " + String.format("%,.0f", pd.getBasicSalary()) + " VND");
+                    System.out.println("Phu cap:            " + String.format("%,.0f", pd.getAllowance()) + " VND");
+                    System.out.println("Ngay cong:          " + pd.getActualWorkingDays() + "/" + pd.getStandardWorkingDays());
+                    System.out.println("Gio OT:             " + pd.getOvertimeHours() + "h");
+                    System.out.println("Tong Gross:         " + String.format("%,.0f", pd.getGrossSalary()) + " VND");
+                    System.out.println("BHXH:               " + String.format("%,.0f", pd.getSocialInsurance()) + " VND");
+                    System.out.println("BHYT:               " + String.format("%,.0f", pd.getHealthInsurance()) + " VND");
+                    System.out.println("BHTN:               " + String.format("%,.0f", pd.getUnemploymentInsurance()) + " VND");
+                    System.out.println("Thue TNCN:          " + String.format("%,.0f", pd.getIncomeTax()) + " VND");
+                    System.out.println("Luong thuc nhan:    " + String.format("%,.0f", pd.getNetSalary()) + " VND");
+                    System.out.println("========================================\n");
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
+
+        if (!found) {
+            System.out.println("Chua co bang luong cho ban.");
+        }
+
+        System.out.println("Nhan Enter de tiep tuc...");
+        try {
+            View.netIn.readLine();
+        } catch (Exception e) {
+            // ignore
         }
     }
-    public void functionContractManagement() throws Exception {
-        controller.contract.ContractManagementController cmc =
-                new controller.contract.ContractManagementController();
-        boolean result = cmc.navigate();
-        if (!result) {
-            hv.showError("Không có quyền truy cập chức năng quản lý hợp đồng");
-        }
-    }
-
-
 
 }

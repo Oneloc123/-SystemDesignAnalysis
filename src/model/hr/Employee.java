@@ -9,6 +9,7 @@ public class Employee extends User {
     private String hometown;
     private Double baseSalary;
     private Double fixedAllowance;
+    private int dependentNumber;
     private String bankAccount;
     private String bankName;
     private String bankAccountHolder;
@@ -68,6 +69,8 @@ public class Employee extends User {
     public void setBaseSalary(Double baseSalary) { this.baseSalary = baseSalary; }
     public Double getFixedAllowance() { return fixedAllowance; }
     public void setFixedAllowance(Double fixedAllowance) { this.fixedAllowance = fixedAllowance; }
+    public int getDependentNumber() { return dependentNumber; }
+    public void setDependentNumber(int dependentNumber) { this.dependentNumber = dependentNumber; }
     public String getBankAccount() { return bankAccount; }
     public void setBankAccount(String bankAccount) { this.bankAccount = bankAccount; }
     public String getBankName() { return bankName; }

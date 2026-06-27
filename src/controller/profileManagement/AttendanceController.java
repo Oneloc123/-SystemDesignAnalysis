@@ -1,6 +1,8 @@
 package controller.profileManagement;
 
 import controller.ScreenManager;
+import dao.AttendanceDAO;
+import dao.DepartmentDAO;
 import enumModel.RoleEnum;
 import model.Department;
 import model.calcSalary.AttendanceDetail;
@@ -8,8 +10,10 @@ import model.calcSalary.AttendancePeriod;
 import view.managerView.AttendanceView;
 import java.util.List;
 
-public class AttendanceController {
-    private AttendanceView attendanceView;
+public class AttendanceController  {
+    AttendanceView attendanceView;
+    private AttendanceDAO attendanceDAO;
+    private DepartmentDAO departmentDAO;
     private int selectedDeptId;
     private int currentMonth;
     private int currentYear;
@@ -17,14 +21,19 @@ public class AttendanceController {
 
     public AttendanceController() {
         this.attendanceView = new AttendanceView(this);
+//        this.view = this.attendanceView;
+        this.attendanceDAO = new AttendanceDAO();
+        this.departmentDAO = new DepartmentDAO();
         java.time.LocalDate now = java.time.LocalDate.now();
         this.currentMonth = now.getMonthValue();
         this.currentYear = now.getYear();
     }
 
+
     public void showOn() {
         attendanceView.showDeptSelection();
     }
+
 
     public boolean checkAuth() {
         return ScreenManager.getCurrentUser() != null
@@ -75,7 +84,7 @@ public class AttendanceController {
             sb.append(String.format("%-4d %-8s %-20s %-6d %-6d %-6d %-6d %-6d %-6d %-6d %-10s",
                     i++, d.getEmployeeCode(), d.getEmployeeName(),
                     d.getActualWorkingDays(), d.getStandardDays(), d.getOvertimeHours(),
-                    d.getLateCount(), d.getEarlyCount(),
+//                    d.getLateCount(), d.getEarlyCount(),
                     d.getPaidLeave(), d.getUnpaidLeave(), label));
             sb.append("\n");
             totalWork += d.getActualWorkingDays();
@@ -97,8 +106,7 @@ public class AttendanceController {
         return "Chi tiết chấm công: " + d.getEmployeeName() + " (" + d.getEmployeeCode() + ")\n"
              + "Ngày công thực tế: " + d.getActualWorkingDays() + "/" + d.getStandardDays() + "\n"
              + "Giờ làm thêm: " + d.getOvertimeHours() + " giờ\n"
-             + "Đi muộn: " + d.getLateCount() + " lần\n"
-             + "Về sớm: " + d.getEarlyCount() + " lần\n"
+
              + "Nghỉ không lương: " + d.getUnpaidLeave() + " ngày\n"
              + "Nghỉ phép: " + d.getPaidLeave() + " ngày\n"
              + "Trạng thái: " + d.getStatus() + "\n";
