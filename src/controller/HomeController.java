@@ -2,7 +2,7 @@ package controller;
 
 import dao.PayrollDAO;
 import enumModel.RoleEnum;
-import model.Recruitment.Employer;
+//import model.Recruitment.Employer;
 import model.User;
 import model.calcSalary.Payroll;
 import model.calcSalary.PayrollDetail;
@@ -16,7 +16,7 @@ public class HomeController {
 
     public HomeController() {
         if (MainController.currentUser == null) {
-            MainController.currentUser = new Employer();
+//            MainController.currentUser = new Employer();
             MainController.currentUser.setRole(RoleEnum.valueOf(RoleEnum.EMPLOYER.toString()));
         }
         this.hv = new HomeView(this);

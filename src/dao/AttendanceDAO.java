@@ -48,7 +48,7 @@ public class AttendanceDAO {
     private boolean saveDetail(AttendanceDetail detail) {
         String sql = "INSERT INTO attendance_details (period_id, employee_id, employee_code, employee_name, " +
                 "actual_working_days, standard_days, overtime_hours, late_count, early_count, " +
-                "unpaid_leave, paid_leave, status,dependent_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "unpaid_leave, paid_leave, status, dependent_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, detail.getPeriodId());
             stmt.setLong(2, detail.getEmployeeId());

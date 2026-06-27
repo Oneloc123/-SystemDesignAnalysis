@@ -12,6 +12,8 @@ public class AttendanceDetail {
 
     private int unpaidLeave;
     private int paidLeave;
+    private int lateCount;
+    private int earlyCount;
     private double basicSalary;
     private double allowance;
     private int dependentNumber;
@@ -50,6 +52,10 @@ public class AttendanceDetail {
     public void setUnpaidLeave(int unpaidLeave) { this.unpaidLeave = unpaidLeave; }
     public int getPaidLeave() { return paidLeave; }
     public void setPaidLeave(int paidLeave) { this.paidLeave = paidLeave; }
+    public int getLateCount() { return lateCount; }
+    public void setLateCount(int lateCount) { this.lateCount = lateCount; }
+    public int getEarlyCount() { return earlyCount; }
+    public void setEarlyCount(int earlyCount) { this.earlyCount = earlyCount; }
     public double getBasicSalary() { return basicSalary; }
     public void setBasicSalary(double basicSalary) { this.basicSalary = basicSalary; }
     public double getAllowance() { return allowance; }

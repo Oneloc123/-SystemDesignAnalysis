@@ -1,6 +1,8 @@
 package controller.profileManagement;
 
 import controller.ScreenManager;
+import dao.AttendanceDAO;
+import dao.DepartmentDAO;
 import enumModel.RoleEnum;
 import model.Department;
 import model.calcSalary.AttendanceDetail;
@@ -8,7 +10,7 @@ import model.calcSalary.AttendancePeriod;
 import view.managerView.AttendanceView;
 import java.util.List;
 
-public class AttendanceController extends Controller {
+public class AttendanceController  {
     AttendanceView attendanceView;
     private AttendanceDAO attendanceDAO;
     private DepartmentDAO departmentDAO;
@@ -19,7 +21,7 @@ public class AttendanceController extends Controller {
 
     public AttendanceController() {
         this.attendanceView = new AttendanceView(this);
-        this.view = this.attendanceView;
+//        this.view = this.attendanceView;
         this.attendanceDAO = new AttendanceDAO();
         this.departmentDAO = new DepartmentDAO();
         java.time.LocalDate now = java.time.LocalDate.now();
@@ -27,12 +29,12 @@ public class AttendanceController extends Controller {
         this.currentYear = now.getYear();
     }
 
-    @Override
+
     public void showOn() {
         attendanceView.showDeptSelection();
     }
 
-    @Override
+
     public boolean checkAuth() {
         return ScreenManager.getCurrentUser() != null
             && ScreenManager.getCurrentUser().getRole() == RoleEnum.MANAGER;
@@ -82,7 +84,7 @@ public class AttendanceController extends Controller {
             sb.append(String.format("%-4d %-8s %-20s %-6d %-6d %-6d %-6d %-6d %-6d %-6d %-10s",
                     i++, d.getEmployeeCode(), d.getEmployeeName(),
                     d.getActualWorkingDays(), d.getStandardDays(), d.getOvertimeHours(),
-                    d.getLateCount(), d.getEarlyCount(),
+//                    d.getLateCount(), d.getEarlyCount(),
                     d.getPaidLeave(), d.getUnpaidLeave(), label));
             sb.append("\n");
             totalWork += d.getActualWorkingDays();
