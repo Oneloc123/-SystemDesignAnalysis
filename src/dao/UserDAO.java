@@ -33,7 +33,7 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public boolean update(User user) {
-        String sql = "UPDATE users SET username=?, password=?, email=?, role=? WHERE user_id=?";
+        String sql = "UPDATE users SET username=?, password=?, email=?, role=? WHERE id=?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
@@ -49,7 +49,7 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public boolean delete(int id) {
-        String sql = "DELETE FROM users WHERE user_id=?";
+        String sql = "DELETE FROM users WHERE id=?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
@@ -61,7 +61,7 @@ public class UserDAO implements DAO<User> {
 
     @Override
     public User findById(int id) {
-        String sql = "SELECT * FROM users WHERE user_id=?";
+        String sql = "SELECT * FROM users WHERE id=?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -109,7 +109,7 @@ public class UserDAO implements DAO<User> {
 
     private User mapUser(ResultSet rs) throws SQLException {
         User user = new User();
-        user.setUserId(rs.getInt("user_id"));
+        user.setUserId(rs.getInt("id"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password"));
         user.setEmail(rs.getString("email"));
@@ -117,7 +117,7 @@ public class UserDAO implements DAO<User> {
         return user;
     }
     public boolean updatePassword(int userId, String newPassword) {
-        String sql = "UPDATE users SET password=? WHERE user_id=?";
+        String sql = "UPDATE users SET password=? WHERE id=?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, newPassword);
             stmt.setInt(2, userId);

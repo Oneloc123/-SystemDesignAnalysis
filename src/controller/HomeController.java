@@ -61,6 +61,12 @@ public class HomeController {
                     hv.showError("Không có quyền truy cập chức năng quản lý hợp đồng");
                 }
                 break;
+            case "9":
+                ProfileController profileController = new ProfileController();
+                if (!profileController.navigate()) {
+                    hv.showError("Không có quyền truy cập chức năng quản lý hồ sơ");
+                }
+                break;
             default:
                 hv.showError("Lệnh không hợp lệ");
                 break;
