@@ -73,22 +73,21 @@ public class AttendanceController extends Controller {
         sb.append("Phòng: ").append(deptName).append(" | Kỳ: ").append(period != null ? period.getPeriodLabel() : "").append("\n");
         if (abnormalOnly) sb.append(" [Đang lọc: Nhân viên bất thường]\n");
         sb.append("\n");
-        sb.append(String.format("%-4s %-8s %-20s %-6s %-6s %-6s %-6s %-6s %-10s",
-                "STT", "Mã NV", "Họ tên", "Công", "Chuẩn", "OT", "Muộn", "Sớm", "Đánh giá"));
-        sb.append("\n------------------------------------------------------------------------------\n");
+        sb.append(String.format("%-4s %-8s %-20s %-6s %-6s %-6s %-10s",
+                "STT", "Mã NV", "Họ tên", "Công", "Chuẩn", "OT", "Đánh giá"));
+        sb.append("\n-----------------------------------------------------------------\n");
         int i = 1;
         int totalWork = 0, totalOT = 0;
         for (AttendanceDetail d : details) {
             String label = d.getAssessment();
-            sb.append(String.format("%-4d %-8s %-20s %-6d %-6d %-6d %-6d %-6d %-10s",
+            sb.append(String.format("%-4d %-8s %-20s %-6d %-6d %-6d %-10s",
                     i++, d.getEmployeeCode(), d.getEmployeeName(),
-                    d.getActualWorkingDays(), d.getStandardDays(), d.getOvertimeHours(),
-                    d.getLateCount(), d.getEarlyCount(), label));
+                    d.getActualWorkingDays(), d.getStandardDays(), d.getOvertimeHours(), label));
             sb.append("\n");
             totalWork += d.getActualWorkingDays();
             totalOT += d.getOvertimeHours();
         }
-        sb.append("------------------------------------------------------------------------------\n");
+        sb.append("-----------------------------------------------------------------\n");
         sb.append("Tổng: ").append(details.size()).append(" nhân viên | Tổng công: ").append(totalWork)
                 .append(" | Tổng OT: ").append(totalOT).append(" giờ\n");
         return sb.toString();
@@ -101,8 +100,7 @@ public class AttendanceController extends Controller {
         return "Chi tiết chấm công: " + d.getEmployeeName() + " (" + d.getEmployeeCode() + ")\n"
              + "Ngày công thực tế: " + d.getActualWorkingDays() + "/" + d.getStandardDays() + "\n"
              + "Giờ làm thêm: " + d.getOvertimeHours() + " giờ\n"
-             + "Đi muộn: " + d.getLateCount() + " lần\n"
-             + "Về sớm: " + d.getEarlyCount() + " lần\n"
+
              + "Nghỉ không lương: " + d.getUnpaidLeave() + " ngày\n"
              + "Nghỉ phép: " + d.getPaidLeave() + " ngày\n"
              + "Trạng thái: " + d.getStatus() + "\n";

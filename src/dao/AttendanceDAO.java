@@ -47,9 +47,9 @@ public class AttendanceDAO {
 
     private boolean saveDetail(AttendanceDetail detail) {
         String sql = "INSERT INTO attendance_details (period_id, employee_id, employee_code, employee_name, " +
-                "actual_working_days, standard_days, overtime_hours, late_count, early_count, " +
+                "actual_working_days, standard_days, overtime_hours, " +
                 "unpaid_leave, paid_leave, status, basic_salary, allowance, dependent_number) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, detail.getPeriodId());
             stmt.setLong(2, detail.getEmployeeId());
@@ -58,14 +58,12 @@ public class AttendanceDAO {
             stmt.setInt(5, detail.getActualWorkingDays());
             stmt.setInt(6, detail.getStandardDays());
             stmt.setInt(7, detail.getOvertimeHours());
-            stmt.setInt(8, detail.getLateCount());
-            stmt.setInt(9, detail.getEarlyCount());
-            stmt.setInt(10, detail.getUnpaidLeave());
-            stmt.setInt(11, detail.getPaidLeave());
-            stmt.setString(12, detail.getStatus());
-            stmt.setDouble(13, detail.getBasicSalary());
-            stmt.setDouble(14, detail.getAllowance());
-            stmt.setInt(15, detail.getDependentNumber());
+            stmt.setInt(8, detail.getUnpaidLeave());
+            stmt.setInt(9, detail.getPaidLeave());
+            stmt.setString(10, detail.getStatus());
+            stmt.setDouble(11, detail.getBasicSalary());
+            stmt.setDouble(12, detail.getAllowance());
+            stmt.setInt(13, detail.getDependentNumber());
             int affected = stmt.executeUpdate();
             if (affected > 0) {
                 ResultSet rs = stmt.getGeneratedKeys();
@@ -139,9 +137,9 @@ public class AttendanceDAO {
 
     public boolean saveDetailOnly(AttendanceDetail detail) {
         String sql = "INSERT INTO attendance_details (period_id, employee_id, employee_code, employee_name, " +
-                "actual_working_days, standard_days, overtime_hours, late_count, early_count, " +
+                "actual_working_days, standard_days, overtime_hours, " +
                 "unpaid_leave, paid_leave, status, basic_salary, allowance, dependent_number) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, detail.getPeriodId());
             stmt.setLong(2, detail.getEmployeeId());
@@ -150,14 +148,12 @@ public class AttendanceDAO {
             stmt.setInt(5, detail.getActualWorkingDays());
             stmt.setInt(6, detail.getStandardDays());
             stmt.setInt(7, detail.getOvertimeHours());
-            stmt.setInt(8, detail.getLateCount());
-            stmt.setInt(9, detail.getEarlyCount());
-            stmt.setInt(10, detail.getUnpaidLeave());
-            stmt.setInt(11, detail.getPaidLeave());
-            stmt.setString(12, detail.getStatus());
-            stmt.setDouble(13, detail.getBasicSalary());
-            stmt.setDouble(14, detail.getAllowance());
-            stmt.setInt(15, detail.getDependentNumber());
+            stmt.setInt(8, detail.getUnpaidLeave());
+            stmt.setInt(9, detail.getPaidLeave());
+            stmt.setString(10, detail.getStatus());
+            stmt.setDouble(11, detail.getBasicSalary());
+            stmt.setDouble(12, detail.getAllowance());
+            stmt.setInt(13, detail.getDependentNumber());
             int affected = stmt.executeUpdate();
             if (affected > 0) {
                 ResultSet rs = stmt.getGeneratedKeys();
@@ -180,8 +176,7 @@ public class AttendanceDAO {
         d.setActualWorkingDays(rs.getInt("actual_working_days"));
         d.setStandardDays(rs.getInt("standard_days"));
         d.setOvertimeHours(rs.getInt("overtime_hours"));
-        d.setLateCount(rs.getInt("late_count"));
-        d.setEarlyCount(rs.getInt("early_count"));
+
         d.setUnpaidLeave(rs.getInt("unpaid_leave"));
         d.setPaidLeave(rs.getInt("paid_leave"));
         d.setStatus(rs.getString("status"));

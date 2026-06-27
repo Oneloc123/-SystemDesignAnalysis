@@ -49,7 +49,7 @@ public class ScreenManager {
                         System.out.println("Không có quyền truy cập chức năng tính lương");
                         return false;
                     }
-                    csc.execute(getCurrentUser());
+                    csc.execute(MainController.currentUser);
                     return true;
                 case "ContractManagement":
                     controller.contract.ContractManagementController cmc =

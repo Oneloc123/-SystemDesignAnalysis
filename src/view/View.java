@@ -11,7 +11,7 @@ import enumModel.AddressEnum;
 
 public abstract class View {
     protected String question;
-    protected static BufferedReader netIn = new BufferedReader(new InputStreamReader(System.in));;
+    public static BufferedReader netIn = new BufferedReader(new InputStreamReader(System.in));;
     public  abstract void show() throws Exception;
     public  void showError(String error){
         System.out.println("------------------------");

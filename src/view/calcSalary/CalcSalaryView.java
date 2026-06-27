@@ -34,11 +34,11 @@ public class CalcSalaryView extends View {
             System.out.println("Danh sach ky cham cong:");
             printAttendancePeriod();
             System.out.println("-------------------------------");
-            System.out.println("a. Tao ky cham cong moi");
-            System.out.println("b. Cham cong cho ky");
-            System.out.println("c. Tinh luong");
-            System.out.println("d. Xem bang luong hien tai");
-            System.out.println("e. Lich su bang luong");
+            System.out.println("a. Tinh luong");
+            System.out.println("b. Xem bang luong hien tai");
+            System.out.println("c. Lich su bang luong");
+            System.out.println("d. Xuat phieu luong");
+            System.out.println("e. Import cham cong tu CSV");
             System.out.println("0. Quay lai");
             System.out.println("-------------------------------");
             System.out.print("Chon: ");
@@ -49,19 +49,19 @@ public class CalcSalaryView extends View {
 
                 switch (input) {
                     case "a":
-                        themKyChamCong();
-                        break;
-                    case "b":
-                        chamCong();
-                        break;
-                    case "c":
                         tinhLuong();
                         break;
-                    case "d":
+                    case "b":
                         xemBangLuong();
                         break;
-                    case "e":
+                    case "c":
                         lichSuBangLuong();
+                        break;
+                    case "d":
+                        xuatPhieuLuong();
+                        break;
+                    case "e":
+                        importCsv();
                         break;
                     default:
                         System.out.println("Lua chon ko hop le.");
@@ -89,84 +89,6 @@ public class CalcSalaryView extends View {
     private void refreshData() {
         parameter = calcSalaryController.getParameter();
         attendancePeriods = calcSalaryController.getAllAttendancePeriods();
-    }
-
-    private void themKyChamCong() throws Exception {
-        System.out.print("Nhap thang (1-12): ");
-        int month = Integer.parseInt(netIn.readLine().trim());
-        System.out.print("Nhap nam: ");
-        int year = Integer.parseInt(netIn.readLine().trim());
-
-        //kiem tra trung
-        for (int i = 0; i < attendancePeriods.size(); i++) {
-            AttendancePeriod ap = attendancePeriods.get(i);
-            if (ap.getMonth() == month && ap.getYear() == year) {
-                System.out.println("Ky cham cong da ton tai.");
-                return;
-            }
-        }
-
-        calcSalaryController.themAttendancePeriod(month, year);
-        refreshData();
-        System.out.println("Da tao ky cham cong thang " + month + "/" + year);
-    }
-
-    private void chamCong() throws Exception {
-        if (attendancePeriods.isEmpty()) {
-            System.out.println("Chua co ky cham cong nao. Tao ky moi truoc.");
-            return;
-        }
-
-        printAttendancePeriod();
-        System.out.print("Chon ky cham cong (nhap so thu tu): ");
-        int idx = Integer.parseInt(netIn.readLine().trim()) - 1;
-        if (idx < 0 || idx >= attendancePeriods.size()) {
-            System.out.println("So thu tu ko hop le.");
-            return;
-        }
-
-        AttendancePeriod period = attendancePeriods.get(idx);
-        System.out.println("--- Cham cong thang " + period.getMonth() + "/" + period.getYear() + " ---");
-
-        //hien thi danh sach cham cong hien co
-        List<AttendanceDetail> ds = period.getAttendanceDetails();
-        if (!ds.isEmpty()) {
-            System.out.println("Danh sach nhan vien da cham:");
-            for (int i = 0; i < ds.size(); i++) {
-                AttendanceDetail ad = ds.get(i);
-                System.out.println("  " + (i + 1) + ". Ma NV: " + ad.getEmployeeId()
-                        + " - Ngay cong: " + ad.getActualWorkingDays()
-                        + " - OT: " + ad.getOvertimeHours() + "h");
-            }
-        }
-
-        //them moi
-        while (true) {
-            System.out.println("\n--- Them nhan vien (nhap 0 de ket thuc) ---");
-            System.out.print("Ma nhan vien: ");
-            String maInput = netIn.readLine().trim();
-            if (maInput.equals("0")) break;
-
-            long empId = Long.parseLong(maInput);
-            System.out.print("Luong co ban: ");
-            double basicSalary = Double.parseDouble(netIn.readLine().trim());
-            System.out.print("Phu cap: ");
-            double allowance = Double.parseDouble(netIn.readLine().trim());
-            System.out.print("So nguoi phu thuoc: ");
-            int dependentNumber = Integer.parseInt(netIn.readLine().trim());
-            System.out.print("Ngay cong thuc te: ");
-            int ngayCong = Integer.parseInt(netIn.readLine().trim());
-            System.out.print("Gio OT: ");
-            int gioOT = Integer.parseInt(netIn.readLine().trim());
-
-            calcSalaryController.themChamCong(
-                    period.getMonth(), period.getYear(),
-                    empId, ngayCong, gioOT,
-                    basicSalary, allowance, dependentNumber);
-            System.out.println("Da cham cong cho ma NV " + empId);
-        }
-
-        refreshData();
     }
 
     private void tinhLuong() throws Exception {
@@ -288,5 +210,43 @@ public class CalcSalaryView extends View {
         System.out.println("  Luong thuc te = Gross x (Ngay cong / Ngay chuan)");
         System.out.println("  Luong OT = (Luong CB / Ngay chuan) x Gio OT x He so OT");
         System.out.println("  Net = Gross - BHXH - BHYT - BHTN - Thue TNCN");
+    }
+
+    private void importCsv() throws Exception {
+        System.out.println("\n--- IMPORT CHAM CONG TU CSV ---");
+        System.out.println("Format file: ma_nv,ngay_cong,gio_ot");
+        System.out.println("Vi du: NV001,26,10");
+        System.out.println("Luong co ban & phu cap tu dong lay tu ho so nhan vien.\n");
+
+        System.out.print("Duong dan file CSV: ");
+        String filePath = netIn.readLine().trim();
+
+        System.out.print("Thang (1-12): ");
+        int month = Integer.parseInt(netIn.readLine().trim());
+        System.out.print("Nam: ");
+        int year = Integer.parseInt(netIn.readLine().trim());
+
+        System.out.println("Dang xu ly...");
+        String result = calcSalaryController.importAttendanceFromCsv(filePath, month, year);
+        System.out.println(result);
+
+        refreshData();
+        System.out.println("\nNhan Enter de tiep tuc...");
+        netIn.readLine();
+    }
+
+    private void xuatPhieuLuong() {
+        Payroll payroll = calcSalaryController.getCurrentPayroll();
+        if (payroll == null) {
+            System.out.println("Chua co bang luong. Tinh luong hoac chon tu lich su truoc.");
+            return;
+        }
+
+        try {
+            int count = calcSalaryController.xuatPhieuLuong(payroll);
+            System.out.println("Da xuat " + count + " phieu luong vao thu muc 'payslips/'.");
+        } catch (Exception e) {
+            System.out.println("Loi xuat phieu luong: " + e.getMessage());
+        }
     }
 }
