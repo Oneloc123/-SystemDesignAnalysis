@@ -38,7 +38,6 @@ public class AdminUserDao {
         }
         return users;
     }
-
     public AdminUser findById(Long id) throws SQLException {
         String sql = """
             SELECT u.user_id, u.username, u.password_hash, u.role_id,
@@ -58,7 +57,6 @@ public class AdminUserDao {
         }
         return null;
     }
-
     public List<AdminUser> searchByUsername(String keyword) throws SQLException {
         List<AdminUser> users = new ArrayList<>();
         String sql = """
@@ -80,7 +78,6 @@ public class AdminUserDao {
         }
         return users;
     }
-
     public boolean create(AdminUser user) throws SQLException {
         String sql = """
             INSERT INTO users (username, password_hash, role_id, is_active)
@@ -103,7 +100,6 @@ public class AdminUserDao {
         }
         return false;
     }
-
     public boolean update(AdminUser user) throws SQLException {
         String sql = """
             UPDATE users
@@ -119,7 +115,6 @@ public class AdminUserDao {
             return ps.executeUpdate() > 0;
         }
     }
-
     public boolean assignRole(Long id, int roleId) throws SQLException {
         String sql = "UPDATE users SET role_id = ? WHERE user_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -128,7 +123,6 @@ public class AdminUserDao {
             return ps.executeUpdate() > 0;
         }
     }
-
     public boolean deactivate(Long id) throws SQLException {
         String sql = "UPDATE users SET is_active = false WHERE user_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -136,7 +130,6 @@ public class AdminUserDao {
             return ps.executeUpdate() > 0;
         }
     }
-
     public Map<String, Integer> getStatistics() throws SQLException {
         List<AdminUser> users = findAll();
         Map<String, Integer> stats = new LinkedHashMap<>();
@@ -148,7 +141,6 @@ public class AdminUserDao {
         stats.put("employee", countByRole(users, "EMPLOYEE"));
         return stats;
     }
-
     private int countActive(List<AdminUser> users) {
         int count = 0;
         for (AdminUser user : users) {
@@ -158,7 +150,6 @@ public class AdminUserDao {
         }
         return count;
     }
-
     private int countInactive(List<AdminUser> users) {
         int count = 0;
         for (AdminUser user : users) {
@@ -168,7 +159,6 @@ public class AdminUserDao {
         }
         return count;
     }
-
     private int countByRole(List<AdminUser> users, String roleCode) {
         int count = 0;
         for (AdminUser user : users) {
@@ -178,7 +168,6 @@ public class AdminUserDao {
         }
         return count;
     }
-
     private AdminUser mapRow(ResultSet rs) throws SQLException {
         AdminUser user = new AdminUser();
         user.setUserId(rs.getLong("user_id"));
@@ -193,7 +182,6 @@ public class AdminUserDao {
         user.setUpdatedAt(rs.getString("updated_at"));
         return user;
     }
-
     public boolean changePassword(long id, String password) throws SQLException {
         String sql = """
             UPDATE users

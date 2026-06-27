@@ -105,6 +105,7 @@ public class AdminController {
     private void updateAccount() throws SQLException {
         Long id = (long) view.readInt("ID tài khoản cần sửa", 1, Integer.MAX_VALUE);
         AdminUser current = adminUserDao.findById(id);
+        if (id == 0){ view.showMenu();}
         if (current == null) {
             view.printError("Không tìm thấy tài khoản.");
             return;
