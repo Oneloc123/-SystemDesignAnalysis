@@ -1,6 +1,10 @@
 package model;
 
+import dao.ContractDAO;
+
 import java.sql.Date;
+import java.util.List;
+
 
 public class Contract {
     private int contractId;
@@ -21,8 +25,20 @@ public class Contract {
     private Date createdDate;
     private String notes;
 
+    private static ContractDAO contractDAO = new ContractDAO();
+
     public Contract() {}
 
+    public boolean save()   { return contractDAO.save(this); }
+    public boolean update() { return contractDAO.update(this); }
+    public boolean delete() { return contractDAO.delete(this.contractId); }
+
+    public static Contract findById(int id)             { return contractDAO.findById(id); }
+    public static List<Contract> findAll()              { return contractDAO.findAll(); }
+    public static List<Contract> findByEmployee(int employeeId) { return contractDAO.findByEmployee(employeeId); }
+    public static List<Contract> search(String keyword, String statusFilter, String typeFilter) {
+        return contractDAO.search(keyword, statusFilter, typeFilter);
+    }
     public int getContractId() { return contractId; }
     public void setContractId(int contractId) { this.contractId = contractId; }
 

@@ -20,7 +20,7 @@ public class EmployeeDAO implements DAO<Employee> {
                 "start_date, contract_type, status, dependent_number, qualification, major, experience) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, emp.getUserId());
+            stmt.setInt(1, (int) emp.getUserId());
             stmt.setString(2, emp.getEmployeeCode());
             stmt.setString(3, emp.getHometown());
             setDouble(stmt, 4, emp.getBaseSalary());
@@ -202,7 +202,6 @@ public class EmployeeDAO implements DAO<Employee> {
         emp.setStartDate(rs.getString("start_date"));
         emp.setContractType(rs.getString("contract_type"));
         emp.setEmployeeStatus(rs.getString("status"));
-        emp.setDependentNumber(rs.getInt("dependent_number"));
         emp.setQualification(rs.getString("qualification"));
         emp.setMajor(rs.getString("major"));
         emp.setExperience(rs.getString("experience"));

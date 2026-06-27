@@ -23,7 +23,8 @@ public class HomeView extends View {
         "Bảng chấm công phòng ban",
         "Quản lý tuyển dụng",
         "Tính lương",
-        "Quản lý hợp đồng"
+        "Quản lý hợp đồng",
+        "Quản lý hồ sơ"
     };
 
     @Override
@@ -35,7 +36,7 @@ public class HomeView extends View {
             printAddress();
             handleInput();
             if(question.equals("0")) {System.out.println("Thoát thành công"); break loop;}
-            hc.executeCommand(question);
+            hc.excuteComent(question);
         }
     }
 }

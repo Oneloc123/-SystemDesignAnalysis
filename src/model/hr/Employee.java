@@ -1,6 +1,8 @@
 package model.hr;
 
+import dao.EmployeeDAO;
 import model.User;
+import java.util.List;
 
 public class Employee extends User {
     private String employeeCode;
@@ -23,6 +25,8 @@ public class Employee extends User {
     private String major;
     private String experience;
 
+    private static EmployeeDAO employeeDAO = new EmployeeDAO();
+
     public Employee() {
         super();
     }
@@ -41,6 +45,19 @@ public class Employee extends User {
 
     public String getDisplayValue(String value) {
         return (value == null || value.isEmpty()) ? "Chưa cập nhật" : value;
+    }
+
+
+    public boolean save() { return employeeDAO.save(this); }
+    public boolean update() { return employeeDAO.update(this); }
+    public boolean delete() { return employeeDAO.delete((int) this.getUserId()); }
+
+    public static Employee findById(int id) { return employeeDAO.findById(id); }
+    public static Employee findByUserId(int userId) { return employeeDAO.findByUserId(userId); }
+    public static List<Employee> findAll() { return employeeDAO.findAll(); }
+    public static List<Employee> findByDepartment(int deptId) { return employeeDAO.findByDepartment(deptId); }
+    public static List<Employee> search(String keyword, String statusFilter, int deptId) {
+        return employeeDAO.search(keyword, statusFilter, deptId);
     }
 
 

@@ -6,6 +6,8 @@ import model.Recruitment.Employer;
 import model.User;
 import model.calcSalary.Payroll;
 import model.calcSalary.PayrollDetail;
+import controller.profileManagement.ProfileController;
+import controller.recruitmentManagement.RecruitmentManagementController;
 import view.HomeView;
 import view.View;
 
@@ -24,7 +26,7 @@ public class HomeController {
         hv.show();
     }
 
-    public void executeCommand(String question) throws Exception {
+    public void excuteComent(String question) throws Exception {
         switch(question) {
             case "1":
                 functionViewMyProfile();

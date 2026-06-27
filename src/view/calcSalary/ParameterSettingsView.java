@@ -2,7 +2,7 @@ package view.calcSalary;
 
 import controller.CalcSalaryController;
 import model.calcSalary.Parameter;
-import model.calcSalary.TaxBracket;
+import model.calcSalary.TaxBraket;
 import view.View;
 
 import java.io.IOException;
@@ -101,14 +101,14 @@ public class ParameterSettingsView extends View {
         System.out.println("6. He so OT: " + p.getOvertimeRate());
         System.out.println("7. Ngay cong chuan: " + p.getStandardWorkingDays());
 
-        List<TaxBracket> taxList = p.getTaxBracket();
+        List<TaxBraket> taxList = p.getTaxBraket();
         System.out.print("8. Cac muc thue: ");
         if (taxList == null || taxList.isEmpty()) {
             System.out.println("(trong)");
         } else {
             System.out.println();
             for (int i = 0; i < taxList.size(); i++) {
-                TaxBracket t = taxList.get(i);
+                TaxBraket t = taxList.get(i);
                 System.out.println("   [" + t.getMinIncome() + " : " + t.getMaxIncome() + "] -> " + (t.getTaxRate() * 100) + "%");
             }
         }
@@ -139,13 +139,13 @@ public class ParameterSettingsView extends View {
     //menu quan ly cac muc thue
     private void editTaxBrackets(Parameter parameter) throws IOException {
         while (true) {
-            List<TaxBracket> taxList = parameter.getTaxBracket();
+            List<TaxBraket> taxList = parameter.getTaxBraket();
             System.out.println("\n--- CAC MUC THUE ---");
             if (taxList.isEmpty()) {
                 System.out.println("(chua co muc thue nao)");
             } else {
                 for (int i = 0; i < taxList.size(); i++) {
-                    TaxBracket t = taxList.get(i);
+                    TaxBraket t = taxList.get(i);
                     System.out.println((i + 1) + ". [" + t.getMinIncome() + " : " + t.getMaxIncome() + "] -> " + (t.getTaxRate() * 100) + "%");
                 }
             }
@@ -166,7 +166,7 @@ public class ParameterSettingsView extends View {
 
             //them moi
             if (input.equals("a")) {
-                TaxBracket newBracket = new TaxBracket();
+                TaxBraket newBracket = new TaxBraket();
                 newBracket.setMinIncome(readDouble("Gioi han duoi (VND)", 0, Double.MAX_VALUE));
                 newBracket.setMaxIncome(readDouble("Gioi han tren (VND)", 0, Double.MAX_VALUE));
                 newBracket.setTaxRate(readDouble("Thue suat (0-1)", 0, 1));
@@ -196,7 +196,7 @@ public class ParameterSettingsView extends View {
                         System.out.println("Da xoa muc thue.");
                     } else {
                         //sua
-                        TaxBracket bracket = taxList.get(idx);
+                        TaxBraket bracket = taxList.get(idx);
                         System.out.println("--- Sua muc thue " + (idx + 1) + " ---");
                         bracket.setMinIncome(readDouble("Gioi han duoi (VND)", 0, Double.MAX_VALUE));
                         bracket.setMaxIncome(readDouble("Gioi han tren (VND)", 0, Double.MAX_VALUE));

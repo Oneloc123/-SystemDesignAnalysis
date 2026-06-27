@@ -1,7 +1,6 @@
 package view.profileManagement;
 
 import controller.profileManagement.CreateNewProfileController;
-import controller.profileManagement.ProfileController;
 import enumModel.RoleEnum;
 import model.User;
 import view.View;
@@ -44,10 +43,10 @@ public class CreateProfileView extends View {
 
     private void handleForm() throws IOException {
         user = new User();
-        user.setUserId(Integer.parseInt(handleParam("ID:")));
+        user.setUserId((int) Long.parseLong(handleParam("ID:")));
         user.setRole(RoleEnum.valueOf(handleParam("Vai trò:")));
         user.setFullName(handleParam("Họ và tên:"));
-        user.setDateOfBirth(handleDateParam("ngày tháng năm sinh"));
+        user.setDateOfBirth((Date) handleValidatedInput("ngày tháng năm sinh", "DATE"));
         user.setGender(handleParam("giới tính:"));
         user.setPhone(handleParam("số điện thoại:"));
         user.setCitizenIdentificationCard(handleParam("cccd:"));
@@ -56,10 +55,10 @@ public class CreateProfileView extends View {
         cnpv.createProfile(user);
     }
 
-    //hàm chuyển String từ handleParam thành date
+
     private Date handleDateParam(String name) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-        sdf.setLenient(false);//validate du lieu nhap
+        sdf.setLenient(false);
 
         while (true) {
             try {
@@ -71,7 +70,55 @@ public class CreateProfileView extends View {
                 System.out.print("nhập lại: " + name + " : ");
             }
 
-
     }
 }
+
+    private Object handleValidatedInput(String inputs, String dtType) {
+        while (true) {
+            try {
+
+                String ip = handleParam(inputs);
+
+                switch (dtType) {
+                    case "INT":
+                        return Integer.parseInt(ip);
+
+                    case "ROLE":
+                        return RoleEnum.valueOf(ip.toUpperCase().trim());
+
+                    case "DATE":
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        sdf.setLenient(false);
+                        Date dob = sdf.parse(ip);
+
+
+                        java.util.Calendar cal = java.util.Calendar.getInstance();
+                        cal.add(java.util.Calendar.YEAR, -18);
+                        Date eighteenYearsAgo = cal.getTime();
+
+                        if (dob.after(eighteenYearsAgo)) {
+                            showError("Nhân viên phải từ đủ 18 tuổi trở lên!");
+                            continue;
+                        }
+
+                        cal = java.util.Calendar.getInstance();
+                        cal.add(java.util.Calendar.YEAR, -70);
+                        Date seventyYearsAgo = cal.getTime();
+
+                        if (dob.before(seventyYearsAgo)) {
+                            showError("Nhân viên không được quá 70 tuổi!");
+                            continue;
+                        }
+
+                        return dob;
+
+                    default:
+                        return ip;
+                }
+            } catch (Exception e) {
+
+                showError("Dữ liệu không hợp lệ! Vui lòng nhập lại.");
+            }
+        }
+    }
 }

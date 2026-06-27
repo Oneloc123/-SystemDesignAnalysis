@@ -23,7 +23,7 @@ public class HomeTest {
         System.out.println("1. ADMIN    (có quyền tính lương)");
         System.out.println("2. ACCOUNT  (có quyền tính lương)");
         System.out.println("3. HR       (không có quyền)");
-        System.out.println("4. EMPLOYER (không có quyền)");
+        System.out.println("4. EMPLOYEE (không có quyền)");
         System.out.println("5. NULL     (chưa set role - test lỗi)");
         System.out.print("Nhập lựa chọn (1-5): ");
         String choice = reader.readLine();
@@ -34,6 +34,7 @@ public class HomeTest {
             case "1":
                 testUser.setRole(RoleEnum.ADMIN);
                 roleName = "ADMIN";
+                AdminTest.main(args);
                 break;
             case "2":
                 testUser.setRole(RoleEnum.ACCOUNTANT);

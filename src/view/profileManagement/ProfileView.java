@@ -1,7 +1,8 @@
 package view.profileManagement;
 
+import controller.profileManagement.ProfileController;
 import controller.profileManagement.ViewEmployeeProfileController;
-import model.hr.Employee;
+import model.User;
 import view.View;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 public class ProfileView extends View {
 
     ViewEmployeeProfileController vepc;
+    User user;
 
     public ProfileView(ViewEmployeeProfileController vepc) {
         this.vepc = vepc;
@@ -20,12 +22,12 @@ public class ProfileView extends View {
         loop:
         while(true) {
 
-            List<Employee> employees = vepc.getEmployeeList();
+            List<User> users = vepc.getEmployeeList();
 
-            if (employees == null || employees.isEmpty()) {
+            if (users == null || users.isEmpty()) {
                 System.out.println("Hệ thống chưa có nhân viên nào.");
             } else {
-                for (Employee u : employees) {
+                for (User u : users) {
                     System.out.printf("%-5d | %-20s | %-12s | %-10s | %-12s\n",
                             u.getUserId(),
                             u.getFullName(),
@@ -40,6 +42,7 @@ public class ProfileView extends View {
 
             //exit
             if(question.equals("0")) {System.out.println("Thoat thanh cong"); break loop;}
+            // thuc thi func
 
         }
     }

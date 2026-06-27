@@ -1,80 +1,54 @@
 package model.Recruitment;
 
+import model.User;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JobPosting {
-    private int postId;
+    private int jobId;
     private String title;
     private String description;
-    private String requiment;
-    private Date dayEnd;
+    private String requirement;
+    private int quantity;
     private double salary;
-    private Employer employer;
-    private Date createdDate;
+    private Date deadline;
     private String status;
-    private List<JobApplication> applications;
+    private Date createdDate;
+    private User createdBy;
 
     public JobPosting() {
-        this.applications = new ArrayList<>();
-        this.status = "DRAFT";
+        this.status = "OPEN";
     }
 
-    public JobPosting(int postId, String title, String description, String requiment, Date dayEnd, double salary) {
-        this();
-        this.postId = postId;
-        this.title = title;
-        this.description = description;
-        this.requiment = requiment;
-        this.dayEnd = dayEnd;
-        this.salary = salary;
-    }
-
-    // Getters & Setters
-    public int getPostId() { return postId; }
-    public void setPostId(int postId) { this.postId = postId; }
-
+    public int getJobId() { return jobId; }
+    public void setJobId(int jobId) { this.jobId = jobId; }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
-
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-
-    public String getRequiment() { return requiment; }
-    public void setRequiment(String requiment) { this.requiment = requiment; }
-
-    public Date getDayEnd() { return dayEnd; }
-    public void setDayEnd(Date dayEnd) { this.dayEnd = dayEnd; }
-
+    public String getRequirement() { return requirement; }
+    public void setRequirement(String requirement) { this.requirement = requirement; }
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
     public double getSalary() { return salary; }
     public void setSalary(double salary) { this.salary = salary; }
-
-    public Employer getEmployer() { return employer; }
-    public void setEmployer(Employer employer) { this.employer = employer; }
-
-    public Date getCreatedDate() { return createdDate; }
-    public void setCreatedDate(Date createdDate) { this.createdDate = createdDate; }
-
+    public Date getDeadline() { return deadline; }
+    public void setDeadline(Date deadline) { this.deadline = deadline; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    public Date getCreatedDate() { return createdDate; }
+    public void setCreatedDate(Date createdDate) { this.createdDate = createdDate; }
+    public User getCreatedBy() { return createdBy; }
+    public void setCreatedBy(User createdBy) { this.createdBy = createdBy; }
 
-    public List<JobApplication> getApplications() {
-        // Nếu chưa load, có thể load từ DB (tuỳ chọn)
-        return applications;
-    }
-    public void setApplications(List<JobApplication> applications) { this.applications = applications; }
+    public void publish() { this.status = "OPEN"; }
+    public void close() { this.status = "CLOSED"; }
 
-    // Nghiệp vụ
-    public boolean checkValid() {
-        return title != null && !title.trim().isEmpty()
-                && description != null && !description.trim().isEmpty()
-                && requiment != null && !requiment.trim().isEmpty()
-                && dayEnd != null
-                && salary > 0;
+    public void update(String title, String description, String requirement, int quantity, double salary, Date deadline) {
+        this.title = title; this.description = description; this.requirement = requirement;
+        this.quantity = quantity; this.salary = salary; this.deadline = deadline;
     }
 
-    public boolean isReadyToSave() {
-        return checkValid();
+    public boolean isValid() {
+        return title != null && !title.trim().isEmpty() && deadline != null && salary > 0 && quantity > 0;
     }
 }
