@@ -1,22 +1,15 @@
 package controller.profileManagement;
 
 import controller.MainController;
-
-
 import enumModel.RoleEnum;
-import model.User;
-import view.profileManagement.EditProfileView;
 import view.profileManagement.ProfileManagementView;
-import view.profileManagement.ProfileView;
-
-import java.util.List;
 
 public class ProfileController {
     ProfileManagementView pmv;
 
     public ProfileController() throws Exception {
         this.pmv = new ProfileManagementView(this);
-    };
+    }
 
     public boolean navigate() throws Exception {
         if(!MainController.currentUser.getRole().equals(RoleEnum.HR)){
@@ -44,17 +37,14 @@ public class ProfileController {
     }
 
     private void functionCreateNewProfile() throws Exception {
-
-            CreateNewProfileController cnpc = new CreateNewProfileController();
-            boolean result = cnpc.navigateTo();
-            if(!result){
-                pmv.showError("không có quyền truy cập");
-            }
-
+        CreateNewProfileController cnpc = new CreateNewProfileController();
+        boolean result = cnpc.navigateTo();
+        if(!result){
+            pmv.showError("không có quyền truy cập");
+        }
     }
 
     private void functionEditProfile() throws Exception {
-
         EditProfileController epc = new EditProfileController();
         boolean rs = epc.navigateTo();
         if (!rs){
@@ -68,7 +58,5 @@ public class ProfileController {
         if(!check){
             pmv.showError("khong co quyen truy cap");
         }
-}
-
-
+    }
 }

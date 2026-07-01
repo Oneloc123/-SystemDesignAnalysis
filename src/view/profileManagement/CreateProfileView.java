@@ -1,96 +1,76 @@
 package view.profileManagement;
 
 import controller.profileManagement.CreateNewProfileController;
-import enumModel.RoleEnum;
-import model.User;
 import view.View;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static controller.MainController.printList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateProfileView extends View {
     private CreateNewProfileController cnpv;
-    User user;
 
     public CreateProfileView(CreateNewProfileController cnpv) {
         netIn = new BufferedReader(new InputStreamReader(System.in));
         this.cnpv = cnpv;
     }
 
-
     @Override
     public void show() throws Exception {
         loop:
         while(true) {
+            Map<String, Object> rawData = new HashMap<>();
 
-            handleForm();
+            rawData.put("fullName", handleParam("Họ và tên:"));
+            rawData.put("dateOfBirth", handleValidatedInput("ngày tháng năm sinh", "DATE"));
+            rawData.put("gender", handleParam("giới tính:"));
+            rawData.put("phone", handleParam("số điện thoại:"));
+            rawData.put("citizenIdentificationCard", handleParam("cccd:"));
+            rawData.put("address", handleParam("địa chỉ:"));
+            rawData.put("role", handleParam("vai trò:"));
 
-            //
-            printAddress();
-            handleInput();
-            //
-            //exit
-            if(question.equals("0")) {System.out.println("Thoat thanh cong"); break loop;}
-            // thuc thi func
+            Map<String, String> errors = cnpv.createProfile(rawData);
 
-        }
-    }
-
-    private void handleForm() throws IOException {
-        user = new User();
-        user.setUserId((int) Long.parseLong(handleParam("ID:")));
-        user.setRole(RoleEnum.valueOf(handleParam("Vai trò:")));
-        user.setFullName(handleParam("Họ và tên:"));
-        user.setDateOfBirth((Date) handleValidatedInput("ngày tháng năm sinh", "DATE"));
-        user.setGender(handleParam("giới tính:"));
-        user.setPhone(handleParam("số điện thoại:"));
-        user.setCitizenIdentificationCard(handleParam("cccd:"));
-        user.setAddress(handleParam("địa chỉ:"));
-
-        cnpv.createProfile(user);
-    }
-
-
-    private Date handleDateParam(String name) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-        sdf.setLenient(false);
-
-        while (true) {
-            try {
-                System.out.println("nhập ngày tháng năm sinh(dd/mm/yyyy):");
-                String input = netIn.readLine();
-                return sdf.parse(input);
-            } catch (Exception e) {
-                showError("Ngày tháng không hợp lệ!");
-                System.out.print("nhập lại: " + name + " : ");
+            if (errors.isEmpty()) {
+                System.out.println("Tạo hồ sơ thành công");
+            } else if (errors.containsKey("duplicate")) {
+                showError(errors.get("duplicate"));
+                System.out.println("Vui lòng nhập lại thông tin");
+                continue;
+            } else {
+                for (Map.Entry<String, String> entry : errors.entrySet()) {
+                    showError(entry.getValue());
+                }
+                System.out.println("Vui lòng nhập lại thông tin");
+                continue;
             }
 
+            System.out.println("Nhấn 0 để quay lại hoặc Enter để tiếp tục thêm mới");
+            printAddress();
+            handleInput();
+            if(question.equals("0")) {
+                System.out.println("Thoat thanh cong");
+                break loop;
+            }
+        }
     }
-}
 
     private Object handleValidatedInput(String inputs, String dtType) {
         while (true) {
             try {
-
                 String ip = handleParam(inputs);
 
                 switch (dtType) {
                     case "INT":
                         return Integer.parseInt(ip);
 
-                    case "ROLE":
-                        return RoleEnum.valueOf(ip.toUpperCase().trim());
-
                     case "DATE":
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         sdf.setLenient(false);
                         Date dob = sdf.parse(ip);
-
 
                         java.util.Calendar cal = java.util.Calendar.getInstance();
                         cal.add(java.util.Calendar.YEAR, -18);
@@ -116,7 +96,6 @@ public class CreateProfileView extends View {
                         return ip;
                 }
             } catch (Exception e) {
-
                 showError("Dữ liệu không hợp lệ! Vui lòng nhập lại.");
             }
         }
