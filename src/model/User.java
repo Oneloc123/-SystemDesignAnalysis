@@ -3,12 +3,9 @@ package model;
 import enumModel.RoleEnum;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import java.sql.SQLException;
 import dao.UserDAO;
-import dao.ProfileDao.ProfileDao;
 
 public class User {
 
@@ -163,15 +160,7 @@ public class User {
         return null;
     }
 
-    public List<User> getAllEmployee() throws SQLException {
-        ProfileDao pd = new ProfileDao();
-        return pd.getAllUsers();
-    }
 
-    public void editProfile(User u) throws SQLException{
-        ProfileDao pd = new ProfileDao();
-        pd.updateUser(u);
-    }
 
     public long getId() {return this.id;}
 }
